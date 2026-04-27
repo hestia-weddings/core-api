@@ -1,5 +1,8 @@
 package com.hestia.api.domain.message;
 
+import com.hestia.api.domain.message.dto.CreateMessageRequest;
+import com.hestia.api.domain.message.dto.MessageResponse;
+import com.hestia.api.domain.message.dto.UpdateMessageRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,27 +16,30 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
 
-    public Message createMessage(String sender, String content) {
-        Message message = Message.builder()
-                .sender(sender)
-                .message(content)
-                .isFavorite(false)
-                .isNew(true)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
+    private MessageResponse toResponse(Message message) {
+        return MessageResponse.builder()
+                .id(message.getId())
+                .sender(message.getSender())
+                .message(message.getMessage())
+                .isFavorite(message.getIsFavorite())
+                .isNew(message.getIsNew())
+                .createdAt(message.getCreatedAt())
                 .build();
-
-        return messageRepository.save(message);
     }
 
-    public List<Message> getMessages(Boolean isNew, Boolean isFavorite) {
-        if (Boolean.TRUE.equals(isNew))
-            return messageRepository.findByIsNewTrue();
-        
-        if (Boolean.TRUE.equals(isFavorite))
-            return messageRepository.findByIsFavoriteTrue();
+    public List<MessageResponse> getMessages(Boolean isNew, Boolean isFavorite) {
+        List<Message> messages;
 
-        return messageRepository.findByIsActiveTrue();
+        if (Boolean.TRUE.equals(isNew))
+            messages = messageRepository.findByIsNewTrue();
+        else if (Boolean.TRUE.equals(isFavorite))
+            messages = messageRepository.findByIsFavoriteTrue();
+        else
+            messages = messageRepository.findByIsActiveTrue();
+
+        return messages.stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     public Message getMessageById(UUID id) {
@@ -41,14 +47,30 @@ public class MessageService {
                 .orElseThrow(() -> new IllegalArgumentException("Message not found"));
     }
 
-    public Message updateMessage(UUID id, Boolean isFavorite, Boolean isNew) {
+    public MessageResponse createMessage(CreateMessageRequest request) {
+        Message message = Message.builder()
+                .sender(request.getSender())
+                .message(request.getMessage())
+                .isFavorite(false)
+                .isNew(true)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        return this.toResponse(messageRepository.save(message));
+    }
+
+    public MessageResponse updateMessage(UUID id, UpdateMessageRequest request) {
         Message message = getMessageById(id);
 
-        message.setIsFavorite(isFavorite);
-        message.setIsNew(isNew);
+        if (request.getIsFavorite() != null)
+            message.setIsFavorite(request.getIsFavorite());
+        if (request.getIsNew() != null)
+            message.setIsNew(request.getIsNew());
+
         message.setUpdatedAt(LocalDateTime.now());
 
-        return messageRepository.save(message);
+        return this.toResponse(messageRepository.save(message));
     }
 
     public void deleteMessage(UUID id) {
