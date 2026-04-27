@@ -4,6 +4,7 @@ import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MessageController {
 
+    @Autowired
     private MessageService messageService;
 
     @GetMapping
