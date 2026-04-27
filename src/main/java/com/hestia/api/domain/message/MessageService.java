@@ -55,6 +55,8 @@ public class MessageService {
                 .isNew(true)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .isActive(true)
+                .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
                 .build();
 
         return this.toResponse(messageRepository.save(message));

@@ -39,4 +39,7 @@ public class Message {
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
+
+    @Column(name = "wedding_id", nullable = false)
+    private UUID weddingId;
 }

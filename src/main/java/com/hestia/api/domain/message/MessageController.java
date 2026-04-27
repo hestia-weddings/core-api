@@ -20,8 +20,8 @@ public class MessageController {
 
     @GetMapping
     public List<MessageResponse> getMessage(
-            @RequestParam(required = false) Boolean isNew,
-            @RequestParam(required = false) Boolean isFavorite
+            @RequestParam(required = false, name = "is_new") Boolean isNew,
+            @RequestParam(required = false, name = "is_favorite") Boolean isFavorite
     ) {
         return messageService.getMessages(isNew, isFavorite);
     }
