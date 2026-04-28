@@ -23,7 +23,6 @@ public class MessageService {
                 .message(message.getMessage())
                 .isFavorite(message.getIsFavorite())
                 .isNew(message.getIsNew())
-                .createdAt(message.getCreatedAt())
                 .build();
     }
 
@@ -53,9 +52,6 @@ public class MessageService {
                 .message(request.getMessage())
                 .isFavorite(false)
                 .isNew(true)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .isActive(true)
                 .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
                 .build();
 

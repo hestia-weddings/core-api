@@ -1,5 +1,6 @@
 package com.hestia.api.domain.message;
 
+import com.hestia.api.common.model.BaseModel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,11 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Message {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class Message extends BaseModel {
 
     @Column(nullable = false)
     private String sender;
@@ -30,15 +27,6 @@ public class Message {
 
     @Column(name = "is_new", nullable = false)
     private Boolean isNew;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
 
     @Column(name = "wedding_id", nullable = false)
     private UUID weddingId;
