@@ -5,7 +5,6 @@ import com.hestia.api.domain.household.entity.Household;
 import com.hestia.api.domain.household.entity.Invite;
 import com.hestia.api.domain.household.enums.InviteStatus;
 import com.hestia.api.domain.household.repository.InviteRepository;
-import com.hestia.api.domain.message.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class InviteService {
 
     private final InviteRepository inviteRepository;
 
-    private InviteResponse toResponse(Invite invite) {
+    public InviteResponse toResponse(Invite invite) {
         return InviteResponse.builder()
                 .id(invite.getId())
                 .name(invite.getName())
