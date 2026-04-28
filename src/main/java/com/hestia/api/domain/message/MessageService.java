@@ -30,9 +30,9 @@ public class MessageService {
         List<Message> messages;
 
         if (Boolean.TRUE.equals(isNew))
-            messages = messageRepository.findByIsNewTrue();
+            messages = messageRepository.findByIsNewTrueAndIsActiveTrue();
         else if (Boolean.TRUE.equals(isFavorite))
-            messages = messageRepository.findByIsFavoriteTrue();
+            messages = messageRepository.findByIsFavoriteTrueAndIsActiveTrue();
         else
             messages = messageRepository.findByIsActiveTrue();
 
