@@ -8,6 +8,7 @@ import com.hestia.api.domain.household.repository.InviteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,5 +46,14 @@ public class InviteService {
     private Invite getInviteById(UUID id) {
         return inviteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invite not found"));
+    }
+
+    public void deleteInvite(UUID id) {
+        Invite invite = getInviteById(id);
+
+        invite.setIsActive(false);
+        invite.setUpdatedAt(LocalDateTime.now());
+
+        inviteRepository.save(invite);
     }
 }

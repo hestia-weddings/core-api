@@ -6,11 +6,10 @@ import com.hestia.api.domain.household.service.HouseholdService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/household")
@@ -25,4 +24,7 @@ public class HouseholdController {
     public List<HouseholdResponse> getHousehold() {
         return householdService.getHouseholds();
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteHousehold(@PathVariable UUID id) { householdService.deleteHousehold(id); }
 }
