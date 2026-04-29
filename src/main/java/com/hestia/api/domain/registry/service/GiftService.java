@@ -57,6 +57,10 @@ public class GiftService {
                 .orElseThrow(() -> new IllegalArgumentException("Gift not found"));
     }
 
+    public void createGift() {}
+
+    public void updateGift() {}
+
     public void deleteGift(UUID id) {
         Gift gift = getGiftById(id);
 

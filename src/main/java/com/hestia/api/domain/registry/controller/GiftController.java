@@ -24,6 +24,12 @@ public class GiftController {
         return giftService.getGifts();
     }
 
+    @PostMapping
+    public void postGift() {}
+
+    @PatchMapping
+    public void patchGift() {}
+
     @DeleteMapping("/{id}")
     public void deleteGift(@PathVariable UUID id) { giftService.deleteGift(id); }
 }
