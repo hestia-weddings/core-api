@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "households")
@@ -26,4 +27,7 @@ public class Household extends BaseModel {
 
     @OneToMany(mappedBy = "household")
     private List<Invite> invites;
+
+    @Column(name = "wedding_id", nullable = false)
+    private UUID weddingId;
 }

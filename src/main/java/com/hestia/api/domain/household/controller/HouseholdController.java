@@ -1,5 +1,6 @@
 package com.hestia.api.domain.household.controller;
 
+import com.hestia.api.domain.household.dto.CreateHouseholdRequest;
 import com.hestia.api.domain.household.dto.HouseholdResponse;
 import com.hestia.api.domain.household.entity.Household;
 import com.hestia.api.domain.household.service.HouseholdService;
@@ -23,6 +24,11 @@ public class HouseholdController {
     @GetMapping
     public List<HouseholdResponse> getHousehold() {
         return householdService.getHouseholds();
+    }
+
+    @PostMapping
+    public HouseholdResponse postHousehold(@RequestBody CreateHouseholdRequest request) {
+        return householdService.createHousehold(request);
     }
 
     @DeleteMapping("/{id}")

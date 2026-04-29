@@ -1,11 +1,13 @@
 package com.hestia.api.domain.household.service;
 
+import com.hestia.api.domain.household.dto.CreateHouseholdRequest;
 import com.hestia.api.domain.household.dto.HouseholdResponse;
 import com.hestia.api.domain.household.dto.InviteResponse;
 import com.hestia.api.domain.household.entity.Household;
 import com.hestia.api.domain.household.entity.Invite;
 import com.hestia.api.domain.household.enums.InviteStatus;
 import com.hestia.api.domain.household.repository.HouseholdRepository;
+import com.hestia.api.domain.household.repository.InviteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class HouseholdService {
 
     private final HouseholdRepository householdRepository;
+    private final InviteRepository inviteRepository;
 
     private HouseholdResponse toResponse(Household household) {
         List<InviteResponse> invites = household.getInvites()
@@ -52,6 +55,34 @@ public class HouseholdService {
     public Household getHouseholdById(UUID id) {
         return householdRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Household not found"));
+    }
+
+    @Transactional
+    public HouseholdResponse createHousehold(CreateHouseholdRequest request) {
+        Household household = Household.builder()
+                .name(request.getName())
+                .phone(request.getPhone())
+                .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
+                .build();
+
+        Household savedHousehold = householdRepository.save(household);
+
+        if (request.getInvites() != null && !request.getInvites().isEmpty()) {
+            List<Invite> invites = request.getInvites().stream()
+                    .map(invitedRequest -> Invite.builder()
+                            .name(invitedRequest.getName())
+                            .ageGroup(invitedRequest.getAgeGroup())
+                            .status(InviteStatus.PENDING)
+                            .household(savedHousehold)
+                            .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
+                            .build())
+                    .toList();
+
+            inviteRepository.saveAll(invites);
+            savedHousehold.setInvites(invites);
+        }
+
+        return this.toResponse(household);
     }
 
     @Transactional
