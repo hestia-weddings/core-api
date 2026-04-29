@@ -1,6 +1,6 @@
-package com.hestia.api.domain.household.repository;
+package com.hestia.api.domain.rsvp.repository;
 
-import com.hestia.api.domain.household.entity.Household;
+import com.hestia.api.domain.rsvp.entity.Household;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

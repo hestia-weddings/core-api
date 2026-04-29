@@ -1,12 +1,12 @@
-package com.hestia.api.domain.household.controller;
+package com.hestia.api.domain.rsvp.controller;
 
-import com.hestia.api.domain.household.dto.CreateInviteRequest;
-import com.hestia.api.domain.household.dto.InviteResponse;
-import com.hestia.api.domain.household.dto.UpdateInviteRequest;
-import com.hestia.api.domain.household.dto.UpdateInviteStatusRequest;
-import com.hestia.api.domain.household.entity.Household;
-import com.hestia.api.domain.household.enums.InviteStatus;
-import com.hestia.api.domain.household.service.InviteService;
+import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
+import com.hestia.api.domain.rsvp.dto.InviteResponse;
+import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
+import com.hestia.api.domain.rsvp.dto.UpdateInviteStatusRequest;
+import com.hestia.api.domain.rsvp.entity.Household;
+import com.hestia.api.domain.rsvp.enums.InviteStatus;
+import com.hestia.api.domain.rsvp.service.InviteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

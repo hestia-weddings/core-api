@@ -1,8 +1,8 @@
-package com.hestia.api.domain.household.entity;
+package com.hestia.api.domain.rsvp.entity;
 
 import com.hestia.api.common.model.BaseModel;
-import com.hestia.api.domain.household.enums.InviteAge;
-import com.hestia.api.domain.household.enums.InviteStatus;
+import com.hestia.api.domain.rsvp.enums.InviteAge;
+import com.hestia.api.domain.rsvp.enums.InviteStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;

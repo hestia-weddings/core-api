@@ -1,19 +1,18 @@
-package com.hestia.api.domain.household.service;
+package com.hestia.api.domain.rsvp.service;
 
-import com.hestia.api.domain.household.dto.CreateHouseholdRequest;
-import com.hestia.api.domain.household.dto.HouseholdResponse;
-import com.hestia.api.domain.household.dto.InviteResponse;
-import com.hestia.api.domain.household.dto.UpdateHouseholdRequest;
-import com.hestia.api.domain.household.entity.Household;
-import com.hestia.api.domain.household.entity.Invite;
-import com.hestia.api.domain.household.enums.InviteStatus;
-import com.hestia.api.domain.household.repository.HouseholdRepository;
-import com.hestia.api.domain.household.repository.InviteRepository;
+import com.hestia.api.domain.rsvp.dto.CreateHouseholdRequest;
+import com.hestia.api.domain.rsvp.dto.HouseholdResponse;
+import com.hestia.api.domain.rsvp.dto.InviteResponse;
+import com.hestia.api.domain.rsvp.dto.UpdateHouseholdRequest;
+import com.hestia.api.domain.rsvp.entity.Household;
+import com.hestia.api.domain.rsvp.entity.Invite;
+import com.hestia.api.domain.rsvp.enums.InviteStatus;
+import com.hestia.api.domain.rsvp.repository.HouseholdRepository;
+import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,9 +111,7 @@ public class HouseholdService {
 
         household.getInvites().stream()
                 .filter(Invite::getIsActive)
-                .forEach(invite -> {
-                    invite.setIsActive(false);
-                });
+                .forEach(invite -> invite.setIsActive(false));
 
         householdRepository.save(household);
     }

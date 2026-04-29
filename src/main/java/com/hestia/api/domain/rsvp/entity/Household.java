@@ -1,4 +1,4 @@
-package com.hestia.api.domain.household.entity;
+package com.hestia.api.domain.rsvp.entity;
 
 import com.hestia.api.common.model.BaseModel;
 import jakarta.persistence.Column;

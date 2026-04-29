@@ -1,10 +1,9 @@
-package com.hestia.api.domain.household.controller;
+package com.hestia.api.domain.rsvp.controller;
 
-import com.hestia.api.domain.household.dto.CreateHouseholdRequest;
-import com.hestia.api.domain.household.dto.HouseholdResponse;
-import com.hestia.api.domain.household.dto.UpdateHouseholdRequest;
-import com.hestia.api.domain.household.entity.Household;
-import com.hestia.api.domain.household.service.HouseholdService;
+import com.hestia.api.domain.rsvp.dto.CreateHouseholdRequest;
+import com.hestia.api.domain.rsvp.dto.HouseholdResponse;
+import com.hestia.api.domain.rsvp.dto.UpdateHouseholdRequest;
+import com.hestia.api.domain.rsvp.service.HouseholdService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

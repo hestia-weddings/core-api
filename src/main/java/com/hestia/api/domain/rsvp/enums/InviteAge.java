@@ -1,4 +1,4 @@
-package com.hestia.api.domain.household.enums;
+package com.hestia.api.domain.rsvp.enums;
 
 public enum InviteAge {
     BABY,
