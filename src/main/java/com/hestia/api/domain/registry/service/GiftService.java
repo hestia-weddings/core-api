@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +50,18 @@ public class GiftService {
         return giftAvailabilities.stream()
                 .map(this::toAvailabilityResponse)
                 .toList();
+    }
+
+    public Gift getGiftById(UUID id) {
+        return giftRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Gift not found"));
+    }
+
+    public void deleteGift(UUID id) {
+        Gift gift = getGiftById(id);
+
+        gift.setIsActive(false);
+
+        giftRepository.save(gift);
     }
 }
