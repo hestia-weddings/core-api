@@ -1,8 +1,10 @@
 package com.hestia.api.domain.household.controller;
 
+import com.hestia.api.domain.household.dto.CreateInviteRequest;
 import com.hestia.api.domain.household.dto.InviteResponse;
+import com.hestia.api.domain.household.dto.UpdateInviteRequest;
+import com.hestia.api.domain.household.dto.UpdateInviteStatusRequest;
 import com.hestia.api.domain.household.entity.Household;
-import com.hestia.api.domain.household.entity.Invite;
 import com.hestia.api.domain.household.enums.InviteStatus;
 import com.hestia.api.domain.household.service.InviteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +30,27 @@ public class InviteController {
             @RequestParam(required = false, name = "household_id") Household household
     ) {
         return inviteService.getInvites(status, household);
+    }
+
+    @PostMapping
+    public InviteResponse postInvite(@RequestBody CreateInviteRequest request) {
+        return inviteService.createInvite(request);
+    }
+
+    @PatchMapping("/{id}")
+    public InviteResponse patchInvite(
+            @PathVariable UUID id,
+            @RequestBody UpdateInviteRequest request
+    ) {
+        return inviteService.updateInvite(id, request);
+    }
+
+    @PatchMapping("/status/{id}")
+    public InviteResponse patchInviteStatus(
+            @PathVariable UUID id,
+            @RequestBody UpdateInviteStatusRequest request
+    ) {
+        return inviteService.updateInviteStatus(id, request);
     }
 
     @DeleteMapping("/{id}")
