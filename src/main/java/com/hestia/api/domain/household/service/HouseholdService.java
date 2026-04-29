@@ -100,7 +100,6 @@ public class HouseholdService {
     @Transactional
     public void deleteHousehold(UUID id) {
         Household household = getHouseholdById(id);
-        LocalDateTime now = LocalDateTime.now();
 
         boolean hasConfirmedInvites = household.getInvites().stream()
                 .filter(Invite::getIsActive)
