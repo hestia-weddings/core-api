@@ -2,6 +2,7 @@ package com.hestia.api.domain.household.controller;
 
 import com.hestia.api.domain.household.dto.CreateHouseholdRequest;
 import com.hestia.api.domain.household.dto.HouseholdResponse;
+import com.hestia.api.domain.household.dto.UpdateHouseholdRequest;
 import com.hestia.api.domain.household.entity.Household;
 import com.hestia.api.domain.household.service.HouseholdService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +30,14 @@ public class HouseholdController {
     @PostMapping
     public HouseholdResponse postHousehold(@RequestBody CreateHouseholdRequest request) {
         return householdService.createHousehold(request);
+    }
+
+    @PatchMapping("/{id}")
+    public HouseholdResponse patchHousehold(
+            @PathVariable UUID id,
+            @RequestBody UpdateHouseholdRequest request
+    ) {
+        return householdService.updateHousehold(id, request);
     }
 
     @DeleteMapping("/{id}")

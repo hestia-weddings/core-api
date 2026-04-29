@@ -102,7 +102,6 @@ public class InviteService {
             throw new RuntimeException("Cannot delete invites already confirmed!");
 
         invite.setIsActive(false);
-        invite.setUpdatedAt(LocalDateTime.now());
 
         inviteRepository.save(invite);
     }

@@ -3,6 +3,7 @@ package com.hestia.api.domain.household.service;
 import com.hestia.api.domain.household.dto.CreateHouseholdRequest;
 import com.hestia.api.domain.household.dto.HouseholdResponse;
 import com.hestia.api.domain.household.dto.InviteResponse;
+import com.hestia.api.domain.household.dto.UpdateHouseholdRequest;
 import com.hestia.api.domain.household.entity.Household;
 import com.hestia.api.domain.household.entity.Invite;
 import com.hestia.api.domain.household.enums.InviteStatus;
@@ -85,6 +86,17 @@ public class HouseholdService {
         return this.toResponse(household);
     }
 
+    public HouseholdResponse updateHousehold(UUID id, UpdateHouseholdRequest request) {
+        Household household = getHouseholdById(id);
+
+        if (request.getName() != null)
+            household.setName(request.getName());
+        if (request.getPhone() != null)
+            household.setPhone(request.getPhone());
+
+        return this.toResponse(householdRepository.save(household));
+    }
+
     @Transactional
     public void deleteHousehold(UUID id) {
         Household household = getHouseholdById(id);
@@ -98,13 +110,11 @@ public class HouseholdService {
             throw new RuntimeException("Cannot delete household with confirmed invites!");
 
         household.setIsActive(false);
-        household.setUpdatedAt(now);
 
         household.getInvites().stream()
                 .filter(Invite::getIsActive)
                 .forEach(invite -> {
                     invite.setIsActive(false);
-                    invite.setUpdatedAt(now);
                 });
 
         householdRepository.save(household);

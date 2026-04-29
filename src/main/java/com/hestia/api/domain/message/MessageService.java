@@ -66,8 +66,6 @@ public class MessageService {
         if (request.getIsNew() != null)
             message.setIsNew(request.getIsNew());
 
-        message.setUpdatedAt(LocalDateTime.now());
-
         return this.toResponse(messageRepository.save(message));
     }
 
@@ -75,7 +73,6 @@ public class MessageService {
         Message message = getMessageById(id);
 
         message.setIsActive(false);
-        message.setUpdatedAt(LocalDateTime.now());
 
         messageRepository.save(message);
     }
