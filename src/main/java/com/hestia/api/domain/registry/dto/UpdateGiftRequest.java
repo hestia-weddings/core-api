@@ -8,4 +8,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class UpdateGiftRequest {
+
+    private String description;
+    private String picture;
+    private Integer price;
+    private Integer stock;
 }

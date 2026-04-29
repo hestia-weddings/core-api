@@ -2,6 +2,7 @@ package com.hestia.api.domain.registry.service;
 
 import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
 import com.hestia.api.domain.registry.dto.GiftResponse;
+import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
 import com.hestia.api.domain.registry.entity.Gift;
 import com.hestia.api.domain.registry.entity.GiftAvailability;
 import com.hestia.api.domain.registry.repository.GiftAvailabilityRepository;
@@ -21,6 +22,7 @@ public class GiftService {
 
     public GiftResponse toResponse(Gift gift) {
         return GiftResponse.builder()
+                .id(gift.getId())
                 .description(gift.getDescription())
                 .picture(gift.getPicture())
                 .price(gift.getPrice())
@@ -59,7 +61,20 @@ public class GiftService {
 
     public void createGift() {}
 
-    public void updateGift() {}
+    public GiftResponse updateGift(UUID id, UpdateGiftRequest request) {
+        Gift gift = getGiftById(id);
+
+        if (request.getDescription() != null)
+            gift.setDescription(request.getDescription());
+        if (request.getPicture() != null)
+            gift.setPicture(request.getPicture());
+        if (request.getPrice() != null)
+            gift.setPrice(request.getPrice());
+        if (request.getStock() != null)
+            gift.setStock(request.getStock());
+
+        return this.toResponse(giftRepository.save(gift));
+    }
 
     public void deleteGift(UUID id) {
         Gift gift = getGiftById(id);

@@ -1,6 +1,8 @@
 package com.hestia.api.domain.registry.controller;
 
 import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
+import com.hestia.api.domain.registry.dto.GiftResponse;
+import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
 import com.hestia.api.domain.registry.service.GiftService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +29,13 @@ public class GiftController {
     @PostMapping
     public void postGift() {}
 
-    @PatchMapping
-    public void patchGift() {}
+    @PatchMapping("/{id}")
+    public GiftResponse patchGift(
+            @PathVariable UUID id,
+            @RequestBody UpdateGiftRequest request
+    ) {
+        return giftService.updateGift(id, request);
+    }
 
     @DeleteMapping("/{id}")
     public void deleteGift(@PathVariable UUID id) { giftService.deleteGift(id); }
