@@ -1,5 +1,6 @@
 package com.hestia.api.domain.registry.service;
 
+import com.hestia.api.domain.registry.dto.CreateGiftRequest;
 import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
 import com.hestia.api.domain.registry.dto.GiftResponse;
 import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
@@ -59,7 +60,17 @@ public class GiftService {
                 .orElseThrow(() -> new IllegalArgumentException("Gift not found"));
     }
 
-    public void createGift() {}
+    public GiftResponse createGift(CreateGiftRequest request) {
+        Gift gift = Gift.builder()
+                .description(request.getDescription())
+                .picture(request.getPicture())
+                .price(request.getPrice())
+                .stock(request.getStock())
+                .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
+                .build();
+
+        return this.toResponse(giftRepository.save(gift));
+    }
 
     public GiftResponse updateGift(UUID id, UpdateGiftRequest request) {
         Gift gift = getGiftById(id);

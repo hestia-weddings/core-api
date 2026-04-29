@@ -1,5 +1,6 @@
 package com.hestia.api.domain.registry.controller;
 
+import com.hestia.api.domain.registry.dto.CreateGiftRequest;
 import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
 import com.hestia.api.domain.registry.dto.GiftResponse;
 import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
@@ -27,7 +28,9 @@ public class GiftController {
     }
 
     @PostMapping
-    public void postGift() {}
+    public GiftResponse postGift(@RequestBody CreateGiftRequest request) {
+        return giftService.createGift(request);
+    }
 
     @PatchMapping("/{id}")
     public GiftResponse patchGift(
