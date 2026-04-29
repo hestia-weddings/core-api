@@ -51,6 +51,9 @@ public class InviteService {
     public void deleteInvite(UUID id) {
         Invite invite = getInviteById(id);
 
+        if (invite.getStatus() == InviteStatus.CONFIRMED)
+            throw new RuntimeException("Cannot delete invites already confirmed!");
+
         invite.setIsActive(false);
         invite.setUpdatedAt(LocalDateTime.now());
 

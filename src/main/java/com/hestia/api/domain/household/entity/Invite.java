@@ -5,6 +5,8 @@ import com.hestia.api.domain.household.enums.InviteAge;
 import com.hestia.api.domain.household.enums.InviteStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "invites")
@@ -19,11 +21,13 @@ public class Invite extends BaseModel {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "age_group", nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "age_group", columnDefinition = "age_group_enum", nullable = false)
     private InviteAge ageGroup;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "invite_status_enum", nullable = false)
     private InviteStatus status;
 
     @ManyToOne

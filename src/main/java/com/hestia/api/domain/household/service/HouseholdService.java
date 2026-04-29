@@ -4,7 +4,9 @@ import com.hestia.api.domain.household.dto.HouseholdResponse;
 import com.hestia.api.domain.household.dto.InviteResponse;
 import com.hestia.api.domain.household.entity.Household;
 import com.hestia.api.domain.household.entity.Invite;
+import com.hestia.api.domain.household.enums.InviteStatus;
 import com.hestia.api.domain.household.repository.HouseholdRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ public class HouseholdService {
     private HouseholdResponse toResponse(Household household) {
         List<InviteResponse> invites = household.getInvites()
                 .stream()
+                .filter(Invite::getIsActive)
                 .map((invite) -> InviteResponse.builder()
                         .id(invite.getId())
                         .name(invite.getName())
@@ -51,11 +54,27 @@ public class HouseholdService {
                 .orElseThrow(() -> new IllegalArgumentException("Household not found"));
     }
 
+    @Transactional
     public void deleteHousehold(UUID id) {
         Household household = getHouseholdById(id);
+        LocalDateTime now = LocalDateTime.now();
+
+        boolean hasConfirmedInvites = household.getInvites().stream()
+                .filter(Invite::getIsActive)
+                .anyMatch(invite -> invite.getStatus() == InviteStatus.CONFIRMED);
+
+        if (hasConfirmedInvites)
+            throw new RuntimeException("Cannot delete household with confirmed invites!");
 
         household.setIsActive(false);
-        household.setUpdatedAt(LocalDateTime.now());
+        household.setUpdatedAt(now);
+
+        household.getInvites().stream()
+                .filter(Invite::getIsActive)
+                .forEach(invite -> {
+                    invite.setIsActive(false);
+                    invite.setUpdatedAt(now);
+                });
 
         householdRepository.save(household);
     }
