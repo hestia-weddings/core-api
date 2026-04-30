@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,29 +24,30 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping
-    public PageResponse<MessageResponse> getMessage(
+    public ResponseEntity<PageResponse<MessageResponse>> getMessage(
             Pageable pageable,
             @RequestParam(required = false, name = "is_new") Boolean isNew,
             @RequestParam(required = false, name = "is_favorite") Boolean isFavorite
     ) {
-        return messageService.getMessages(pageable, isNew, isFavorite);
+        return ResponseEntity.ok(messageService.getMessages(pageable, isNew, isFavorite));
     }
 
     @PostMapping
-    public MessageResponse createMessage(@RequestBody CreateMessageRequest request) {
-        return messageService.createMessage(request);
+    public ResponseEntity<MessageResponse> createMessage(@RequestBody CreateMessageRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(request));
     }
 
     @PatchMapping("/{id}")
-    public MessageResponse updateMessage(
+    public ResponseEntity<MessageResponse> updateMessage(
             @PathVariable UUID id,
             @RequestBody UpdateMessageRequest request
         ) {
-        return messageService.updateMessage(id, request);
+        return ResponseEntity.ok(messageService.updateMessage(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMessage(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteMessage(@PathVariable UUID id) {
         messageService.deleteMessage(id);
+        return ResponseEntity.noContent().build();
     }
 }

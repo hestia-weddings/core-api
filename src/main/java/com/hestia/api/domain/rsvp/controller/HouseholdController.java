@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -23,23 +25,26 @@ public class HouseholdController {
     private HouseholdService householdService;
 
     @GetMapping
-    public PageResponse<HouseholdResponse> getHousehold(Pageable pageable) {
-        return householdService.getHouseholds(pageable);
+    public ResponseEntity<PageResponse<HouseholdResponse>> getHousehold(Pageable pageable) {
+        return ResponseEntity.ok(householdService.getHouseholds(pageable));
     }
 
     @PostMapping
-    public HouseholdResponse postHousehold(@RequestBody CreateHouseholdRequest request) {
-        return householdService.createHousehold(request);
+    public ResponseEntity<HouseholdResponse> postHousehold(@RequestBody CreateHouseholdRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(householdService.createHousehold(request));
     }
 
     @PatchMapping("/{id}")
-    public HouseholdResponse patchHousehold(
+    public ResponseEntity<HouseholdResponse> patchHousehold(
             @PathVariable UUID id,
             @RequestBody UpdateHouseholdRequest request
     ) {
-        return householdService.updateHousehold(id, request);
+        return ResponseEntity.ok(householdService.updateHousehold(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteHousehold(@PathVariable UUID id) { householdService.deleteHousehold(id); }
+    public ResponseEntity<Void> deleteHousehold(@PathVariable UUID id) {
+        householdService.deleteHousehold(id);
+        return ResponseEntity.noContent().build();
+    }
 }

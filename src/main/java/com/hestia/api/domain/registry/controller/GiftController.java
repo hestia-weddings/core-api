@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,23 +26,26 @@ public class GiftController {
     private GiftService giftService;
 
     @GetMapping
-    public PageResponse<GiftAvailabilityResponse> getGift(Pageable pageable) {
-        return giftService.getGifts(pageable);
+    public ResponseEntity<PageResponse<GiftAvailabilityResponse>> getGift(Pageable pageable) {
+        return ResponseEntity.ok(giftService.getGifts(pageable));
     }
 
     @PostMapping
-    public GiftResponse postGift(@RequestBody CreateGiftRequest request) {
-        return giftService.createGift(request);
+    public ResponseEntity<GiftResponse> postGift(@RequestBody CreateGiftRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(giftService.createGift(request));
     }
 
     @PatchMapping("/{id}")
-    public GiftResponse patchGift(
+    public ResponseEntity<GiftResponse> patchGift(
             @PathVariable UUID id,
             @RequestBody UpdateGiftRequest request
     ) {
-        return giftService.updateGift(id, request);
+        return ResponseEntity.ok(giftService.updateGift(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteGift(@PathVariable UUID id) { giftService.deleteGift(id); }
+    public ResponseEntity<Void> deleteGift(@PathVariable UUID id) {
+        giftService.deleteGift(id);
+        return ResponseEntity.noContent().build();
+    }
 }
