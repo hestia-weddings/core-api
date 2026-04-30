@@ -14,9 +14,19 @@ import java.util.List;
 public class PageResponse<T> {
 
     private List<T> data;
-    private int page;
-    private int size;
-    private int totalElements;
-    private int totalPages;
-    private boolean last;
+    private Meta meta;
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class Meta {
+        private int page;
+        private int size;
+        private long totalElements;
+        private int totalPages;
+        private boolean hasNext;
+        private boolean hasPrevious;
+    }
+
 }

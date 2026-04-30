@@ -1,5 +1,7 @@
 package com.hestia.api.domain.rsvp.service;
 
+import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.rsvp.dto.CreateHouseholdRequest;
 import com.hestia.api.domain.rsvp.dto.HouseholdResponse;
 import com.hestia.api.domain.rsvp.dto.InviteResponse;
@@ -47,9 +49,11 @@ public class HouseholdService {
                 .build();
     }
 
-    public Page<HouseholdResponse> getHouseholds(Pageable pageable) {
-        return householdRepository.findByIsActiveTrue(pageable)
+    public PageResponse<HouseholdResponse> getHouseholds(Pageable pageable) {
+        Page<HouseholdResponse> household = householdRepository.findByIsActiveTrue(pageable)
                 .map(this::toResponse);
+
+        return PageMapper.toResponse(household);
     }
 
     public Household getHouseholdById(UUID id) {

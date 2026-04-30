@@ -1,5 +1,7 @@
 package com.hestia.api.domain.message;
 
+import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
@@ -26,17 +28,21 @@ public class MessageService {
                 .build();
     }
 
-    public Page<MessageResponse> getMessages(Pageable pageable, Boolean isNew, Boolean isFavorite) {
+    public PageResponse<MessageResponse> getMessages(Pageable pageable, Boolean isNew, Boolean isFavorite) {
+        Page<MessageResponse> message;
+
         if (Boolean.TRUE.equals(isNew))
-            return messageRepository.findByIsNewTrueAndIsActiveTrue(pageable)
+            message = messageRepository.findByIsNewTrueAndIsActiveTrue(pageable)
                     .map(this::toResponse);
 
-        if (Boolean.TRUE.equals(isFavorite))
-            return messageRepository.findByIsFavoriteTrueAndIsActiveTrue(pageable)
+        else if (Boolean.TRUE.equals(isFavorite))
+            message = messageRepository.findByIsFavoriteTrueAndIsActiveTrue(pageable)
                     .map(this::toResponse);
-
-        return messageRepository.findByIsActiveTrue(pageable)
+        else
+            message = messageRepository.findByIsActiveTrue(pageable)
                 .map(this::toResponse);
+
+        return PageMapper.toResponse(message);
     }
 
     public Message getMessageById(UUID id) {

@@ -1,5 +1,6 @@
 package com.hestia.api.domain.rsvp.controller;
 
+import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
 import com.hestia.api.domain.rsvp.dto.InviteResponse;
 import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
@@ -10,7 +11,6 @@ import com.hestia.api.domain.rsvp.service.InviteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +26,7 @@ public class InviteController {
     private InviteService inviteService;
 
     @GetMapping
-    public Page<InviteResponse> getInvite(
+    public PageResponse<InviteResponse> getInvite(
             Pageable pageable,
             @RequestParam(required = false, name = "status") InviteStatus status,
             @RequestParam(required = false, name = "household_id") Household household

@@ -1,12 +1,12 @@
 package com.hestia.api.domain.message;
 
+import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping
-    public Page<MessageResponse> getMessage(
+    public PageResponse<MessageResponse> getMessage(
             Pageable pageable,
             @RequestParam(required = false, name = "is_new") Boolean isNew,
             @RequestParam(required = false, name = "is_favorite") Boolean isFavorite

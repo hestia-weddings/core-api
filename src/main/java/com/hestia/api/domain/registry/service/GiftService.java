@@ -1,5 +1,7 @@
 package com.hestia.api.domain.registry.service;
 
+import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.registry.dto.CreateGiftRequest;
 import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
 import com.hestia.api.domain.registry.dto.GiftResponse;
@@ -46,9 +48,11 @@ public class GiftService {
                 .build();
     }
 
-    public Page<GiftAvailabilityResponse> getGifts(Pageable pageable) {
-        return giftAvailabilityRepository.findAll(pageable)
+    public PageResponse<GiftAvailabilityResponse> getGifts(Pageable pageable) {
+        Page<GiftAvailabilityResponse> page = giftAvailabilityRepository.findAll(pageable)
                 .map(this::toAvailabilityResponse);
+
+        return PageMapper.toResponse(page);
     }
 
     public Gift getGiftById(UUID id) {

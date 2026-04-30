@@ -1,5 +1,6 @@
 package com.hestia.api.domain.registry.controller;
 
+import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.registry.dto.CreateGiftRequest;
 import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
 import com.hestia.api.domain.registry.dto.GiftResponse;
@@ -8,7 +9,6 @@ import com.hestia.api.domain.registry.service.GiftService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public class GiftController {
     private GiftService giftService;
 
     @GetMapping
-    public Page<GiftAvailabilityResponse> getGift(Pageable pageable) {
+    public PageResponse<GiftAvailabilityResponse> getGift(Pageable pageable) {
         return giftService.getGifts(pageable);
     }
 

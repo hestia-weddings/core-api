@@ -1,5 +1,7 @@
 package com.hestia.api.domain.rsvp.service;
 
+import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
 import com.hestia.api.domain.rsvp.dto.InviteResponse;
 import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
@@ -33,17 +35,22 @@ public class InviteService {
                 .build();
     }
 
-    public Page<InviteResponse> getInvites(Pageable pageable, InviteStatus status, Household household) {
+    public PageResponse<InviteResponse> getInvites(Pageable pageable, InviteStatus status, Household household) {
+        Page<InviteResponse> invite;
+
         if (household != null)
-            return inviteRepository.findByHouseholdAndIsActiveTrue(pageable, household)
+            invite = inviteRepository.findByHouseholdAndIsActiveTrue(pageable, household)
                     .map(this::toResponse);
 
-        if (status != null)
-            return inviteRepository.findByStatusAndIsActiveTrue(pageable, status)
+        else if (status != null)
+            invite = inviteRepository.findByStatusAndIsActiveTrue(pageable, status)
                     .map(this::toResponse);
 
-        return inviteRepository.findByIsActiveTrue(pageable)
+        else
+            invite = inviteRepository.findByIsActiveTrue(pageable)
                 .map(this::toResponse);
+
+        return PageMapper.toResponse(invite);
     }
 
     private Invite getInviteById(UUID id) {
