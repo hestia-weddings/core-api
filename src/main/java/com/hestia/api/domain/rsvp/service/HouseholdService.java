@@ -1,6 +1,7 @@
 package com.hestia.api.domain.rsvp.service;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.rsvp.dto.CreateHouseholdRequest;
 import com.hestia.api.domain.rsvp.dto.HouseholdResponse;
@@ -56,9 +57,9 @@ public class HouseholdService {
         return PageMapper.toResponse(household);
     }
 
-    public Household getHouseholdById(UUID id) {
+    private Household getHousehold(UUID id) {
         return householdRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Household not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Household not found"));
     }
 
     @Transactional
@@ -90,7 +91,7 @@ public class HouseholdService {
     }
 
     public HouseholdResponse updateHousehold(UUID id, UpdateHouseholdRequest request) {
-        Household household = getHouseholdById(id);
+        Household household = getHousehold(id);
 
         if (request.getName() != null)
             household.setName(request.getName());
@@ -102,7 +103,7 @@ public class HouseholdService {
 
     @Transactional
     public void deleteHousehold(UUID id) {
-        Household household = getHouseholdById(id);
+        Household household = getHousehold(id);
 
         boolean hasConfirmedInvites = household.getInvites().stream()
                 .filter(Invite::getIsActive)

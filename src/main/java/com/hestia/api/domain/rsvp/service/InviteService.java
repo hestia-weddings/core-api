@@ -1,6 +1,7 @@
 package com.hestia.api.domain.rsvp.service;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
 import com.hestia.api.domain.rsvp.dto.InviteResponse;
@@ -53,14 +54,14 @@ public class InviteService {
         return PageMapper.toResponse(invite);
     }
 
-    private Invite getInviteById(UUID id) {
+    private Invite getInvite(UUID id) {
         return inviteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invite not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
     }
 
     public InviteResponse createInvite(CreateInviteRequest request) {
         Household household = householdRepository.findById(request.getHouseholdId())
-                .orElseThrow(() -> new RuntimeException("Household not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Household not found"));
 
         Invite invite = Invite.builder()
                 .name(request.getName())
@@ -74,7 +75,7 @@ public class InviteService {
     }
 
     public InviteResponse updateInvite(UUID id, UpdateInviteRequest request) {
-        Invite invite = getInviteById(id);
+        Invite invite = getInvite(id);
 
         if (request.getName() != null)
             invite.setName(request.getName());
@@ -85,7 +86,7 @@ public class InviteService {
     }
 
     public InviteResponse updateInviteStatus(UUID id, UpdateInviteStatusRequest request) {
-        Invite invite = getInviteById(id);
+        Invite invite = getInvite(id);
 
         invite.setStatus(request.getStatus());
 
@@ -93,7 +94,7 @@ public class InviteService {
     }
 
     public void deleteInvite(UUID id) {
-        Invite invite = getInviteById(id);
+        Invite invite = getInvite(id);
 
         if (invite.getStatus() == InviteStatus.CONFIRMED)
             throw new RuntimeException("Cannot delete invites already confirmed!");

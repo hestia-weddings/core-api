@@ -1,6 +1,7 @@
 package com.hestia.api.domain.message.service;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
@@ -47,9 +48,9 @@ public class MessageService {
         return PageMapper.toResponse(message);
     }
 
-    public Message getMessageById(UUID id) {
+    private Message getMessage(UUID id) {
         return messageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Message not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
     }
 
     public MessageResponse createMessage(CreateMessageRequest request) {
@@ -65,7 +66,7 @@ public class MessageService {
     }
 
     public MessageResponse updateMessage(UUID id, UpdateMessageRequest request) {
-        Message message = getMessageById(id);
+        Message message = getMessage(id);
 
         if (request.getIsFavorite() != null)
             message.setIsFavorite(request.getIsFavorite());
@@ -76,7 +77,7 @@ public class MessageService {
     }
 
     public void deleteMessage(UUID id) {
-        Message message = getMessageById(id);
+        Message message = getMessage(id);
 
         message.setIsActive(false);
 
