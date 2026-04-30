@@ -1,6 +1,7 @@
 package com.hestia.api.domain.registry.service;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.registry.dto.CreateGiftRequest;
 import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
@@ -55,9 +56,16 @@ public class GiftService {
         return PageMapper.toResponse(page);
     }
 
-    public Gift getGiftById(UUID id) {
+    public GiftAvailabilityResponse getGiftById(UUID id) {
+        GiftAvailability gift = giftAvailabilityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
+
+        return toAvailabilityResponse(gift);
+    }
+
+    private Gift getGift(UUID id) {
         return giftRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Gift not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
     }
 
     public GiftResponse createGift(CreateGiftRequest request) {
@@ -73,7 +81,7 @@ public class GiftService {
     }
 
     public GiftResponse updateGift(UUID id, UpdateGiftRequest request) {
-        Gift gift = getGiftById(id);
+        Gift gift = getGift(id);
 
         if (request.getDescription() != null)
             gift.setDescription(request.getDescription());
@@ -88,7 +96,7 @@ public class GiftService {
     }
 
     public void deleteGift(UUID id) {
-        Gift gift = getGiftById(id);
+        Gift gift = getGift(id);
 
         gift.setIsActive(false);
 

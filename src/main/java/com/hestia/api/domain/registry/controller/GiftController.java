@@ -35,6 +35,11 @@ public class GiftController {
         return ResponseEntity.status(HttpStatus.CREATED).body(giftService.createGift(request));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<GiftAvailabilityResponse> getGiftById(@PathVariable UUID id) {
+        return ResponseEntity.ok(giftService.getGiftById(id));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<GiftResponse> patchGift(
             @PathVariable UUID id,
