@@ -1,6 +1,7 @@
-package com.hestia.api.domain.message;
+package com.hestia.api.domain.message.controller;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.domain.message.service.MessageService;
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;

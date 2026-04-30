@@ -1,10 +1,12 @@
-package com.hestia.api.domain.message;
+package com.hestia.api.domain.message.service;
 
 import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
+import com.hestia.api.domain.message.entity.Message;
+import com.hestia.api.domain.message.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

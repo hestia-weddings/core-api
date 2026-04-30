@@ -1,10 +1,9 @@
-package com.hestia.api.domain.message;
+package com.hestia.api.domain.message.entity;
 
 import com.hestia.api.common.model.BaseModel;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
