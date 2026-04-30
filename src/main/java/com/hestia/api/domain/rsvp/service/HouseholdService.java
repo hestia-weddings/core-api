@@ -11,6 +11,8 @@ import com.hestia.api.domain.rsvp.repository.HouseholdRepository;
 import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,11 +47,9 @@ public class HouseholdService {
                 .build();
     }
 
-    public List<HouseholdResponse> getHouseholds() {
-        return householdRepository.findByIsActiveTrue()
-                .stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<HouseholdResponse> getHouseholds(Pageable pageable) {
+        return householdRepository.findByIsActiveTrue(pageable)
+                .map(this::toResponse);
     }
 
     public Household getHouseholdById(UUID id) {

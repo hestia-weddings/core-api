@@ -4,10 +4,10 @@ import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,19 +26,17 @@ public class MessageService {
                 .build();
     }
 
-    public List<MessageResponse> getMessages(Boolean isNew, Boolean isFavorite) {
-        List<Message> messages;
-
+    public Page<MessageResponse> getMessages(Pageable pageable, Boolean isNew, Boolean isFavorite) {
         if (Boolean.TRUE.equals(isNew))
-            messages = messageRepository.findByIsNewTrueAndIsActiveTrue();
-        else if (Boolean.TRUE.equals(isFavorite))
-            messages = messageRepository.findByIsFavoriteTrueAndIsActiveTrue();
-        else
-            messages = messageRepository.findByIsActiveTrue();
+            return messageRepository.findByIsNewTrueAndIsActiveTrue(pageable)
+                    .map(this::toResponse);
 
-        return messages.stream()
-                .map(this::toResponse)
-                .toList();
+        if (Boolean.TRUE.equals(isFavorite))
+            return messageRepository.findByIsFavoriteTrueAndIsActiveTrue(pageable)
+                    .map(this::toResponse);
+
+        return messageRepository.findByIsActiveTrue(pageable)
+                .map(this::toResponse);
     }
 
     public Message getMessageById(UUID id) {

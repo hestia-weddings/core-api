@@ -10,9 +10,10 @@ import com.hestia.api.domain.rsvp.enums.InviteStatus;
 import com.hestia.api.domain.rsvp.repository.HouseholdRepository;
 import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,19 +33,17 @@ public class InviteService {
                 .build();
     }
 
-    public List<InviteResponse> getInvites(InviteStatus status, Household household) {
-        List<Invite> invites;
-
+    public Page<InviteResponse> getInvites(Pageable pageable, InviteStatus status, Household household) {
         if (household != null)
-            invites = inviteRepository.findByHouseholdAndIsActiveTrue(household);
-        else if (status != null)
-            invites = inviteRepository.findByStatusAndIsActiveTrue(status);
-        else
-            invites = inviteRepository.findByIsActiveTrue();
+            return inviteRepository.findByHouseholdAndIsActiveTrue(pageable, household)
+                    .map(this::toResponse);
 
-        return invites.stream()
-                .map(this::toResponse)
-                .toList();
+        if (status != null)
+            return inviteRepository.findByStatusAndIsActiveTrue(pageable, status)
+                    .map(this::toResponse);
+
+        return inviteRepository.findByIsActiveTrue(pageable)
+                .map(this::toResponse);
     }
 
     private Invite getInviteById(UUID id) {

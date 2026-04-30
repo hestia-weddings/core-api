@@ -10,9 +10,10 @@ import com.hestia.api.domain.rsvp.service.InviteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,11 +26,12 @@ public class InviteController {
     private InviteService inviteService;
 
     @GetMapping
-    public List<InviteResponse> getInvite(
+    public Page<InviteResponse> getInvite(
+            Pageable pageable,
             @RequestParam(required = false, name = "status") InviteStatus status,
             @RequestParam(required = false, name = "household_id") Household household
     ) {
-        return inviteService.getInvites(status, household);
+        return inviteService.getInvites(pageable, status, household);
     }
 
     @PostMapping

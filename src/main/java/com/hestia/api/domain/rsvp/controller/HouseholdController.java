@@ -7,9 +7,10 @@ import com.hestia.api.domain.rsvp.service.HouseholdService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,8 +23,8 @@ public class HouseholdController {
     private HouseholdService householdService;
 
     @GetMapping
-    public List<HouseholdResponse> getHousehold() {
-        return householdService.getHouseholds();
+    public Page<HouseholdResponse> getHousehold(Pageable pageable) {
+        return householdService.getHouseholds(pageable);
     }
 
     @PostMapping

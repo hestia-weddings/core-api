@@ -8,9 +8,10 @@ import com.hestia.api.domain.registry.service.GiftService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,8 +24,8 @@ public class GiftController {
     private GiftService giftService;
 
     @GetMapping
-    public List<GiftAvailabilityResponse> getGift() {
-        return giftService.getGifts();
+    public Page<GiftAvailabilityResponse> getGift(Pageable pageable) {
+        return giftService.getGifts(pageable);
     }
 
     @PostMapping

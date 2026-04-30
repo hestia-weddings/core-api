@@ -9,9 +9,10 @@ import com.hestia.api.domain.registry.entity.GiftAvailability;
 import com.hestia.api.domain.registry.repository.GiftAvailabilityRepository;
 import com.hestia.api.domain.registry.repository.GiftRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -45,14 +46,9 @@ public class GiftService {
                 .build();
     }
 
-    public List<GiftAvailabilityResponse> getGifts() {
-        List<GiftAvailability> giftAvailabilities;
-
-        giftAvailabilities = giftAvailabilityRepository.findAll();
-
-        return giftAvailabilities.stream()
-                .map(this::toAvailabilityResponse)
-                .toList();
+    public Page<GiftAvailabilityResponse> getGifts(Pageable pageable) {
+        return giftAvailabilityRepository.findAll(pageable)
+                .map(this::toAvailabilityResponse);
     }
 
     public Gift getGiftById(UUID id) {
