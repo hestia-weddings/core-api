@@ -1,6 +1,7 @@
 package com.hestia.api.domain.rsvp.service;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.exception.CannotDeleteConfirmedInviteException;
 import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
@@ -97,7 +98,7 @@ public class InviteService {
         Invite invite = getInvite(id);
 
         if (invite.getStatus() == InviteStatus.CONFIRMED)
-            throw new RuntimeException("Cannot delete invites already confirmed!");
+            throw new CannotDeleteConfirmedInviteException();
 
         invite.setIsActive(false);
 

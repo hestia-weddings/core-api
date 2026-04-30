@@ -1,6 +1,7 @@
 package com.hestia.api.domain.rsvp.service;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.exception.CannotDeleteHouseholdWithConfirmedInvitesException;
 import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.rsvp.dto.CreateHouseholdRequest;
@@ -110,7 +111,7 @@ public class HouseholdService {
                 .anyMatch(invite -> invite.getStatus() == InviteStatus.CONFIRMED);
 
         if (hasConfirmedInvites)
-            throw new RuntimeException("Cannot delete household with confirmed invites!");
+            throw new CannotDeleteHouseholdWithConfirmedInvitesException();
 
         household.setIsActive(false);
 
