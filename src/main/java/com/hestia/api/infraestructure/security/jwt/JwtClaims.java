@@ -8,4 +8,14 @@ public record JwtClaims(
         String email,
         Map<String, Object> claims
 ) {
+
+    public UUID getWeddingId() {
+        Map<?, ?> appMetadata = (Map<?, ?>) claims.get("app_metadata");
+
+        if (appMetadata == null) return null;
+
+        String weddingId = (String) appMetadata.get("wedding_id");
+
+        return weddingId != null ? UUID.fromString(weddingId) : null;
+    }
 }

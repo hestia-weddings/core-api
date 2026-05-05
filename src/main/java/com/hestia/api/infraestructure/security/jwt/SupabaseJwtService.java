@@ -18,7 +18,7 @@ public class SupabaseJwtService {
 
         return new JwtClaims(
                 UUID.fromString(jwt.getSubject()),
-                jwt.getClaimAsString("gmail"),
+                jwt.getClaimAsString("email"),
                 jwt.getClaims()
         );
     }
