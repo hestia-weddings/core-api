@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class HouseholdResponse {
+public class InviteResponse {
 
     private UUID id;
     private String name;

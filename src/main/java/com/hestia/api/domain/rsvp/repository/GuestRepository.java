@@ -1,6 +1,6 @@
 package com.hestia.api.domain.rsvp.repository;
 
-import com.hestia.api.domain.rsvp.entity.Household;
+import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.entity.Guest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import org.springframework.data.domain.Page;
@@ -13,5 +13,5 @@ public interface GuestRepository extends JpaRepository<Guest, UUID> {
 
     Page<Guest> findByIsActiveTrue(Pageable pageable);
     Page<Guest> findByStatusAndIsActiveTrue(Pageable pageable, GuestStatus status);
-    Page<Guest> findByHouseholdAndIsActiveTrue(Pageable pageable, Household household);
+    Page<Guest> findByInviteAndIsActiveTrue(Pageable pageable, Invite invite);
 }

@@ -8,10 +8,10 @@ import com.hestia.api.domain.rsvp.dto.CreateGuestRequest;
 import com.hestia.api.domain.rsvp.dto.GuestResponse;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestRequest;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestStatusRequest;
-import com.hestia.api.domain.rsvp.entity.Household;
+import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.entity.Guest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
-import com.hestia.api.domain.rsvp.repository.HouseholdRepository;
+import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class GuestService {
 
     private final GuestRepository guestRepository;
-    private final HouseholdRepository householdRepository;
+    private final InviteRepository inviteRepository;
 
     public GuestResponse toResponse(Guest guest) {
         return GuestResponse.builder()
@@ -37,11 +37,11 @@ public class GuestService {
                 .build();
     }
 
-    public PageResponse<GuestResponse> getGuests(Pageable pageable, GuestStatus status, Household household) {
+    public PageResponse<GuestResponse> getGuests(Pageable pageable, GuestStatus status, Invite invite) {
         Page<GuestResponse> guest;
 
-        if (household != null)
-            guest = guestRepository.findByHouseholdAndIsActiveTrue(pageable, household)
+        if (invite != null)
+            guest = guestRepository.findByInviteAndIsActiveTrue(pageable, invite)
                     .map(this::toResponse);
 
         else if (status != null)
@@ -61,14 +61,14 @@ public class GuestService {
     }
 
     public GuestResponse createGuest(CreateGuestRequest request) {
-        Household household = householdRepository.findById(request.getHouseholdId())
-                .orElseThrow(() -> new ResourceNotFoundException("Household not found"));
+        Invite invite = inviteRepository.findById(request.getInviteId())
+                .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
 
         Guest guest = Guest.builder()
                 .name(request.getName())
                 .ageGroup(request.getAgeGroup())
                 .status(GuestStatus.PENDING)
-                .household(household)
+                .invite(invite)
                 .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
                 .build();
 

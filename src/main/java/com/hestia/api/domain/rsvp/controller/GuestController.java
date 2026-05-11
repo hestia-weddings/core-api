@@ -5,7 +5,7 @@ import com.hestia.api.domain.rsvp.dto.CreateGuestRequest;
 import com.hestia.api.domain.rsvp.dto.GuestResponse;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestRequest;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestStatusRequest;
-import com.hestia.api.domain.rsvp.entity.Household;
+import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,9 +31,9 @@ public class GuestController {
     public ResponseEntity<PageResponse<GuestResponse>> getGuest(
             Pageable pageable,
             @RequestParam(required = false, name = "status") GuestStatus status,
-            @RequestParam(required = false, name = "household_id") Household household
+            @RequestParam(required = false, name = "invite_id") Invite invite
     ) {
-        return ResponseEntity.ok(guestService.getGuests(pageable, status, household));
+        return ResponseEntity.ok(guestService.getGuests(pageable, status, invite));
     }
 
     @PostMapping

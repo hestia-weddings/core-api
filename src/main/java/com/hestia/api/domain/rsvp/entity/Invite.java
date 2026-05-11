@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "households")
+@Table(name = "invites")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Household extends BaseModel {
+public class Invite extends BaseModel {
 
     @Column(nullable = false)
     private String name;
@@ -25,7 +25,7 @@ public class Household extends BaseModel {
     @Column()
     private String phone;
 
-    @OneToMany(mappedBy = "household")
+    @OneToMany(mappedBy = "invite")
     private List<Guest> guests;
 
     @Column(name = "wedding_id", nullable = false)

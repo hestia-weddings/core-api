@@ -33,8 +33,8 @@ public class Guest extends BaseModel {
     private GuestStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "household_id")
-    private Household household;
+    @JoinColumn(name = "invite_id")
+    private Invite invite;
 
     @Column(name = "wedding_id", nullable = false)
     private UUID weddingId;

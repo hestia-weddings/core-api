@@ -4,11 +4,11 @@ A Spring Boot REST API for managing wedding/event planning features including RS
 
 ## 📋 Project Overview
 
-**Hestia Core API** is a comprehensive event management platform built with Spring Boot 3.5.14 and Java 21. The application provides RESTful endpoints for managing households, guests, gift registries, and guest messages.
+**Hestia Core API** is a comprehensive event management platform built with Spring Boot 3.5.14 and Java 21. The application provides RESTful endpoints for managing invites, guests, gift registries, and guest messages.
 
 ### Current Features
 
-- **RSVP Management**: Household and guest tracking with status management
+- **RSVP Management**: Invite and guest tracking with status management
 - **Gift Registry**: Gift catalog with availability tracking
 - **Messaging System**: Guest message management
 - **API Documentation**: Swagger/OpenAPI integration
@@ -70,7 +70,7 @@ src/main/java/com/hestia/api/
 │   ├── mapper/         # Utility mappers
 │   └── model/          # Base models
 ├── domain/
-│   ├── rsvp/           # RSVP management (Households & Guests)
+│   ├── rsvp/           # RSVP management (Invites & Guests)
 │   ├── registry/       # Gift registry management
 │   └── message/        # Guest messaging system
 └── CoreApiApplication.java
@@ -104,7 +104,7 @@ This project follows an **8-step incremental development approach**. Each step r
 - ✅ Pagination support
 
 ### Endpoints
-- **Households**: `/api/v2/households`
+- **Invites**: `/api/v2/invites`
 - **Guests**: `/api/v2/guests`
 - **Gifts**: `/api/v2/gifts`
 - **Messages**: `/api/v2/messages`

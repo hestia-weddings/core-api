@@ -12,5 +12,5 @@ public class CreateGuestRequest {
 
     private String name;
     private GuestAge ageGroup;
-    private UUID householdId;
+    private UUID inviteId;
 }

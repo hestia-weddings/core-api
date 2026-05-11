@@ -1,17 +1,17 @@
 package com.hestia.api.domain.rsvp.service;
 
 import com.hestia.api.common.dto.PageResponse;
-import com.hestia.api.common.exception.CannotDeleteHouseholdWithConfirmedGuestsException;
+import com.hestia.api.common.exception.CannotDeleteInviteWithConfirmedGuestsException;
 import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
-import com.hestia.api.domain.rsvp.dto.CreateHouseholdRequest;
-import com.hestia.api.domain.rsvp.dto.HouseholdResponse;
+import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
+import com.hestia.api.domain.rsvp.dto.InviteResponse;
 import com.hestia.api.domain.rsvp.dto.GuestResponse;
-import com.hestia.api.domain.rsvp.dto.UpdateHouseholdRequest;
-import com.hestia.api.domain.rsvp.entity.Household;
+import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
+import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.entity.Guest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
-import com.hestia.api.domain.rsvp.repository.HouseholdRepository;
+import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,13 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class HouseholdService {
+public class InviteService {
 
-    private final HouseholdRepository householdRepository;
+    private final InviteRepository inviteRepository;
     private final GuestRepository guestRepository;
 
-    private HouseholdResponse toResponse(Household household) {
-        List<GuestResponse> guests = household.getGuests()
+    private InviteResponse toResponse(Invite invite) {
+        List<GuestResponse> guests = invite.getGuests()
                 .stream()
                 .filter(Guest::getIsActive)
                 .map((guest) -> GuestResponse.builder()
@@ -42,36 +42,36 @@ public class HouseholdService {
                         .build())
                 .toList();
         
-        return HouseholdResponse.builder()
-                .id(household.getId())
-                .name(household.getName())
-                .phone(household.getPhone())
-                .createdAt(household.getCreatedAt())
+        return InviteResponse.builder()
+                .id(invite.getId())
+                .name(invite.getName())
+                .phone(invite.getPhone())
+                .createdAt(invite.getCreatedAt())
                 .guests(guests)
                 .build();
     }
 
-    public PageResponse<HouseholdResponse> getHouseholds(Pageable pageable) {
-        Page<HouseholdResponse> household = householdRepository.findByIsActiveTrue(pageable)
+    public PageResponse<InviteResponse> getInvites(Pageable pageable) {
+        Page<InviteResponse> invite = inviteRepository.findByIsActiveTrue(pageable)
                 .map(this::toResponse);
 
-        return PageMapper.toResponse(household);
+        return PageMapper.toResponse(invite);
     }
 
-    private Household getHousehold(UUID id) {
-        return householdRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Household not found"));
+    private Invite getInvite(UUID id) {
+        return inviteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
     }
 
     @Transactional
-    public HouseholdResponse createHousehold(CreateHouseholdRequest request) {
-        Household household = Household.builder()
+    public InviteResponse createInvite(CreateInviteRequest request) {
+        Invite invite = Invite.builder()
                 .name(request.getName())
                 .phone(request.getPhone())
                 .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
                 .build();
 
-        Household savedHousehold = householdRepository.save(household);
+        Invite savedInvite = inviteRepository.save(invite);
 
         if (request.getGuests() != null && !request.getGuests().isEmpty()) {
             List<Guest> guests = request.getGuests().stream()
@@ -79,46 +79,46 @@ public class HouseholdService {
                             .name(guestRequest.getName())
                             .ageGroup(guestRequest.getAgeGroup())
                             .status(GuestStatus.PENDING)
-                            .household(savedHousehold)
+                            .invite(savedInvite)
                             .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
                             .build())
                     .toList();
 
             guestRepository.saveAll(guests);
-            savedHousehold.setGuests(guests);
+            savedInvite.setGuests(guests);
         }
 
-        return this.toResponse(household);
+        return this.toResponse(invite);
     }
 
-    public HouseholdResponse updateHousehold(UUID id, UpdateHouseholdRequest request) {
-        Household household = getHousehold(id);
+    public InviteResponse updateInvite(UUID id, UpdateInviteRequest request) {
+        Invite invite = getInvite(id);
 
         if (request.getName() != null)
-            household.setName(request.getName());
+            invite.setName(request.getName());
         if (request.getPhone() != null)
-            household.setPhone(request.getPhone());
+            invite.setPhone(request.getPhone());
 
-        return this.toResponse(householdRepository.save(household));
+        return this.toResponse(inviteRepository.save(invite));
     }
 
     @Transactional
-    public void deleteHousehold(UUID id) {
-        Household household = getHousehold(id);
+    public void deleteInvite(UUID id) {
+        Invite invite = getInvite(id);
 
-        boolean hasConfirmedGuests = household.getGuests().stream()
+        boolean hasConfirmedGuests = invite.getGuests().stream()
                 .filter(Guest::getIsActive)
                 .anyMatch(guest -> guest.getStatus() == GuestStatus.CONFIRMED);
 
         if (hasConfirmedGuests)
-            throw new CannotDeleteHouseholdWithConfirmedGuestsException();
+            throw new CannotDeleteInviteWithConfirmedGuestsException();
 
-        household.setIsActive(false);
+        invite.setIsActive(false);
 
-        household.getGuests().stream()
+        invite.getGuests().stream()
                 .filter(Guest::getIsActive)
                 .forEach(guest -> guest.setIsActive(false));
 
-        householdRepository.save(household);
+        inviteRepository.save(invite);
     }
 }
