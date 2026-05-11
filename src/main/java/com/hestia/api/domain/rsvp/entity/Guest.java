@@ -1,8 +1,8 @@
 package com.hestia.api.domain.rsvp.entity;
 
 import com.hestia.api.common.model.BaseModel;
-import com.hestia.api.domain.rsvp.enums.InviteAge;
-import com.hestia.api.domain.rsvp.enums.InviteStatus;
+import com.hestia.api.domain.rsvp.enums.GuestAge;
+import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -11,13 +11,13 @@ import org.hibernate.type.SqlTypes;
 import java.util.UUID;
 
 @Entity
-@Table(name = "invites")
+@Table(name = "guests")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Invite extends BaseModel {
+public class Guest extends BaseModel {
 
     @Column(nullable = false)
     private String name;
@@ -25,12 +25,12 @@ public class Invite extends BaseModel {
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "age_group", columnDefinition = "age_group_enum", nullable = false)
-    private InviteAge ageGroup;
+    private GuestAge ageGroup;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(columnDefinition = "invite_status_enum", nullable = false)
-    private InviteStatus status;
+    @Column(columnDefinition = "guest_status_enum", nullable = false)
+    private GuestStatus status;
 
     @ManyToOne
     @JoinColumn(name = "household_id")

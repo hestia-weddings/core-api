@@ -11,5 +11,5 @@ public class CreateHouseholdRequest {
 
     private String name;
     private String phone;
-    private List<CreateInviteRequest> invites;
+    private List<CreateGuestRequest> guests;
 }

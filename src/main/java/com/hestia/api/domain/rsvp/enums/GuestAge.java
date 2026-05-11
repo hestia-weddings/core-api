@@ -1,6 +1,6 @@
 package com.hestia.api.domain.rsvp.enums;
 
-public enum InviteAge {
+public enum GuestAge {
     BABY,
     CHILD,
     ADULT

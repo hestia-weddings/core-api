@@ -17,5 +17,5 @@ public class HouseholdResponse {
     private String name;
     private String phone;
     private LocalDateTime createdAt;
-    private List<InviteResponse> invites;
+    private List<GuestResponse> guests;
 }

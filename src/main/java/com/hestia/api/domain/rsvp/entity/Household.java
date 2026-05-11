@@ -26,7 +26,7 @@ public class Household extends BaseModel {
     private String phone;
 
     @OneToMany(mappedBy = "household")
-    private List<Invite> invites;
+    private List<Guest> guests;
 
     @Column(name = "wedding_id", nullable = false)
     private UUID weddingId;
