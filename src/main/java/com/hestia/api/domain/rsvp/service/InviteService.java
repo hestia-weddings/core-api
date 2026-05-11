@@ -113,6 +113,9 @@ public class InviteService {
         if (hasConfirmedGuests)
             throw new CannotDeleteInviteWithConfirmedGuestsException();
 
+        if (!invite.getIsActive())
+            throw new ResourceNotFoundException("Invite not found");
+
         invite.setIsActive(false);
 
         invite.getGuests().stream()

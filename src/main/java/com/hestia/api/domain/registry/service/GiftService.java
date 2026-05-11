@@ -98,6 +98,9 @@ public class GiftService {
     public void deleteGift(UUID id) {
         Gift gift = getGift(id);
 
+        if (!gift.getIsActive())
+            throw new ResourceNotFoundException("Gift not found");
+
         gift.setIsActive(false);
 
         giftRepository.save(gift);

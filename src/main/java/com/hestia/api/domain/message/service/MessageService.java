@@ -70,14 +70,23 @@ public class MessageService {
 
         if (request.getIsFavorite() != null)
             message.setIsFavorite(request.getIsFavorite());
-        if (request.getIsNew() != null)
-            message.setIsNew(request.getIsNew());
+
+        return this.toResponse(messageRepository.save(message));
+    }
+
+    public MessageResponse readMessage(UUID id) {
+        Message message = getMessage(id);
+
+        message.setIsNew(false);
 
         return this.toResponse(messageRepository.save(message));
     }
 
     public void deleteMessage(UUID id) {
         Message message = getMessage(id);
+
+        if (!message.getIsActive())
+            throw new ResourceNotFoundException("Message not found");
 
         message.setIsActive(false);
 

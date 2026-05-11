@@ -100,6 +100,9 @@ public class GuestService {
         if (guest.getStatus() == GuestStatus.CONFIRMED)
             throw new CannotDeleteConfirmedGuestException();
 
+        if (!guest.getIsActive())
+            throw new ResourceNotFoundException("Guest not found");
+
         guest.setIsActive(false);
 
         guestRepository.save(guest);
