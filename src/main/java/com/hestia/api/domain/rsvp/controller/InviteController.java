@@ -3,6 +3,7 @@ package com.hestia.api.domain.rsvp.controller;
 import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
 import com.hestia.api.domain.rsvp.dto.InviteResponse;
+import com.hestia.api.domain.rsvp.dto.SearchInviteRequest;
 import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
 import com.hestia.api.domain.rsvp.service.InviteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,11 @@ public class InviteController {
     @PostMapping
     public ResponseEntity<InviteResponse> postInvite(@RequestBody CreateInviteRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(inviteService.createInvite(request));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<InviteResponse> searchInvite(@RequestBody SearchInviteRequest request) {
+        return ResponseEntity.ok(inviteService.searchInvite(request));
     }
 
     @PatchMapping("/{id}")

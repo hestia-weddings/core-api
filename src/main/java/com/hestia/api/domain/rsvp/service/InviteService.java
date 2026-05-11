@@ -4,10 +4,7 @@ import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.common.exception.CannotDeleteInviteWithConfirmedGuestsException;
 import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
-import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
-import com.hestia.api.domain.rsvp.dto.InviteResponse;
-import com.hestia.api.domain.rsvp.dto.GuestResponse;
-import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
+import com.hestia.api.domain.rsvp.dto.*;
 import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.entity.Guest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
@@ -123,5 +120,14 @@ public class InviteService {
                 .forEach(guest -> guest.setIsActive(false));
 
         inviteRepository.save(invite);
+    }
+
+    public InviteResponse searchInvite(SearchInviteRequest request) {
+        Invite invite = inviteRepository
+                .findByNameIgnoreCaseAndIsActiveTrue(request.getName())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Invite not found"));
+
+        return this.toResponse(invite);
     }
 }
