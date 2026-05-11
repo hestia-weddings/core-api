@@ -9,6 +9,10 @@ public record JwtClaims(
         Map<String, Object> claims
 ) {
 
+    private Map<?, ?> getAppMetadata() {
+        return (Map<?, ?>) claims.get("app_metadata");
+    }
+
     public UUID getWeddingId() {
         Map<?, ?> appMetadata = (Map<?, ?>) claims.get("app_metadata");
 
