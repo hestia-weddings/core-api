@@ -46,6 +46,13 @@ public class MessageController {
         return ResponseEntity.ok(messageService.updateMessage(id, request));
     }
 
+    @PatchMapping("/{id}/read")
+    public ResponseEntity<MessageResponse> readMessage(
+            @PathVariable UUID id
+        ) {
+        return ResponseEntity.ok(messageService.readMessage(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable UUID id) {
         messageService.deleteMessage(id);

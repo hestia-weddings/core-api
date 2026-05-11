@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class UpdateMessageRequest {
 
-    private Boolean isNew;
     private Boolean isFavorite;
 }
