@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/message")
-@Tag(name = "Messages", description = "CRUD operations for messages")
+@Tag(name = "Messages", description = "CRUD operations for messages management")
 @RequiredArgsConstructor
 public class MessageController {
 

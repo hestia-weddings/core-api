@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/household")
-@Tag(name = "Households", description = "CRUD operations for households")
+@RequestMapping("/rsvp/invite")
+@Tag(name = "RSVP")
 @RequiredArgsConstructor
 public class HouseholdController {
 

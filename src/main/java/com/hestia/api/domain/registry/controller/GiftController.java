@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/gift")
-@Tag(name = "Gifts", description = "CRUD operations for gifts")
+@Tag(name = "Registry", description = "CRUD operations for registries management")
 @RequiredArgsConstructor
 public class GiftController {
 
