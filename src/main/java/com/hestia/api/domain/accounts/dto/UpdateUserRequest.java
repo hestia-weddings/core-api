@@ -1,4 +1,4 @@
-package com.hestia.api.domain.accounts.controller;
+package com.hestia.api.domain.accounts.dto;
 
 import lombok.Getter;
 import lombok.Setter;

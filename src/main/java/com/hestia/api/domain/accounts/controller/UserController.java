@@ -1,6 +1,8 @@
 package com.hestia.api.domain.accounts.controller;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.domain.accounts.dto.CreateUserRequest;
+import com.hestia.api.domain.accounts.dto.UpdateUserRequest;
 import com.hestia.api.domain.accounts.dto.UserResponse;
 import com.hestia.api.domain.accounts.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
