@@ -26,9 +26,9 @@ CREATE TYPE user_role_enum AS ENUM (
 
 -- Trigger to auto update updated_at
 CREATE OR REPLACE FUNCTION set_updated_at()
-RETURNS TRIGGER AS $
+RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated_at = now();
     RETURN NEW;
 END;
-$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;

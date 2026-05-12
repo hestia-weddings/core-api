@@ -8,7 +8,7 @@ CREATE OR REPLACE FUNCTION create_invite_with_guests(
 )
 RETURNS invites
 LANGUAGE plpgsql
-AS $
+AS $$
 DECLARE
     new_invite invites;
 BEGIN
@@ -29,4 +29,4 @@ BEGIN
 
     RETURN new_invite;
 END;
-$;
+$$;
