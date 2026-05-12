@@ -47,6 +47,9 @@ public class SecurityConfig {
                         // SWAGGER
                         .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
+                        // ERROR
+                        .requestMatchers("/error").permitAll()
+
                         // GENERAL
                         .anyRequest().hasRole("COUPLE")
                 )

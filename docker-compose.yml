@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: hestia-postgres
+    restart: always
+
+    environment:
+      POSTGRES_DB: hestia_dev
+      POSTGRES_USER: hestia
+      POSTGRES_PASSWORD: hestia123
+
+    ports:
+      - "5433:5433"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
