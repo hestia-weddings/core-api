@@ -19,6 +19,8 @@ A Spring Boot REST API for managing wedding/event planning features including RS
 - **Language**: Java 21
 - **Database**: PostgreSQL
 - **ORM**: Spring Data JPA / Hibernate
+- **Security**: Spring Security 6.x (RBAC, stateless)
+- **Authentication**: Supabase (JWT via JWK Set URI, ES256)
 - **Documentation**: SpringDoc OpenAPI (Swagger UI)
 - **Build Tool**: Maven
 - **Additional Libraries**: Lombok, Spring DevTools
@@ -39,6 +41,7 @@ Create a `.env` file or set the following environment variables:
 DB_URL=jdbc:postgresql://localhost:5432/hestia_db
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
+SUPABASE_PROJECT_ID=your_supabase_project_id
 ```
 
 ### Running the Application
@@ -64,15 +67,23 @@ http://localhost:8081/api/v2/swagger-ui.html
 
 ```
 src/main/java/com/hestia/api/
-├── common/              # Shared components
-│   ├── dto/            # Common DTOs (PageResponse)
-│   ├── exception/      # Custom exceptions
-│   ├── mapper/         # Utility mappers
-│   └── model/          # Base models
+├── common/                  # Shared components
+│   ├── dto/                # Common DTOs (PageResponse)
+│   ├── exception/          # Custom exceptions
+│   ├── mapper/             # Utility mappers
+│   └── model/              # Base models
 ├── domain/
-│   ├── rsvp/           # RSVP management (Invites & Guests)
-│   ├── registry/       # Gift registry management
-│   └── message/        # Guest messaging system
+│   ├── accounts/           # User management (entity, roles, CRUD)
+│   ├── rsvp/              # RSVP management (Invites & Guests)
+│   ├── registry/          # Gift registry management
+│   └── message/           # Guest messaging system
+├── infraestructure/
+│   └── security/          # Security layer
+│       ├── config/        # SecurityConfig (endpoint rules)
+│       ├── filter/        # JwtAuthenticationFilter
+│       ├── jwt/           # Supabase JWT validation & claims
+│       ├── principal/     # AuthenticatedUser (UserDetails)
+│       └── service/       # AuthenticatedUserService
 └── CoreApiApplication.java
 ```
 
@@ -84,7 +95,7 @@ This project follows an **8-step incremental development approach**. Each step r
 
 - `prod` - Production-ready code
 - `step-1-crud-swagger` - Step 1 deliverable
-- `step-2-authentication` - Step 2 deliverable
+- `step-2-authorization` - Step 2 deliverable
 - `step-3-multi-tenant` - Step 3 deliverable
 - And so on...
 
@@ -111,26 +122,27 @@ This project follows an **8-step incremental development approach**. Each step r
 
 ---
 
-## 📍 Step 2: Authentication (And OAuth)
+## 📍 Step 2: Authorization (RBAC) ✅
 
-**Branch**: `step-2-authentication`  
-**Status**: Planned
+**Branch**: `step-2-authorization`  
+**Status**: Completed
 
 ### Deliverables
-- [ ] Spring Security integration
-- [ ] JWT-based authentication
-- [ ] User registration and login endpoints
-- [ ] OAuth2 integration (Google, Facebook, etc.)
-- [ ] Password encryption (BCrypt)
-- [ ] Refresh token mechanism
-- [ ] Security configuration for endpoints
-- [ ] User entity and repository
+- ✅ Spring Security integration (stateless, no sessions)
+- ✅ Supabase JWT validation via JWK Set URI
+- ✅ Role-based access control (COUPLE, ADMIN)
+- ✅ Endpoint-level authorization rules
+- ✅ User entity with `authUserId` linked to Supabase
+- ✅ Custom `JwtAuthenticationFilter`
+- ✅ Public endpoints for guest-facing features (RSVP search, gift listing, messages)
 
 ### Technical Approach
-- Spring Security 6.x
-- JWT tokens with configurable expiration
-- OAuth2 client configuration
-- Role-based access control foundation
+- **Authentication**: Delegated to Supabase (JWT issuance, OAuth, user management)
+- **Authorization**: Spring Security 6.x with RBAC
+- Supabase JWT decoded and validated using JWK Set URI (ES256)
+- User loaded from DB by `authUserId` to resolve roles
+- `SecurityConfig` defines per-endpoint access rules based on roles
+- No login/register endpoints in this project — handled entirely by Supabase
 
 ---
 
