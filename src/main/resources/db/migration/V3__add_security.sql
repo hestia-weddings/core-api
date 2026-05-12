@@ -6,21 +6,21 @@ ALTER TABLE weddings ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public can select wedding"
 ON weddings
 FOR SELECT
-               USING (
-               is_active = true
-               );
+USING (
+    is_active = true
+);
 
 CREATE POLICY "authenticated can update wedding"
 ON weddings
 FOR UPDATE
-               USING (
-               auth.role() = 'authenticated'
-               AND is_active = true
-               )
-    WITH CHECK (
-               auth.role() = 'authenticated'
-               AND is_active = true
-               );
+USING (
+    auth.role() = 'authenticated'
+    AND is_active = true
+)
+WITH CHECK (
+    auth.role() = 'authenticated'
+    AND is_active = true
+);
 
 ALTER TABLE weddings
     ADD CONSTRAINT weddings_couple_name_not_empty
@@ -32,10 +32,10 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "authenticated can select own user"
 ON users
 FOR SELECT
-               USING (
-               auth.role() = 'authenticated'
-               AND id = auth.uid()
-               );
+USING (
+    auth.role() = 'authenticated'
+    AND id = auth.uid()
+);
 
 ALTER TABLE users
     ADD CONSTRAINT users_name_length
@@ -47,10 +47,10 @@ ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "authenticated can select messages"
 ON messages
 FOR SELECT
-               USING (
-               auth.role() = 'authenticated'
-               AND is_active = true
-               );
+USING (
+    auth.role() = 'authenticated'
+    AND is_active = true
+);
 
 CREATE POLICY "guest can insert messages"
 ON messages
@@ -65,14 +65,14 @@ WITH CHECK (
 CREATE POLICY "authenticated can update messages"
 ON messages
 FOR UPDATE
-                      USING (
-                      auth.role() = 'authenticated'
-                      AND is_active = true
-                      )
-    WITH CHECK (
-                      auth.role() = 'authenticated'
-                      AND is_active = true
-                      );
+USING (
+    auth.role() = 'authenticated'
+    AND is_active = true
+)
+WITH CHECK (
+    auth.role() = 'authenticated'
+    AND is_active = true
+);
 
 ALTER TABLE messages
     ADD CONSTRAINT messages_sender_not_empty
@@ -88,9 +88,9 @@ ALTER TABLE invites ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public can select invites"
 ON invites
 FOR SELECT
-               USING (
-               is_active = true
-               );
+USING (
+    is_active = true
+);
 
 CREATE POLICY "authenticated can insert invites"
 ON invites
@@ -103,13 +103,13 @@ WITH CHECK (
 CREATE POLICY "authenticated can update invites"
 ON invites
 FOR UPDATE
-                      USING (
-                      auth.role() = 'authenticated'
-                      AND is_active = true
-                      )
-    WITH CHECK (
-                      auth.role() = 'authenticated'
-                      );
+USING (
+    auth.role() = 'authenticated'
+    AND is_active = true
+)
+WITH CHECK (
+    auth.role() = 'authenticated'
+);
 
 ALTER TABLE invites
     ADD CONSTRAINT invites_name_not_empty
@@ -121,9 +121,9 @@ ALTER TABLE guests ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public can select guests"
 ON guests
 FOR SELECT
-               USING (
-               is_active = true
-               );
+USING (
+    is_active = true
+);
 
 CREATE POLICY "authenticated can insert guests"
 ON guests
@@ -137,26 +137,26 @@ WITH CHECK (
 CREATE POLICY "guest can rsvp guest"
 ON guests
 FOR UPDATE
-                      USING (
-                      auth.role() = 'anon'
-                      AND is_active = true
-                      )
-    WITH CHECK (
-                      auth.role() = 'anon'
-                      AND status IN ('CONFIRMED', 'DECLINED')
-                      AND is_active = true
-                      );
+USING (
+    auth.role() = 'anon'
+    AND is_active = true
+)
+WITH CHECK (
+    auth.role() = 'anon'
+    AND status IN ('CONFIRMED', 'DECLINED')
+    AND is_active = true
+);
 
 CREATE POLICY "authenticated can update guests"
 ON guests
 FOR UPDATE
-               USING (
-               auth.role() = 'authenticated'
-               AND is_active = true
-               )
-    WITH CHECK (
-               auth.role() = 'authenticated'
-               );
+USING (
+    auth.role() = 'authenticated'
+    AND is_active = true
+)
+WITH CHECK (
+    auth.role() = 'authenticated'
+);
 
 ALTER TABLE guests
     ADD CONSTRAINT guests_name_not_empty
@@ -168,9 +168,9 @@ ALTER TABLE gifts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public can view active gifts"
 ON gifts
 FOR SELECT
-               USING (
-               is_active = true
-               );
+USING (
+    is_active = true
+);
 
 CREATE POLICY "authenticated can insert gifts"
 ON gifts
@@ -183,13 +183,13 @@ WITH CHECK (
 CREATE POLICY "authenticated can update gifts"
 ON gifts
 FOR UPDATE
-                      USING (
-                      auth.role() = 'authenticated'
-                      AND is_active = true
-                      )
-    WITH CHECK (
-                      auth.role() = 'authenticated'
-                      );
+USING (
+    auth.role() = 'authenticated'
+    AND is_active = true
+)
+WITH CHECK (
+    auth.role() = 'authenticated'
+);
 
 ALTER TABLE gifts
     ADD CONSTRAINT gifts_stock_positive
@@ -205,9 +205,9 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "authenticated can select orders"
 ON orders
 FOR SELECT
-               USING (
-               auth.role() = 'authenticated'
-               );
+USING (
+    auth.role() = 'authenticated'
+);
 
 CREATE POLICY "guest can insert orders"
 ON orders
