@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/rsvp/guest/status/**").permitAll()
 
                         // SWAGGER
-                        .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
                         // ERROR
                         .requestMatchers("/error").permitAll()
