@@ -11,6 +11,7 @@ import com.hestia.api.domain.rsvp.dto.UpdateGuestStatusRequest;
 import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.entity.Guest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
+import com.hestia.api.domain.rsvp.mapper.GuestMapper;
 import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +29,7 @@ public class GuestService {
 
     private final GuestRepository guestRepository;
     private final InviteRepository inviteRepository;
-
-    public GuestResponse toResponse(Guest guest) {
-        return GuestResponse.builder()
-                .id(guest.getId())
-                .name(guest.getName())
-                .ageGroup(guest.getAgeGroup())
-                .status(guest.getStatus())
-                .createdAt(guest.getCreatedAt())
-                .build();
-    }
+    private final GuestMapper guestMapper;
 
     @Transactional(readOnly = true)
     public PageResponse<GuestResponse> getGuests(Pageable pageable, GuestStatus status, Invite invite) {
@@ -45,15 +37,15 @@ public class GuestService {
 
         if (invite != null)
             guest = guestRepository.findByInviteAndIsActiveTrue(pageable, invite)
-                    .map(this::toResponse);
+                    .map(guestMapper::toResponse);
 
         else if (status != null)
             guest = guestRepository.findByStatusAndIsActiveTrue(pageable, status)
-                    .map(this::toResponse);
+                    .map(guestMapper::toResponse);
 
         else
             guest = guestRepository.findByIsActiveTrue(pageable)
-                .map(this::toResponse);
+                .map(guestMapper::toResponse);
 
         return PageMapper.toResponse(guest);
     }
@@ -75,7 +67,7 @@ public class GuestService {
                 .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
                 .build();
 
-        return this.toResponse(guestRepository.save(guest));
+        return guestMapper.toResponse(guestRepository.save(guest));
     }
 
     public GuestResponse updateGuest(UUID id, UpdateGuestRequest request) {
@@ -86,7 +78,7 @@ public class GuestService {
         if (request.getAgeGroup() != null)
             guest.setAgeGroup(request.getAgeGroup());
 
-        return this.toResponse(guestRepository.save(guest));
+        return guestMapper.toResponse(guestRepository.save(guest));
     }
 
     public GuestResponse updateGuestStatus(UUID id, UpdateGuestStatusRequest request) {
@@ -94,7 +86,7 @@ public class GuestService {
 
         guest.setStatus(request.getStatus());
 
-        return this.toResponse(guestRepository.save(guest));
+        return guestMapper.toResponse(guestRepository.save(guest));
     }
 
     public void deleteGuest(UUID id) {

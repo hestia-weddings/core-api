@@ -9,6 +9,7 @@ import com.hestia.api.domain.registry.dto.GiftResponse;
 import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
 import com.hestia.api.domain.registry.entity.Gift;
 import com.hestia.api.domain.registry.entity.GiftAvailability;
+import com.hestia.api.domain.registry.mapper.GiftMapper;
 import com.hestia.api.domain.registry.repository.GiftAvailabilityRepository;
 import com.hestia.api.domain.registry.repository.GiftRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,35 +27,12 @@ public class GiftService {
 
     private final GiftRepository giftRepository;
     private final GiftAvailabilityRepository giftAvailabilityRepository;
-
-    public GiftResponse toResponse(Gift gift) {
-        return GiftResponse.builder()
-                .id(gift.getId())
-                .description(gift.getDescription())
-                .picture(gift.getPicture())
-                .price(gift.getPrice())
-                .stock(gift.getStock())
-                .createdAt(gift.getCreatedAt())
-                .build();
-    }
-
-    public GiftAvailabilityResponse toAvailabilityResponse(GiftAvailability giftAvailability) {
-        return GiftAvailabilityResponse.builder()
-                .id(giftAvailability.getId())
-                .description(giftAvailability.getDescription())
-                .picture(giftAvailability.getPicture())
-                .price(giftAvailability.getPrice())
-                .stock(giftAvailability.getStock())
-                .remain(giftAvailability.getRemain())
-                .availability(giftAvailability.getAvailability())
-                .createdAt(giftAvailability.getCreatedAt())
-                .build();
-    }
+    private final GiftMapper giftMapper;
 
     @Transactional(readOnly = true)
     public PageResponse<GiftAvailabilityResponse> getGifts(Pageable pageable) {
         Page<GiftAvailabilityResponse> page = giftAvailabilityRepository.findAll(pageable)
-                .map(this::toAvailabilityResponse);
+                .map(giftMapper::toAvailabilityResponse);
 
         return PageMapper.toResponse(page);
     }
@@ -64,7 +42,7 @@ public class GiftService {
         GiftAvailability gift = giftAvailabilityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
 
-        return toAvailabilityResponse(gift);
+        return giftMapper.toAvailabilityResponse(gift);
     }
 
     private Gift getGift(UUID id) {
@@ -81,7 +59,7 @@ public class GiftService {
                 .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
                 .build();
 
-        return this.toResponse(giftRepository.save(gift));
+        return giftMapper.toResponse(giftRepository.save(gift));
     }
 
     public GiftResponse updateGift(UUID id, UpdateGiftRequest request) {
@@ -96,7 +74,7 @@ public class GiftService {
         if (request.getStock() != null)
             gift.setStock(request.getStock());
 
-        return this.toResponse(giftRepository.save(gift));
+        return giftMapper.toResponse(giftRepository.save(gift));
     }
 
     public void deleteGift(UUID id) {

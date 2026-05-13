@@ -8,6 +8,7 @@ import com.hestia.api.domain.rsvp.dto.*;
 import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.entity.Guest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
+import com.hestia.api.domain.rsvp.mapper.InviteMapper;
 import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,33 +27,12 @@ public class InviteService {
 
     private final InviteRepository inviteRepository;
     private final GuestRepository guestRepository;
-
-    private InviteResponse toResponse(Invite invite) {
-        List<GuestResponse> guests = invite.getGuests()
-                .stream()
-                .filter(Guest::getIsActive)
-                .map((guest) -> GuestResponse.builder()
-                        .id(guest.getId())
-                        .name(guest.getName())
-                        .ageGroup(guest.getAgeGroup())
-                        .status(guest.getStatus())
-                        .createdAt(guest.getCreatedAt())
-                        .build())
-                .toList();
-        
-        return InviteResponse.builder()
-                .id(invite.getId())
-                .name(invite.getName())
-                .phone(invite.getPhone())
-                .createdAt(invite.getCreatedAt())
-                .guests(guests)
-                .build();
-    }
+    private final InviteMapper inviteMapper;
 
     @Transactional(readOnly = true)
     public PageResponse<InviteResponse> getInvites(Pageable pageable) {
         Page<InviteResponse> invite = inviteRepository.findByIsActiveTrue(pageable)
-                .map(this::toResponse);
+                .map(inviteMapper::toResponse);
 
         return PageMapper.toResponse(invite);
     }
@@ -86,7 +66,7 @@ public class InviteService {
             savedInvite.setGuests(guests);
         }
 
-        return this.toResponse(invite);
+        return inviteMapper.toResponse(invite);
     }
 
     public InviteResponse updateInvite(UUID id, UpdateInviteRequest request) {
@@ -97,7 +77,7 @@ public class InviteService {
         if (request.getPhone() != null)
             invite.setPhone(request.getPhone());
 
-        return this.toResponse(inviteRepository.save(invite));
+        return inviteMapper.toResponse(inviteRepository.save(invite));
     }
 
     public void deleteInvite(UUID id) {
@@ -126,6 +106,6 @@ public class InviteService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Invite not found"));
 
-        return this.toResponse(invite);
+        return inviteMapper.toResponse(invite);
     }
 }
