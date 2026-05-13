@@ -1,6 +1,6 @@
-package com.hestia.api.infraestructure.security.config;
+package com.hestia.api.infrastructure.security.config;
 
-import com.hestia.api.infraestructure.security.filter.JwtAuthenticationFilter;
+import com.hestia.api.infrastructure.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,9 +1,9 @@
-package com.hestia.api.infraestructure.security.filter;
+package com.hestia.api.infrastructure.security.filter;
 
-import com.hestia.api.infraestructure.security.jwt.JwtClaims;
-import com.hestia.api.infraestructure.security.jwt.SupabaseJwtService;
-import com.hestia.api.infraestructure.security.principal.AuthenticatedUser;
-import com.hestia.api.infraestructure.security.service.AuthenticatedUserService;
+import com.hestia.api.infrastructure.security.jwt.JwtClaims;
+import com.hestia.api.infrastructure.security.jwt.SupabaseJwtService;
+import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
+import com.hestia.api.infrastructure.security.service.AuthenticatedUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

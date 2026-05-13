@@ -1,4 +1,4 @@
-package com.hestia.api.infraestructure.security.jwt;
+package com.hestia.api.infrastructure.security.jwt;
 
 import java.util.Map;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.hestia.api.infraestructure.security.jwt;
+package com.hestia.api.infrastructure.security.jwt;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;

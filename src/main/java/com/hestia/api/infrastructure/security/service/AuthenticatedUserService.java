@@ -1,8 +1,8 @@
-package com.hestia.api.infraestructure.security.service;
+package com.hestia.api.infrastructure.security.service;
 
 import com.hestia.api.domain.accounts.entity.User;
 import com.hestia.api.domain.accounts.repository.UserRepository;
-import com.hestia.api.infraestructure.security.principal.AuthenticatedUser;
+import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

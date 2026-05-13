@@ -1,4 +1,4 @@
-package com.hestia.api.infraestructure.security.principal;
+package com.hestia.api.infrastructure.security.principal;
 
 import com.hestia.api.domain.accounts.entity.User;
 import lombok.Getter;
