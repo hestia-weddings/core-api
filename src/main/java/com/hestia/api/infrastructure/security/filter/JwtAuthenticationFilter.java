@@ -38,7 +38,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = authorizationHeader.substring(7);
 
-        JwtClaims claims = supabaseJwtService.validate(token);
+        JwtClaims claims;
+        try {
+            claims = supabaseJwtService.validate(token);
+        } catch (Exception ex) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Invalid or expired token\"}");
+            return;
+        }
 
         AuthenticatedUser authenticatedUser = authenticatedUserService.loadByAuthUserId(claims.subject());
 
