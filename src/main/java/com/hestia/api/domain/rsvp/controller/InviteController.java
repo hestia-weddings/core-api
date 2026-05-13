@@ -7,6 +7,7 @@ import com.hestia.api.domain.rsvp.dto.SearchInviteRequest;
 import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
 import com.hestia.api.domain.rsvp.service.InviteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,19 +30,19 @@ public class InviteController {
     }
 
     @PostMapping
-    public ResponseEntity<InviteResponse> postInvite(@RequestBody CreateInviteRequest request) {
+    public ResponseEntity<InviteResponse> postInvite(@Valid @RequestBody CreateInviteRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(inviteService.createInvite(request));
     }
 
     @PostMapping("/search")
-    public ResponseEntity<InviteResponse> searchInvite(@RequestBody SearchInviteRequest request) {
+    public ResponseEntity<InviteResponse> searchInvite(@Valid @RequestBody SearchInviteRequest request) {
         return ResponseEntity.ok(inviteService.searchInvite(request));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<InviteResponse> patchInvite(
             @PathVariable UUID id,
-            @RequestBody UpdateInviteRequest request
+            @Valid @RequestBody UpdateInviteRequest request
     ) {
         return ResponseEntity.ok(inviteService.updateInvite(id, request));
     }

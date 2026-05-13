@@ -6,6 +6,7 @@ import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -32,14 +33,14 @@ public class MessageController {
     }
 
     @PostMapping
-    public ResponseEntity<MessageResponse> createMessage(@RequestBody CreateMessageRequest request) {
+    public ResponseEntity<MessageResponse> createMessage(@Valid @RequestBody CreateMessageRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(request));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<MessageResponse> updateMessage(
             @PathVariable UUID id,
-            @RequestBody UpdateMessageRequest request
+            @Valid @RequestBody UpdateMessageRequest request
         ) {
         return ResponseEntity.ok(messageService.updateMessage(id, request));
     }

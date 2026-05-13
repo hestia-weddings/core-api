@@ -6,6 +6,7 @@ import com.hestia.api.domain.accounts.dto.UpdateUserRequest;
 import com.hestia.api.domain.accounts.dto.UserResponse;
 import com.hestia.api.domain.accounts.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> postUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserResponse> postUser(@Valid @RequestBody CreateUserRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponse> patchUser(
             @PathVariable UUID id,
-            @RequestBody UpdateUserRequest request
+            @Valid @RequestBody UpdateUserRequest request
     ) {
         return ResponseEntity.ok(userService.updateUser(id, request));
     }

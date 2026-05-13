@@ -7,6 +7,7 @@ import com.hestia.api.domain.registry.dto.GiftResponse;
 import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
 import com.hestia.api.domain.registry.service.GiftService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GiftController {
 
-    private GiftService giftService;
+    private final GiftService giftService;
 
     @GetMapping
     public ResponseEntity<PageResponse<GiftAvailabilityResponse>> getGift(Pageable pageable) {
@@ -29,7 +30,7 @@ public class GiftController {
     }
 
     @PostMapping
-    public ResponseEntity<GiftResponse> postGift(@RequestBody CreateGiftRequest request) {
+    public ResponseEntity<GiftResponse> postGift(@Valid @RequestBody CreateGiftRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(giftService.createGift(request));
     }
 
@@ -41,7 +42,7 @@ public class GiftController {
     @PatchMapping("/{id}")
     public ResponseEntity<GiftResponse> patchGift(
             @PathVariable UUID id,
-            @RequestBody UpdateGiftRequest request
+            @Valid @RequestBody UpdateGiftRequest request
     ) {
         return ResponseEntity.ok(giftService.updateGift(id, request));
     }

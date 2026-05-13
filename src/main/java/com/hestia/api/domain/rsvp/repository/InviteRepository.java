@@ -11,5 +11,6 @@ import java.util.UUID;
 public interface InviteRepository extends JpaRepository<Invite, UUID> {
 
     Page<Invite> findByIsActiveTrue(Pageable pageable);
+    Optional<Invite> findByIdAndIsActiveTrue(UUID id);
     Optional<Invite> findByNameIgnoreCaseAndIsActiveTrue(String name);
 }

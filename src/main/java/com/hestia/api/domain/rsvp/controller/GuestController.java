@@ -9,6 +9,7 @@ import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,14 +36,14 @@ public class GuestController {
     }
 
     @PostMapping
-    public ResponseEntity<GuestResponse> postGuest(@RequestBody CreateGuestRequest request) {
+    public ResponseEntity<GuestResponse> postGuest(@Valid @RequestBody CreateGuestRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(guestService.createGuest(request));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<GuestResponse> patchGuest(
             @PathVariable UUID id,
-            @RequestBody UpdateGuestRequest request
+            @Valid @RequestBody UpdateGuestRequest request
     ) {
         return ResponseEntity.ok(guestService.updateGuest(id, request));
     }
@@ -50,7 +51,7 @@ public class GuestController {
     @PatchMapping("/status/{id}")
     public ResponseEntity<GuestResponse> patchGuestStatus(
             @PathVariable UUID id,
-            @RequestBody UpdateGuestStatusRequest request
+            @Valid @RequestBody UpdateGuestStatusRequest request
     ) {
         return ResponseEntity.ok(guestService.updateGuestStatus(id, request));
     }

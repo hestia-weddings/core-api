@@ -59,12 +59,12 @@ public class GuestService {
     }
 
     private Guest getGuest(UUID id) {
-        return guestRepository.findById(id)
+        return guestRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
     }
 
     public GuestResponse createGuest(CreateGuestRequest request) {
-        Invite invite = inviteRepository.findById(request.getInviteId())
+        Invite invite = inviteRepository.findByIdAndIsActiveTrue(request.getInviteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
 
         Guest guest = Guest.builder()
@@ -103,11 +103,7 @@ public class GuestService {
         if (guest.getStatus() == GuestStatus.CONFIRMED)
             throw new CannotDeleteConfirmedGuestException();
 
-        if (!guest.getIsActive())
-            throw new ResourceNotFoundException("Guest not found");
-
         guest.setIsActive(false);
-
         guestRepository.save(guest);
     }
 }

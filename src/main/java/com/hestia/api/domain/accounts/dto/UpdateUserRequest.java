@@ -1,5 +1,6 @@
 package com.hestia.api.domain.accounts.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,5 +8,6 @@ import lombok.Setter;
 @Setter
 public class UpdateUserRequest {
 
+    @NotBlank
     private String name;
 }

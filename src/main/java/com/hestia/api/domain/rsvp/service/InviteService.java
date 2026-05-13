@@ -58,7 +58,7 @@ public class InviteService {
     }
 
     private Invite getInvite(UUID id) {
-        return inviteRepository.findById(id)
+        return inviteRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
     }
 
@@ -102,9 +102,6 @@ public class InviteService {
 
     public void deleteInvite(UUID id) {
         Invite invite = getInvite(id);
-
-        if (!invite.getIsActive())
-            throw new ResourceNotFoundException("Invite not found");
 
         boolean hasConfirmedGuests = invite.getGuests().stream()
                 .filter(Guest::getIsActive)
