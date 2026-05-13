@@ -10,17 +10,18 @@ import com.hestia.api.domain.rsvp.entity.Guest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class InviteService {
 
     private final InviteRepository inviteRepository;
@@ -48,6 +49,7 @@ public class InviteService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<InviteResponse> getInvites(Pageable pageable) {
         Page<InviteResponse> invite = inviteRepository.findByIsActiveTrue(pageable)
                 .map(this::toResponse);
@@ -60,7 +62,6 @@ public class InviteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
     }
 
-    @Transactional
     public InviteResponse createInvite(CreateInviteRequest request) {
         Invite invite = Invite.builder()
                 .name(request.getName())
@@ -99,7 +100,6 @@ public class InviteService {
         return this.toResponse(inviteRepository.save(invite));
     }
 
-    @Transactional
     public void deleteInvite(UUID id) {
         Invite invite = getInvite(id);
 
@@ -122,6 +122,7 @@ public class InviteService {
         inviteRepository.save(invite);
     }
 
+    @Transactional(readOnly = true)
     public InviteResponse searchInvite(SearchInviteRequest request) {
         Invite invite = inviteRepository
                 .findByNameIgnoreCaseAndIsActiveTrue(request.getName())

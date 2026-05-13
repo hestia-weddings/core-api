@@ -12,11 +12,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MessageService {
 
     private final MessageRepository messageRepository;
@@ -31,6 +33,7 @@ public class MessageService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<MessageResponse> getMessages(Pageable pageable, Boolean isNew, Boolean isFavorite) {
         Page<MessageResponse> message;
 

@@ -15,11 +15,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class GiftService {
 
     private final GiftRepository giftRepository;
@@ -49,6 +51,7 @@ public class GiftService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<GiftAvailabilityResponse> getGifts(Pageable pageable) {
         Page<GiftAvailabilityResponse> page = giftAvailabilityRepository.findAll(pageable)
                 .map(this::toAvailabilityResponse);
@@ -56,6 +59,7 @@ public class GiftService {
         return PageMapper.toResponse(page);
     }
 
+    @Transactional(readOnly = true)
     public GiftAvailabilityResponse getGiftById(UUID id) {
         GiftAvailability gift = giftAvailabilityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
