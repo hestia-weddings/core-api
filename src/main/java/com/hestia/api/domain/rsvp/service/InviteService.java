@@ -103,15 +103,15 @@ public class InviteService {
     public void deleteInvite(UUID id) {
         Invite invite = getInvite(id);
 
+        if (!invite.getIsActive())
+            throw new ResourceNotFoundException("Invite not found");
+
         boolean hasConfirmedGuests = invite.getGuests().stream()
                 .filter(Guest::getIsActive)
                 .anyMatch(guest -> guest.getStatus() == GuestStatus.CONFIRMED);
 
         if (hasConfirmedGuests)
             throw new CannotDeleteInviteWithConfirmedGuestsException();
-
-        if (!invite.getIsActive())
-            throw new ResourceNotFoundException("Invite not found");
 
         invite.setIsActive(false);
 

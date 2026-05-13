@@ -7,7 +7,6 @@ import com.hestia.api.domain.accounts.dto.UserResponse;
 import com.hestia.api.domain.accounts.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<PageResponse<UserResponse>> getUsers (Pageable pageable) {

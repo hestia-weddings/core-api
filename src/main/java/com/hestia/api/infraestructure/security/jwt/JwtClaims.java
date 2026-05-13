@@ -14,7 +14,7 @@ public record JwtClaims(
     }
 
     public UUID getWeddingId() {
-        Map<?, ?> appMetadata = (Map<?, ?>) claims.get("app_metadata");
+        Map<?, ?> appMetadata = getAppMetadata();
 
         if (appMetadata == null) return null;
 
