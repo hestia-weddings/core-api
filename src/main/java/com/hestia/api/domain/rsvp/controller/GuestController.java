@@ -10,7 +10,6 @@ import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GuestController {
 
-    @Autowired
-    private GuestService guestService;
+    private final GuestService guestService;
 
     @GetMapping
     public ResponseEntity<PageResponse<GuestResponse>> getGuest(

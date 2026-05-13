@@ -8,7 +8,6 @@ import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
 import com.hestia.api.domain.rsvp.service.InviteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InviteController {
 
-    @Autowired
-    private InviteService inviteService;
+    private final InviteService inviteService;
 
     @GetMapping
     public ResponseEntity<PageResponse<InviteResponse>> getInvite(Pageable pageable) {
