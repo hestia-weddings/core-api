@@ -43,7 +43,7 @@ public class UserService {
     }
 
     private User getUser(UUID id) {
-        return userRepository.findById(id)
+        return userRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
@@ -69,12 +69,7 @@ public class UserService {
 
     public void deleteUser(UUID id) {
         User user = getUser(id);
-
-        if (!user.getIsActive())
-            throw new ResourceNotFoundException("User not found");
-
         user.setIsActive(false);
-
         userRepository.save(user);
     }
 }

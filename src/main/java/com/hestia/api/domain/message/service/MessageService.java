@@ -49,7 +49,7 @@ public class MessageService {
     }
 
     private Message getMessage(UUID id) {
-        return messageRepository.findById(id)
+        return messageRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
     }
 
@@ -84,12 +84,7 @@ public class MessageService {
 
     public void deleteMessage(UUID id) {
         Message message = getMessage(id);
-
-        if (!message.getIsActive())
-            throw new ResourceNotFoundException("Message not found");
-
         message.setIsActive(false);
-
         messageRepository.save(message);
     }
 }

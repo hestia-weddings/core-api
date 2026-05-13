@@ -64,7 +64,7 @@ public class GiftService {
     }
 
     private Gift getGift(UUID id) {
-        return giftRepository.findById(id)
+        return giftRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
     }
 
@@ -97,12 +97,7 @@ public class GiftService {
 
     public void deleteGift(UUID id) {
         Gift gift = getGift(id);
-
-        if (!gift.getIsActive())
-            throw new ResourceNotFoundException("Gift not found");
-
         gift.setIsActive(false);
-
         giftRepository.save(gift);
     }
 }
