@@ -1,10 +1,8 @@
 package com.hestia.api.domain.rsvp.entity;
 
 import com.hestia.api.common.model.BaseModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.hestia.api.domain.wedding.entity.Wedding;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -28,6 +26,7 @@ public class Invite extends BaseModel {
     @OneToMany(mappedBy = "invite")
     private List<Guest> guests;
 
-    @Column(name = "wedding_id", nullable = false)
-    private UUID weddingId;
+    @ManyToOne
+    @JoinColumn(name = "wedding_id")
+    private Wedding wedding;
 }

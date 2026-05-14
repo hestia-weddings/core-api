@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 public class CreateMessageRequest {
@@ -13,4 +15,7 @@ public class CreateMessageRequest {
 
     @NotBlank
     private String message;
+
+    @NotBlank
+    private UUID weddingId;
 }

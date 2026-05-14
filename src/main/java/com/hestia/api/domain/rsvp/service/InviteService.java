@@ -11,6 +11,8 @@ import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.mapper.InviteMapper;
 import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
+import com.hestia.api.domain.wedding.entity.Wedding;
+import com.hestia.api.domain.wedding.repository.WeddingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,8 @@ public class InviteService {
     private final GuestRepository guestRepository;
     private final InviteMapper inviteMapper;
 
+    private final WeddingRepository weddingRepository;
+
     @Transactional(readOnly = true)
     public PageResponse<InviteResponse> getInvites(Pageable pageable) {
         Page<InviteResponse> invite = inviteRepository.findByIsActiveTrue(pageable)
@@ -43,10 +47,13 @@ public class InviteService {
     }
 
     public InviteResponse createInvite(CreateInviteRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
+
         Invite invite = Invite.builder()
                 .name(request.getName())
                 .phone(request.getPhone())
-                .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
+                .wedding(wedding)
                 .build();
 
         Invite savedInvite = inviteRepository.save(invite);
@@ -58,7 +65,7 @@ public class InviteService {
                             .ageGroup(guestRequest.getAgeGroup())
                             .status(GuestStatus.PENDING)
                             .invite(savedInvite)
-                            .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
+                            .wedding(wedding)
                             .build())
                     .toList();
 

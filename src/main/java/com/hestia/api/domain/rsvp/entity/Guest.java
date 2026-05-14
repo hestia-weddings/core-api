@@ -3,6 +3,7 @@ package com.hestia.api.domain.rsvp.entity;
 import com.hestia.api.common.model.BaseModel;
 import com.hestia.api.domain.rsvp.enums.GuestAge;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
+import com.hestia.api.domain.wedding.entity.Wedding;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -36,6 +37,7 @@ public class Guest extends BaseModel {
     @JoinColumn(name = "invite_id")
     private Invite invite;
 
-    @Column(name = "wedding_id", nullable = false)
-    private UUID weddingId;
+    @ManyToOne
+    @JoinColumn(name = "wedding_id")
+    private Wedding wedding;
 }

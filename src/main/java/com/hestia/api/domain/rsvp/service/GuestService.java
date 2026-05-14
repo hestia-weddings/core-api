@@ -14,6 +14,8 @@ import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.mapper.GuestMapper;
 import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
+import com.hestia.api.domain.wedding.entity.Wedding;
+import com.hestia.api.domain.wedding.repository.WeddingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,8 @@ public class GuestService {
     private final GuestRepository guestRepository;
     private final InviteRepository inviteRepository;
     private final GuestMapper guestMapper;
+
+    private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
     public PageResponse<GuestResponse> getGuests(Pageable pageable, GuestStatus status, Invite invite) {
@@ -56,6 +60,9 @@ public class GuestService {
     }
 
     public GuestResponse createGuest(CreateGuestRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
+
         Invite invite = inviteRepository.findByIdAndIsActiveTrue(request.getInviteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
 
@@ -64,7 +71,7 @@ public class GuestService {
                 .ageGroup(request.getAgeGroup())
                 .status(GuestStatus.PENDING)
                 .invite(invite)
-                .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
+                .wedding(wedding)
                 .build();
 
         return guestMapper.toResponse(guestRepository.save(guest));

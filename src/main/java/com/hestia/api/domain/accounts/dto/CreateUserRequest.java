@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 public class CreateUserRequest {
@@ -15,4 +17,7 @@ public class CreateUserRequest {
     @NotBlank
     @Email
     private String email;
+
+    @NotBlank
+    private UUID weddingId;
 }

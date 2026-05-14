@@ -1,9 +1,8 @@
 package com.hestia.api.domain.registry.entity;
 
 import com.hestia.api.common.model.BaseModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.hestia.api.domain.wedding.entity.Wedding;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
@@ -29,6 +28,7 @@ public class Gift extends BaseModel {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(name = "wedding_id", nullable = false)
-    private UUID weddingId;
+    @ManyToOne
+    @JoinColumn(name = "wedding_id")
+    private Wedding wedding;
 }

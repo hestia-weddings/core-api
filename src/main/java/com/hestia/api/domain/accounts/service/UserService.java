@@ -10,6 +10,8 @@ import com.hestia.api.domain.accounts.entity.User;
 import com.hestia.api.domain.accounts.enums.UserRole;
 import com.hestia.api.domain.accounts.mapper.UserMapper;
 import com.hestia.api.domain.accounts.repository.UserRepository;
+import com.hestia.api.domain.wedding.entity.Wedding;
+import com.hestia.api.domain.wedding.repository.WeddingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
     public PageResponse<UserResponse> getUsers(Pageable pageable) {
@@ -42,12 +46,15 @@ public class UserService {
     }
 
     public UserResponse createUser(CreateUserRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
+
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .role(UserRole.COUPLE)
                 .authUserId(UUID.fromString("187b00ff-fa02-4182-94bb-02184f7bde48"))
-                .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
+                .wedding(wedding)
                 .build();
 
         return userMapper.toResponse(userRepository.save(user));

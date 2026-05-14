@@ -1,6 +1,7 @@
 package com.hestia.api.domain.message.entity;
 
 import com.hestia.api.common.model.BaseModel;
+import com.hestia.api.domain.wedding.entity.Wedding;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,7 @@ public class Message extends BaseModel {
     @Column(name = "is_new", nullable = false)
     private Boolean isNew;
 
-    @Column(name = "wedding_id", nullable = false)
-    private UUID weddingId;
+    @ManyToOne
+    @JoinColumn(name = "wedding_id")
+    private Wedding wedding;
 }

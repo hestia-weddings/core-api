@@ -12,6 +12,8 @@ import com.hestia.api.domain.registry.entity.GiftAvailability;
 import com.hestia.api.domain.registry.mapper.GiftMapper;
 import com.hestia.api.domain.registry.repository.GiftAvailabilityRepository;
 import com.hestia.api.domain.registry.repository.GiftRepository;
+import com.hestia.api.domain.wedding.entity.Wedding;
+import com.hestia.api.domain.wedding.repository.WeddingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,8 @@ public class GiftService {
     private final GiftRepository giftRepository;
     private final GiftAvailabilityRepository giftAvailabilityRepository;
     private final GiftMapper giftMapper;
+
+    private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
     public PageResponse<GiftAvailabilityResponse> getGifts(Pageable pageable) {
@@ -51,12 +55,15 @@ public class GiftService {
     }
 
     public GiftResponse createGift(CreateGiftRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
+
         Gift gift = Gift.builder()
                 .description(request.getDescription())
                 .picture(request.getPicture())
                 .price(request.getPrice())
                 .stock(request.getStock())
-                .weddingId(UUID.fromString("7987490b-ed02-4e3f-87df-4e063eeed604"))
+                .wedding(wedding)
                 .build();
 
         return giftMapper.toResponse(giftRepository.save(gift));

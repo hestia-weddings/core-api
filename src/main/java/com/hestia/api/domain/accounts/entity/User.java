@@ -2,6 +2,7 @@ package com.hestia.api.domain.accounts.entity;
 
 import com.hestia.api.common.model.BaseModel;
 import com.hestia.api.domain.accounts.enums.UserRole;
+import com.hestia.api.domain.wedding.entity.Wedding;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -32,6 +33,7 @@ public class User extends BaseModel {
     @Column(name = "auth_user_id", nullable = false)
     private UUID authUserId;
 
-    @Column(name = "wedding_id", nullable = false)
-    private UUID weddingId;
+    @ManyToOne
+    @JoinColumn(name = "wedding_id")
+    private Wedding wedding;
 }
