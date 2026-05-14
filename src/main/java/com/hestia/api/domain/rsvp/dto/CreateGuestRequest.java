@@ -20,7 +20,4 @@ public class CreateGuestRequest {
 
     @NotNull
     private UUID inviteId;
-
-    @NotBlank
-    private UUID weddingId;
 }

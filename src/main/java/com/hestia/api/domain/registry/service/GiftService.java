@@ -30,32 +30,31 @@ public class GiftService {
     private final GiftRepository giftRepository;
     private final GiftAvailabilityRepository giftAvailabilityRepository;
     private final GiftMapper giftMapper;
-
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<GiftAvailabilityResponse> getGifts(Pageable pageable) {
-        Page<GiftAvailabilityResponse> page = giftAvailabilityRepository.findAll(pageable)
+    public PageResponse<GiftAvailabilityResponse> getGifts(UUID weddingId, Pageable pageable) {
+        Page<GiftAvailabilityResponse> page = giftAvailabilityRepository.findByWeddingId(weddingId, pageable)
                 .map(giftMapper::toAvailabilityResponse);
 
         return PageMapper.toResponse(page);
     }
 
     @Transactional(readOnly = true)
-    public GiftAvailabilityResponse getGiftById(UUID id) {
-        GiftAvailability gift = giftAvailabilityRepository.findById(id)
+    public GiftAvailabilityResponse getGiftById(UUID weddingId, UUID id) {
+        GiftAvailability gift = giftAvailabilityRepository.findByIdAndWeddingId(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
 
         return giftMapper.toAvailabilityResponse(gift);
     }
 
-    private Gift getGift(UUID id) {
-        return giftRepository.findByIdAndIsActiveTrue(id)
+    private Gift getGift(UUID weddingId, UUID id) {
+        return giftRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
     }
 
-    public GiftResponse createGift(CreateGiftRequest request) {
-        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+    public GiftResponse createGift(UUID weddingId, CreateGiftRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
         Gift gift = Gift.builder()
@@ -69,8 +68,8 @@ public class GiftService {
         return giftMapper.toResponse(giftRepository.save(gift));
     }
 
-    public GiftResponse updateGift(UUID id, UpdateGiftRequest request) {
-        Gift gift = getGift(id);
+    public GiftResponse updateGift(UUID weddingId, UUID id, UpdateGiftRequest request) {
+        Gift gift = getGift(weddingId, id);
 
         if (request.getDescription() != null)
             gift.setDescription(request.getDescription());
@@ -84,8 +83,8 @@ public class GiftService {
         return giftMapper.toResponse(giftRepository.save(gift));
     }
 
-    public void deleteGift(UUID id) {
-        Gift gift = getGift(id);
+    public void deleteGift(UUID weddingId, UUID id) {
+        Gift gift = getGift(weddingId, id);
         gift.setIsActive(false);
         giftRepository.save(gift);
     }

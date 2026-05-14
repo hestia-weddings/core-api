@@ -32,38 +32,35 @@ public class GuestService {
     private final GuestRepository guestRepository;
     private final InviteRepository inviteRepository;
     private final GuestMapper guestMapper;
-
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<GuestResponse> getGuests(Pageable pageable, GuestStatus status, Invite invite) {
+    public PageResponse<GuestResponse> getGuests(UUID weddingId, Pageable pageable, GuestStatus status, UUID inviteId) {
         Page<GuestResponse> guest;
 
-        if (invite != null)
-            guest = guestRepository.findByInviteAndIsActiveTrue(pageable, invite)
+        if (inviteId != null)
+            guest = guestRepository.findByWeddingIdAndInviteIdAndIsActiveTrue(weddingId, inviteId, pageable)
                     .map(guestMapper::toResponse);
-
         else if (status != null)
-            guest = guestRepository.findByStatusAndIsActiveTrue(pageable, status)
+            guest = guestRepository.findByWeddingIdAndStatusAndIsActiveTrue(weddingId, status, pageable)
                     .map(guestMapper::toResponse);
-
         else
-            guest = guestRepository.findByIsActiveTrue(pageable)
-                .map(guestMapper::toResponse);
+            guest = guestRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable)
+                    .map(guestMapper::toResponse);
 
         return PageMapper.toResponse(guest);
     }
 
-    private Guest getGuest(UUID id) {
-        return guestRepository.findByIdAndIsActiveTrue(id)
+    private Guest getGuest(UUID weddingId, UUID id) {
+        return guestRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
     }
 
-    public GuestResponse createGuest(CreateGuestRequest request) {
-        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+    public GuestResponse createGuest(UUID weddingId, CreateGuestRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
-        Invite invite = inviteRepository.findByIdAndIsActiveTrue(request.getInviteId())
+        Invite invite = inviteRepository.findByIdAndWeddingIdAndIsActiveTrue(request.getInviteId(), weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
 
         Guest guest = Guest.builder()
@@ -77,8 +74,8 @@ public class GuestService {
         return guestMapper.toResponse(guestRepository.save(guest));
     }
 
-    public GuestResponse updateGuest(UUID id, UpdateGuestRequest request) {
-        Guest guest = getGuest(id);
+    public GuestResponse updateGuest(UUID weddingId, UUID id, UpdateGuestRequest request) {
+        Guest guest = getGuest(weddingId, id);
 
         if (request.getName() != null)
             guest.setName(request.getName());
@@ -88,16 +85,14 @@ public class GuestService {
         return guestMapper.toResponse(guestRepository.save(guest));
     }
 
-    public GuestResponse updateGuestStatus(UUID id, UpdateGuestStatusRequest request) {
-        Guest guest = getGuest(id);
-
+    public GuestResponse updateGuestStatus(UUID weddingId, UUID id, UpdateGuestStatusRequest request) {
+        Guest guest = getGuest(weddingId, id);
         guest.setStatus(request.getStatus());
-
         return guestMapper.toResponse(guestRepository.save(guest));
     }
 
-    public void deleteGuest(UUID id) {
-        Guest guest = getGuest(id);
+    public void deleteGuest(UUID weddingId, UUID id) {
+        Guest guest = getGuest(weddingId, id);
 
         if (guest.getStatus() == GuestStatus.CONFIRMED)
             throw new CannotDeleteConfirmedGuestException();

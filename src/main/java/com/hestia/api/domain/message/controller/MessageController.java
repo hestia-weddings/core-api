@@ -5,12 +5,14 @@ import com.hestia.api.domain.message.service.MessageService;
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
+import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -25,36 +27,45 @@ public class MessageController {
 
     @GetMapping
     public ResponseEntity<PageResponse<MessageResponse>> getMessage(
+            @AuthenticationPrincipal AuthenticatedUser user,
             Pageable pageable,
             @RequestParam(required = false, name = "is_new") Boolean isNew,
             @RequestParam(required = false, name = "is_favorite") Boolean isFavorite
     ) {
-        return ResponseEntity.ok(messageService.getMessages(pageable, isNew, isFavorite));
+        return ResponseEntity.ok(messageService.getMessages(user.getWeddingId(), pageable, isNew, isFavorite));
     }
 
     @PostMapping
-    public ResponseEntity<MessageResponse> createMessage(@Valid @RequestBody CreateMessageRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(request));
+    public ResponseEntity<MessageResponse> createMessage(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @Valid @RequestBody CreateMessageRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(user.getWeddingId(), request));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<MessageResponse> updateMessage(
+            @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id,
             @Valid @RequestBody UpdateMessageRequest request
-        ) {
-        return ResponseEntity.ok(messageService.updateMessage(id, request));
+    ) {
+        return ResponseEntity.ok(messageService.updateMessage(user.getWeddingId(), id, request));
     }
 
     @PatchMapping("/{id}/read")
     public ResponseEntity<MessageResponse> readMessage(
+            @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id
-        ) {
-        return ResponseEntity.ok(messageService.readMessage(id));
+    ) {
+        return ResponseEntity.ok(messageService.readMessage(user.getWeddingId(), id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable UUID id) {
-        messageService.deleteMessage(id);
+    public ResponseEntity<Void> deleteMessage(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @PathVariable UUID id
+    ) {
+        messageService.deleteMessage(user.getWeddingId(), id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -14,6 +14,7 @@ public class AuthenticatedUser implements UserDetails {
 
     private final UUID id;
     private final UUID authUserId;
+    private final UUID weddingId;
     private final String email;
     private final boolean isActive;
     private final Collection<SimpleGrantedAuthority> authorities;
@@ -21,6 +22,7 @@ public class AuthenticatedUser implements UserDetails {
     public AuthenticatedUser(User user) {
         this.id = user.getId();
         this.authUserId = user.getAuthUserId();
+        this.weddingId = user.getWedding() != null ? user.getWedding().getId() : null;
         this.email = user.getEmail();
         this.isActive = user.getIsActive();
         this.authorities = List.of(

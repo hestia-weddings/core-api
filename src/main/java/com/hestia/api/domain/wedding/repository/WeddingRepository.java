@@ -12,4 +12,5 @@ public interface WeddingRepository extends JpaRepository<Wedding, UUID> {
 
     Page<Wedding> findByIsActiveTrue(Pageable pageable);
     Optional<Wedding> findByIdAndIsActiveTrue(UUID id);
+    Optional<Wedding> findBySlugAndIsActiveTrue(String slug);
 }

@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
 
-    Page<Message> findByIsActiveTrue(Pageable pageable);
-    Page<Message> findByIsNewTrueAndIsActiveTrue(Pageable pageable);
-    Page<Message> findByIsFavoriteTrueAndIsActiveTrue(Pageable pageable);
-    Optional<Message> findByIdAndIsActiveTrue(UUID id);
+    Page<Message> findByWeddingIdAndIsActiveTrue(UUID weddingId, Pageable pageable);
+    Page<Message> findByWeddingIdAndIsNewTrueAndIsActiveTrue(UUID weddingId, Pageable pageable);
+    Page<Message> findByWeddingIdAndIsFavoriteTrueAndIsActiveTrue(UUID weddingId, Pageable pageable);
+    Optional<Message> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
 }

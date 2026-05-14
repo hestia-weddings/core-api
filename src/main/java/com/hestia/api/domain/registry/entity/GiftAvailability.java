@@ -39,6 +39,9 @@ public class GiftAvailability {
     @Column(nullable = false)
     private Boolean availability;
 
+    @Column(name = "wedding_id", nullable = false)
+    private UUID weddingId;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

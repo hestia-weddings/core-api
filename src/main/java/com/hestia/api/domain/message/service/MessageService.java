@@ -26,34 +26,32 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
-
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<MessageResponse> getMessages(Pageable pageable, Boolean isNew, Boolean isFavorite) {
+    public PageResponse<MessageResponse> getMessages(UUID weddingId, Pageable pageable, Boolean isNew, Boolean isFavorite) {
         Page<MessageResponse> message;
 
         if (Boolean.TRUE.equals(isNew))
-            message = messageRepository.findByIsNewTrueAndIsActiveTrue(pageable)
+            message = messageRepository.findByWeddingIdAndIsNewTrueAndIsActiveTrue(weddingId, pageable)
                     .map(messageMapper::toResponse);
-
         else if (Boolean.TRUE.equals(isFavorite))
-            message = messageRepository.findByIsFavoriteTrueAndIsActiveTrue(pageable)
+            message = messageRepository.findByWeddingIdAndIsFavoriteTrueAndIsActiveTrue(weddingId, pageable)
                     .map(messageMapper::toResponse);
         else
-            message = messageRepository.findByIsActiveTrue(pageable)
-                .map(messageMapper::toResponse);
+            message = messageRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable)
+                    .map(messageMapper::toResponse);
 
         return PageMapper.toResponse(message);
     }
 
-    private Message getMessage(UUID id) {
-        return messageRepository.findByIdAndIsActiveTrue(id)
+    private Message getMessage(UUID weddingId, UUID id) {
+        return messageRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
     }
 
-    public MessageResponse createMessage(CreateMessageRequest request) {
-        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+    public MessageResponse createMessage(UUID weddingId, CreateMessageRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
         Message message = Message.builder()
@@ -67,8 +65,8 @@ public class MessageService {
         return messageMapper.toResponse(messageRepository.save(message));
     }
 
-    public MessageResponse updateMessage(UUID id, UpdateMessageRequest request) {
-        Message message = getMessage(id);
+    public MessageResponse updateMessage(UUID weddingId, UUID id, UpdateMessageRequest request) {
+        Message message = getMessage(weddingId, id);
 
         if (request.getIsFavorite() != null)
             message.setIsFavorite(request.getIsFavorite());
@@ -76,16 +74,14 @@ public class MessageService {
         return messageMapper.toResponse(messageRepository.save(message));
     }
 
-    public MessageResponse readMessage(UUID id) {
-        Message message = getMessage(id);
-
+    public MessageResponse readMessage(UUID weddingId, UUID id) {
+        Message message = getMessage(weddingId, id);
         message.setIsNew(false);
-
         return messageMapper.toResponse(messageRepository.save(message));
     }
 
-    public void deleteMessage(UUID id) {
-        Message message = getMessage(id);
+    public void deleteMessage(UUID weddingId, UUID id) {
+        Message message = getMessage(weddingId, id);
         message.setIsActive(false);
         messageRepository.save(message);
     }

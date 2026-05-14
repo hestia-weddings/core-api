@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @Builder
@@ -26,7 +24,4 @@ public class CreateGiftRequest {
     @NotNull
     @Positive
     private Integer stock;
-
-    @NotBlank
-    private UUID weddingId;
 }

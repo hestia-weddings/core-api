@@ -30,24 +30,23 @@ public class InviteService {
     private final InviteRepository inviteRepository;
     private final GuestRepository guestRepository;
     private final InviteMapper inviteMapper;
-
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<InviteResponse> getInvites(Pageable pageable) {
-        Page<InviteResponse> invite = inviteRepository.findByIsActiveTrue(pageable)
+    public PageResponse<InviteResponse> getInvites(UUID weddingId, Pageable pageable) {
+        Page<InviteResponse> invite = inviteRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable)
                 .map(inviteMapper::toResponse);
 
         return PageMapper.toResponse(invite);
     }
 
-    private Invite getInvite(UUID id) {
-        return inviteRepository.findByIdAndIsActiveTrue(id)
+    private Invite getInvite(UUID weddingId, UUID id) {
+        return inviteRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
     }
 
-    public InviteResponse createInvite(CreateInviteRequest request) {
-        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+    public InviteResponse createInvite(UUID weddingId, CreateInviteRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
         Invite invite = Invite.builder()
@@ -73,11 +72,11 @@ public class InviteService {
             savedInvite.setGuests(guests);
         }
 
-        return inviteMapper.toResponse(invite);
+        return inviteMapper.toResponse(savedInvite);
     }
 
-    public InviteResponse updateInvite(UUID id, UpdateInviteRequest request) {
-        Invite invite = getInvite(id);
+    public InviteResponse updateInvite(UUID weddingId, UUID id, UpdateInviteRequest request) {
+        Invite invite = getInvite(weddingId, id);
 
         if (request.getName() != null)
             invite.setName(request.getName());
@@ -87,8 +86,8 @@ public class InviteService {
         return inviteMapper.toResponse(inviteRepository.save(invite));
     }
 
-    public void deleteInvite(UUID id) {
-        Invite invite = getInvite(id);
+    public void deleteInvite(UUID weddingId, UUID id) {
+        Invite invite = getInvite(weddingId, id);
 
         boolean hasConfirmedGuests = invite.getGuests().stream()
                 .filter(Guest::getIsActive)
@@ -107,11 +106,10 @@ public class InviteService {
     }
 
     @Transactional(readOnly = true)
-    public InviteResponse searchInvite(SearchInviteRequest request) {
+    public InviteResponse searchInvite(UUID weddingId, SearchInviteRequest request) {
         Invite invite = inviteRepository
-                .findByNameIgnoreCaseAndIsActiveTrue(request.getName())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Invite not found"));
+                .findByNameIgnoreCaseAndWeddingIdAndIsActiveTrue(request.getName(), weddingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
 
         return inviteMapper.toResponse(invite);
     }

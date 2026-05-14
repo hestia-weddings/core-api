@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface GiftRepository extends JpaRepository<Gift, UUID> {
 
-    Optional<Gift> findByIdAndIsActiveTrue(UUID id);
+    Optional<Gift> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
 }

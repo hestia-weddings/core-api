@@ -27,26 +27,23 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<UserResponse> getUsers(Pageable pageable) {
-        Page<UserResponse> user;
-
-        user = userRepository.findByIsActiveTrue(pageable)
+    public PageResponse<UserResponse> getUsers(UUID weddingId, Pageable pageable) {
+        Page<UserResponse> user = userRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable)
                 .map(userMapper::toResponse);
 
         return PageMapper.toResponse(user);
     }
 
-    private User getUser(UUID id) {
-        return userRepository.findByIdAndIsActiveTrue(id)
+    private User getUser(UUID weddingId, UUID id) {
+        return userRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    public UserResponse createUser(CreateUserRequest request) {
-        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+    public UserResponse createUser(UUID weddingId, CreateUserRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
         User user = User.builder()
@@ -60,16 +57,16 @@ public class UserService {
         return userMapper.toResponse(userRepository.save(user));
     }
 
-    public UserResponse updateUser(UUID id, UpdateUserRequest request) {
-        User user = getUser(id);
+    public UserResponse updateUser(UUID weddingId, UUID id, UpdateUserRequest request) {
+        User user = getUser(weddingId, id);
 
         user.setName(request.getName());
 
         return userMapper.toResponse(userRepository.save(user));
     }
 
-    public void deleteUser(UUID id) {
-        User user = getUser(id);
+    public void deleteUser(UUID weddingId, UUID id) {
+        User user = getUser(weddingId, id);
         user.setIsActive(false);
         userRepository.save(user);
     }

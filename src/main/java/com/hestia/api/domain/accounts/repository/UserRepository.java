@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    Page<User> findByIsActiveTrue(Pageable pageable);
-    Optional<User> findByIdAndIsActiveTrue(UUID id);
+    Page<User> findByWeddingIdAndIsActiveTrue(UUID weddingId, Pageable pageable);
+    Optional<User> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
     User findByAuthUserId(UUID id);
 }
