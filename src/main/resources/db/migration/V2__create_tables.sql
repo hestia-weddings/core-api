@@ -7,7 +7,6 @@ CREATE TABLE weddings (
     invite_message text,
     gift_message text,
     slug text NOT NULL UNIQUE,
-    custom_domain text UNIQUE,
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
     is_active boolean NOT NULL DEFAULT true
