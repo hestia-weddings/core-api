@@ -5,7 +5,6 @@ import com.hestia.api.domain.rsvp.dto.GuestResponse;
 import com.hestia.api.domain.rsvp.dto.InviteResponse;
 import com.hestia.api.domain.rsvp.dto.SearchInviteRequest;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestStatusRequest;
-import com.hestia.api.domain.rsvp.entity.Invite;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import com.hestia.api.domain.rsvp.service.InviteService;
@@ -20,7 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/w/{slug}/rsvp")
-@Tag(name = "Guest RSVP", description = "CRUD operations for rsvp module managements")
+@Tag(name = "Guest", description = "Public guest-facing endpoints")
 @RequiredArgsConstructor
 public class GuestRsvpController {
 
@@ -28,24 +27,29 @@ public class GuestRsvpController {
     private final GuestService guestService;
 
     @PostMapping("/invite/search")
-    public ResponseEntity<InviteResponse> searchInvite(@Valid @RequestBody SearchInviteRequest request) {
-        return ResponseEntity.ok(inviteService.searchInvite(request));
+    public ResponseEntity<InviteResponse> searchInvite(
+            @RequestAttribute UUID weddingId,
+            @Valid @RequestBody SearchInviteRequest request
+    ) {
+        return ResponseEntity.ok(inviteService.searchInvite(weddingId, request));
     }
 
     @GetMapping("/guest")
     public ResponseEntity<PageResponse<GuestResponse>> getGuest(
+            @RequestAttribute UUID weddingId,
             Pageable pageable,
             @RequestParam(required = false, name = "status") GuestStatus status,
-            @RequestParam(required = false, name = "invite_id") Invite invite
+            @RequestParam(required = false, name = "invite_id") UUID inviteId
     ) {
-        return ResponseEntity.ok(guestService.getGuests(pageable, status, invite));
+        return ResponseEntity.ok(guestService.getGuests(weddingId, pageable, status, inviteId));
     }
 
     @PatchMapping("/guest/status/{id}")
     public ResponseEntity<GuestResponse> patchGuestStatus(
+            @RequestAttribute UUID weddingId,
             @PathVariable UUID id,
             @Valid @RequestBody UpdateGuestStatusRequest request
     ) {
-        return ResponseEntity.ok(guestService.updateGuestStatus(id, request));
+        return ResponseEntity.ok(guestService.updateGuestStatus(weddingId, id, request));
     }
 }

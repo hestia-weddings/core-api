@@ -17,8 +17,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SlugResolver implements HandlerInterceptor {
 
-    public static final String WEDDING_ID_ATTR = "weddingId";
-
     private final WeddingRepository weddingRepository;
 
     @Override
@@ -30,7 +28,7 @@ public class SlugResolver implements HandlerInterceptor {
             String slug = pathVars.get("slug");
             Wedding wedding = weddingRepository.findBySlugAndIsActiveTrue(slug)
                     .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
-            request.setAttribute(WEDDING_ID_ATTR, wedding.getId());
+            request.setAttribute("weddingId", wedding.getId());
         }
 
         return true;

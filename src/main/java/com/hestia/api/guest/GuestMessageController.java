@@ -8,21 +8,23 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/w/{slug}/message")
-@Tag(name = "Guest Messages", description = "CRUD operations for public message send")
+@Tag(name = "Guest", description = "Public guest-facing endpoints")
 @RequiredArgsConstructor
 public class GuestMessageController {
 
     private final MessageService messageService;
 
     @PostMapping
-    public ResponseEntity<MessageResponse> createMessage(@Valid @RequestBody CreateMessageRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(request));
+    public ResponseEntity<MessageResponse> createMessage(
+            @RequestAttribute UUID weddingId,
+            @Valid @RequestBody CreateMessageRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(weddingId, request));
     }
 }
