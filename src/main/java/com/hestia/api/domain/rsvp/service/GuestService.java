@@ -51,6 +51,14 @@ public class GuestService {
         return PageMapper.toResponse(guest);
     }
 
+    @Transactional(readOnly = true)
+    public PageResponse<GuestResponse> getGuests(UUID weddingId, Pageable pageable, UUID inviteId) {
+        Page<GuestResponse> guest = guestRepository.findByWeddingIdAndInviteIdAndIsActiveTrue(weddingId, inviteId, pageable)
+                .map(guestMapper::toResponse);
+
+        return PageMapper.toResponse(guest);
+    }
+
     private Guest getGuest(UUID weddingId, UUID id) {
         return guestRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));

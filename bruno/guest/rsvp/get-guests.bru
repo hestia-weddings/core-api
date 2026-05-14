@@ -5,12 +5,13 @@ meta {
 }
 
 get {
-  url: {{base-url}}/w/{{slug}}/rsvp/guest?page=0&size=10
+  url: {{base-url}}/w/{{slug}}/rsvp/guest?invite_id=
   body: none
   auth: none
 }
 
 params:query {
+  invite_id: 
   ~status: CONFIRMED
   ~invite_id: 
 }

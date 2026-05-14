@@ -5,7 +5,6 @@ import com.hestia.api.domain.rsvp.dto.GuestResponse;
 import com.hestia.api.domain.rsvp.dto.InviteResponse;
 import com.hestia.api.domain.rsvp.dto.SearchInviteRequest;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestStatusRequest;
-import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import com.hestia.api.domain.rsvp.service.InviteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,10 +37,9 @@ public class GuestRsvpController {
     public ResponseEntity<PageResponse<GuestResponse>> getGuest(
             @RequestAttribute UUID weddingId,
             Pageable pageable,
-            @RequestParam(required = false, name = "status") GuestStatus status,
-            @RequestParam(required = false, name = "invite_id") UUID inviteId
+            @RequestParam(name = "invite_id") UUID inviteId
     ) {
-        return ResponseEntity.ok(guestService.getGuests(weddingId, pageable, status, inviteId));
+        return ResponseEntity.ok(guestService.getGuests(weddingId, pageable, inviteId));
     }
 
     @PatchMapping("/guest/status/{id}")

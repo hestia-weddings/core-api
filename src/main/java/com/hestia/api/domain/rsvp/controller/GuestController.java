@@ -54,15 +54,6 @@ public class GuestController {
         return ResponseEntity.ok(guestService.updateGuest(user.getWeddingId(), id, request));
     }
 
-    @PatchMapping("/status/{id}")
-    public ResponseEntity<GuestResponse> patchGuestStatus(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id,
-            @Valid @RequestBody UpdateGuestStatusRequest request
-    ) {
-        return ResponseEntity.ok(guestService.updateGuestStatus(user.getWeddingId(), id, request));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGuest(
             @AuthenticationPrincipal AuthenticatedUser user,

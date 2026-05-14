@@ -34,14 +34,7 @@ public class MessageController {
     ) {
         return ResponseEntity.ok(messageService.getMessages(user.getWeddingId(), pageable, isNew, isFavorite));
     }
-
-    @PostMapping
-    public ResponseEntity<MessageResponse> createMessage(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @Valid @RequestBody CreateMessageRequest request
-    ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(user.getWeddingId(), request));
-    }
+    
 
     @PatchMapping("/{id}")
     public ResponseEntity<MessageResponse> updateMessage(
