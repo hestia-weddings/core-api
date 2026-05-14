@@ -1,0 +1,26 @@
+meta {
+  name: Update Wedding
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base-url}}/wedding/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: {{wedding-id}}
+}
+
+auth:bearer {
+  token: {{token-admin}}
+}
+
+body:json {
+  {
+    "couple_name": "João & Maria Updated",
+    "date": "2026-09-20T18:00:00"
+  }
+}

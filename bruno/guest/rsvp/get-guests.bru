@@ -1,0 +1,16 @@
+meta {
+  name: Get Guests
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base-url}}/w/{{slug}}/rsvp/guest?page=0&size=10
+  body: none
+  auth: none
+}
+
+params:query {
+  ~status: CONFIRMED
+  ~invite_id: 
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Create Wedding
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base-url}}/wedding
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token-admin}}
+}
+
+body:json {
+  {
+    "couple_name": "João & Maria",
+    "date": "2026-08-15T16:00:00",
+    "invite_message": "We'd love to celebrate with you!",
+    "gift_message": "Your presence is our greatest gift.",
+    "slug": "joao-and-maria"
+  }
+}

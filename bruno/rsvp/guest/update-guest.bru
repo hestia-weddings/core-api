@@ -1,0 +1,26 @@
+meta {
+  name: Update Guest
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{base-url}}/rsvp/guest/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "name": "Ana Silva Updated",
+    "age_group": "CHILD"
+  }
+}

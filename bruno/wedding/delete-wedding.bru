@@ -1,0 +1,19 @@
+meta {
+  name: Delete Wedding
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base-url}}/wedding/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: {{wedding-id}}
+}
+
+auth:bearer {
+  token: {{token-admin}}
+}

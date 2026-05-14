@@ -1,0 +1,19 @@
+meta {
+  name: Delete Gift
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base-url}}/gift/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}

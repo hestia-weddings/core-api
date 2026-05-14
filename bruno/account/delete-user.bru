@@ -1,0 +1,19 @@
+meta {
+  name: Delete User
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{base-url}}/account/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: {{wedding-id}}
+}
+
+auth:bearer {
+  token: {{token-admin}}
+}

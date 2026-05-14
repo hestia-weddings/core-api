@@ -1,0 +1,18 @@
+meta {
+  name: Send Message
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base-url}}/w/{{slug}}/message
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "sender": "Tio Carlos",
+    "message": "Felicidades ao casal!"
+  }
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Update Guest Status
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base-url}}/rsvp/guest/status/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "status": "CONFIRMED"
+  }
+}

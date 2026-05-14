@@ -1,0 +1,23 @@
+meta {
+  name: Create Guest
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base-url}}/rsvp/guest
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "name": "Ana Silva",
+    "age_group": "ADULT",
+    "invite_id": ""
+  }
+}

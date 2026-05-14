@@ -1,0 +1,25 @@
+meta {
+  name: Update Message
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{base-url}}/message/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "is_favorite": true
+  }
+}

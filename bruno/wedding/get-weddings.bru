@@ -1,0 +1,15 @@
+meta {
+  name: Get Weddings
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base-url}}/wedding?page=0&size=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token-admin}}
+}

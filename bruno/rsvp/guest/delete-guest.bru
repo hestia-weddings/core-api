@@ -1,0 +1,19 @@
+meta {
+  name: Delete Guest
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base-url}}/rsvp/guest/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}

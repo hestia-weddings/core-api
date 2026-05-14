@@ -1,0 +1,25 @@
+meta {
+  name: Update User
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{base-url}}/account/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: {{wedding-id}}
+}
+
+auth:bearer {
+  token: {{token-admin}}
+}
+
+body:json {
+  {
+    "name": "João Updated"
+  }
+}

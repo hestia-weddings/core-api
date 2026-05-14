@@ -1,0 +1,29 @@
+meta {
+  name: Create Invite
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base-url}}/rsvp/invite
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "name": "Família Silva",
+    "phone": "11999999999",
+    "guests": [
+      {
+        "name": "Carlos Silva",
+        "age_group": "ADULT",
+        "invite_id": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Update Invite
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{base-url}}/rsvp/invite/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "name": "Família Silva Updated",
+    "phone": "11988888888"
+  }
+}

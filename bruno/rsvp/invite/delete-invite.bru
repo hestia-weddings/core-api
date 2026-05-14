@@ -1,0 +1,19 @@
+meta {
+  name: Delete Invite
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{base-url}}/rsvp/invite/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}

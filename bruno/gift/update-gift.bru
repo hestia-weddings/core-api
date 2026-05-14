@@ -1,0 +1,26 @@
+meta {
+  name: Update Gift
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base-url}}/gift/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "description": "Kitchen Blender Pro",
+    "price": 20000
+  }
+}

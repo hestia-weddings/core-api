@@ -1,0 +1,19 @@
+meta {
+  name: Get Wedding By Id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base-url}}/wedding/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: {{wedding-id}}
+}
+
+auth:bearer {
+  token: {{token-admin}}
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Get Messages
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base-url}}/message?page=0&size=10
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~is_new: true
+  ~is_favorite: true
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}

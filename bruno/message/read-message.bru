@@ -1,0 +1,19 @@
+meta {
+  name: Read Message
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base-url}}/message/:id/read
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
