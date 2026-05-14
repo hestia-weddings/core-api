@@ -4,7 +4,6 @@ import com.hestia.api.infrastructure.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,20 +28,12 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // ACCOUNT
-                        .requestMatchers(HttpMethod.PATCH, "/account/**").hasRole("COUPLE")
-                        .requestMatchers("/account", "/account/**").hasRole("ADMIN")
+                        // STRUCTURAL (ADMIN)
+                        .requestMatchers("/account/**").hasRole("ADMIN")
+                        .requestMatchers("/wedding/**").hasRole("ADMIN")
 
-                        // MESSAGE
-                        .requestMatchers(HttpMethod.POST, "/message").permitAll()
-
-                        // REGISTRY
-                        .requestMatchers(HttpMethod.GET, "/gift", "/gift/**").permitAll()
-
-                        // RSVP
-                        .requestMatchers(HttpMethod.POST, "/rsvp/invite/search").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/rsvp/guest").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/rsvp/guest/status/**").permitAll()
+                        // GUEST (PUBLIC)
+                        .requestMatchers("/w/**").permitAll()
 
                         // SWAGGER
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
@@ -50,7 +41,7 @@ public class SecurityConfig {
                         // ERROR
                         .requestMatchers("/error").permitAll()
 
-                        // GENERAL
+                        // DOMAIN MANAGEMENT (COUPLE)
                         .anyRequest().hasRole("COUPLE")
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
