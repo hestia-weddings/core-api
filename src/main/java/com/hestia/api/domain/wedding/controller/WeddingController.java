@@ -5,12 +5,15 @@ import com.hestia.api.domain.wedding.dto.CreateWeddingRequest;
 import com.hestia.api.domain.wedding.dto.UpdateWeddingRequest;
 import com.hestia.api.domain.wedding.dto.WeddingResponse;
 import com.hestia.api.domain.wedding.service.WeddingService;
+import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -34,21 +37,35 @@ public class WeddingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WeddingResponse> getWeddingById(@PathVariable UUID id) {
+    public ResponseEntity<WeddingResponse> getWeddingById(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @PathVariable UUID id
+    ) {
+        validateWeddingAccess(user, id);
         return ResponseEntity.ok(weddingService.getWeddingById(id));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<WeddingResponse> patchUser(
+    public ResponseEntity<WeddingResponse> patchWedding(
+            @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id,
             @Valid @RequestBody UpdateWeddingRequest request
     ) {
+        validateWeddingAccess(user, id);
         return ResponseEntity.ok(weddingService.updateWedding(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteWedding(@PathVariable UUID id) {
         weddingService.deleteWedding(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private void validateWeddingAccess(AuthenticatedUser user, UUID weddingId) {
+        boolean isCouple = user.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_COUPLE"));
+        if (isCouple && !weddingId.equals(user.getWeddingId())) {
+            throw new AccessDeniedException("Access denied");
+        }
     }
 }

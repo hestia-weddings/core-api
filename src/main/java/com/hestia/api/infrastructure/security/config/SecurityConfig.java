@@ -4,6 +4,7 @@ import com.hestia.api.infrastructure.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,6 +29,11 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // COUPLE-ACCESSIBLE (subset of account/wedding)
+                        .requestMatchers(HttpMethod.PATCH, "/account/{id}").hasAnyRole("ADMIN", "COUPLE")
+                        .requestMatchers(HttpMethod.GET, "/wedding/{id}").hasAnyRole("ADMIN", "COUPLE")
+                        .requestMatchers(HttpMethod.PATCH, "/wedding/{id}").hasAnyRole("ADMIN", "COUPLE")
+
                         // STRUCTURAL (ADMIN)
                         .requestMatchers("/account/**").hasRole("ADMIN")
                         .requestMatchers("/wedding/**").hasRole("ADMIN")

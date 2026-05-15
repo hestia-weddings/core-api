@@ -30,20 +30,20 @@ public class UserService {
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<UserResponse> getUsers(UUID weddingId, Pageable pageable) {
-        Page<UserResponse> user = userRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable)
+    public PageResponse<UserResponse> getUsers(Pageable pageable) {
+        Page<UserResponse> user = userRepository.findByIsActiveTrue(pageable)
                 .map(userMapper::toResponse);
 
         return PageMapper.toResponse(user);
     }
 
-    private User getUser(UUID weddingId, UUID id) {
-        return userRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
+    private User getUser(UUID id) {
+        return userRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    public UserResponse createUser(UUID weddingId, CreateUserRequest request) {
-        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(weddingId)
+    public UserResponse createUser(CreateUserRequest request) {
+        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
         User user = User.builder()
@@ -57,16 +57,16 @@ public class UserService {
         return userMapper.toResponse(userRepository.save(user));
     }
 
-    public UserResponse updateUser(UUID weddingId, UUID id, UpdateUserRequest request) {
-        User user = getUser(weddingId, id);
+    public UserResponse updateUser(UUID id, UpdateUserRequest request) {
+        User user = getUser(id);
 
         user.setName(request.getName());
 
         return userMapper.toResponse(userRepository.save(user));
     }
 
-    public void deleteUser(UUID weddingId, UUID id) {
-        User user = getUser(weddingId, id);
+    public void deleteUser(UUID id) {
+        User user = getUser(id);
         user.setIsActive(false);
         userRepository.save(user);
     }
