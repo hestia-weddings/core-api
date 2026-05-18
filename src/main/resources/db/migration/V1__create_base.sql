@@ -1,1 +1,5 @@
--- No-op: enum types handled as VARCHAR with CHECK constraints in table definitions
+-- H2 enum types (simulates PostgreSQL named enums)
+CREATE DOMAIN IF NOT EXISTS age_group_enum AS VARCHAR(10) CHECK (VALUE IN ('BABY', 'CHILD', 'ADULT'));
+CREATE DOMAIN IF NOT EXISTS guest_status_enum AS VARCHAR(10) CHECK (VALUE IN ('CONFIRMED', 'DECLINED', 'PENDING'));
+CREATE DOMAIN IF NOT EXISTS order_status_enum AS VARCHAR(10) CHECK (VALUE IN ('PENDING', 'PAID'));
+CREATE DOMAIN IF NOT EXISTS user_role_enum AS VARCHAR(10) CHECK (VALUE IN ('COUPLE', 'ADMIN'));

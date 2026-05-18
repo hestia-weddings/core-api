@@ -6,8 +6,6 @@ import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -24,12 +22,10 @@ public class Guest extends BaseModel {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "age_group", columnDefinition = "age_group_enum", nullable = false)
     private GuestAge ageGroup;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(columnDefinition = "guest_status_enum", nullable = false)
     private GuestStatus status;
 

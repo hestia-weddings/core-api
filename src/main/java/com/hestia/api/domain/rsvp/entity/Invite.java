@@ -5,6 +5,7 @@ import com.hestia.api.domain.wedding.entity.Wedding;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +25,8 @@ public class Invite extends BaseModel {
     private String phone;
 
     @OneToMany(mappedBy = "invite")
-    private List<Guest> guests;
+    @Builder.Default
+    private List<Guest> guests = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "wedding_id")
