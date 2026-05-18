@@ -1,9 +1,4 @@
--- Gifts Availability View
-
-DROP VIEW IF EXISTS gift_availability;
-
--- View
-CREATE VIEW public.gift_availability WITH (security_invoker = on) AS
+CREATE VIEW gift_availability AS
 SELECT
     g.id,
     g.description,
@@ -19,12 +14,14 @@ FROM gifts g
 LEFT JOIN orders o
     ON o.gift_id = g.id
     AND o.status = 'PAID'
-    AND o.is_active = true
-WHERE g.is_active = true
+    AND o.is_active = TRUE
+WHERE g.is_active = TRUE
 GROUP BY
     g.id,
     g.description,
     g.picture,
     g.price,
     g.stock,
-    g.created_at;
+    g.created_at,
+    g.wedding_id,
+    g.is_active;
