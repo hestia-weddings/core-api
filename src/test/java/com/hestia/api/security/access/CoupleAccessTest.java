@@ -28,127 +28,287 @@ class CoupleAccessTest {
 
     private static final String OWN_WEDDING = "11111111-1111-1111-1111-111111111111";
     private static final String OTHER_WEDDING = "22222222-2222-2222-2222-222222222222";
+    private static final String OWN_INVITE = "cccc0000-0000-0000-0000-000000000001";
+    private static final String OTHER_INVITE = "cccc0000-0000-0000-0000-000000000002";
+    private static final String OWN_GUEST = "dddd0000-0000-0000-0000-000000000001";
+    private static final String OTHER_GUEST = "dddd0000-0000-0000-0000-000000000002";
+    private static final String OWN_GIFT = "eeee0000-0000-0000-0000-000000000001";
+    private static final String OTHER_GIFT = "eeee0000-0000-0000-0000-000000000002";
+    private static final String OWN_MESSAGE = "ffff0000-0000-0000-0000-000000000001";
+    private static final String OTHER_MESSAGE = "ffff0000-0000-0000-0000-000000000002";
+    private static final String OWN_USER = "bbbb0000-0000-0000-0000-000000000001";
+    private static final String ADMIN_USER = "aaaa0000-0000-0000-0000-000000000001";
+
+    // ==========================================
+    // INVITE ENDPOINTS - Own wedding
+    // ==========================================
 
     @Nested
-    @DisplayName("Own wedding (should succeed)")
-    class OwnWedding {
+    @DisplayName("Invites (own wedding)")
+    class InviteOwn {
 
         @Test
         void canListInvites() throws Exception {
-            mockMvc.perform(get("/rsvp/invite"))
-                    .andExpect(status().isOk());
+            mockMvc.perform(get("/rsvp/invite")).andExpect(status().isOk());
         }
 
         @Test
         void canCreateInvite() throws Exception {
-            mockMvc.perform(post("/rsvp/invite")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"name\": \"New Invite\"}"))
+            mockMvc.perform(post("/rsvp/invite").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"New Family\"}")).andExpect(status().isCreated());
+        }
+
+        @Test
+        void canPatchInvite() throws Exception {
+            mockMvc.perform(patch("/rsvp/invite/{id}", OWN_INVITE).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"Updated\"}")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canDeleteInvite() throws Exception {
+            mockMvc.perform(delete("/rsvp/invite/{id}", OWN_INVITE)).andExpect(status().isNoContent());
+        }
+
+        @Test
+        void cannotPatchOtherWeddingInvite() throws Exception {
+            mockMvc.perform(patch("/rsvp/invite/{id}", OTHER_INVITE).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"Hacked\"}")).andExpect(status().isNotFound());
+        }
+
+        @Test
+        void cannotDeleteOtherWeddingInvite() throws Exception {
+            mockMvc.perform(delete("/rsvp/invite/{id}", OTHER_INVITE)).andExpect(status().isNotFound());
+        }
+    }
+
+    // ==========================================
+    // GUEST ENDPOINTS - Own wedding
+    // ==========================================
+
+    @Nested
+    @DisplayName("Guests (own wedding)")
+    class GuestOwn {
+
+        @Test
+        void canListGuests() throws Exception {
+            mockMvc.perform(get("/rsvp/guest")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canCreateGuest() throws Exception {
+            mockMvc.perform(post("/rsvp/guest").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"New Guest\", \"age_group\": \"ADULT\", \"invite_id\": \"" + OWN_INVITE + "\"}"))
                     .andExpect(status().isCreated());
         }
 
         @Test
-        void canListGuests() throws Exception {
-            mockMvc.perform(get("/rsvp/guest"))
-                    .andExpect(status().isOk());
+        void canPatchGuest() throws Exception {
+            mockMvc.perform(patch("/rsvp/guest/{id}", OWN_GUEST).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"Updated\"}")).andExpect(status().isOk());
         }
 
         @Test
+        void canDeleteGuest() throws Exception {
+            mockMvc.perform(delete("/rsvp/guest/{id}", OWN_GUEST)).andExpect(status().isNoContent());
+        }
+
+        @Test
+        void cannotPatchOtherWeddingGuest() throws Exception {
+            mockMvc.perform(patch("/rsvp/guest/{id}", OTHER_GUEST).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"Hacked\"}")).andExpect(status().isNotFound());
+        }
+
+        @Test
+        void cannotDeleteOtherWeddingGuest() throws Exception {
+            mockMvc.perform(delete("/rsvp/guest/{id}", OTHER_GUEST)).andExpect(status().isNotFound());
+        }
+    }
+
+    // ==========================================
+    // GIFT ENDPOINTS - Own wedding
+    // ==========================================
+
+    @Nested
+    @DisplayName("Gifts (own wedding)")
+    class GiftOwn {
+
+        @Test
         void canListGifts() throws Exception {
-            mockMvc.perform(get("/gift"))
-                    .andExpect(status().isOk());
+            mockMvc.perform(get("/gift")).andExpect(status().isOk());
         }
 
         @Test
         void canCreateGift() throws Exception {
-            mockMvc.perform(post("/gift")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"description\": \"Toaster\", \"price\": 5000, \"stock\": 1}"))
+            mockMvc.perform(post("/gift").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"description\": \"Toaster\", \"price\": 5000, \"stock\": 1}"))
                     .andExpect(status().isCreated());
         }
 
         @Test
-        void canListMessages() throws Exception {
-            mockMvc.perform(get("/message"))
-                    .andExpect(status().isOk());
+        void canGetGiftById() throws Exception {
+            mockMvc.perform(get("/gift/{id}", OWN_GIFT)).andExpect(status().isOk());
         }
+
+        @Test
+        void canPatchGift() throws Exception {
+            mockMvc.perform(patch("/gift/{id}", OWN_GIFT).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"description\": \"Updated\"}")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canDeleteGift() throws Exception {
+            mockMvc.perform(delete("/gift/{id}", OWN_GIFT)).andExpect(status().isNoContent());
+        }
+
+        @Test
+        void cannotGetOtherWeddingGift() throws Exception {
+            mockMvc.perform(get("/gift/{id}", OTHER_GIFT)).andExpect(status().isNotFound());
+        }
+
+        @Test
+        void cannotPatchOtherWeddingGift() throws Exception {
+            mockMvc.perform(patch("/gift/{id}", OTHER_GIFT).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"description\": \"Hacked\"}")).andExpect(status().isNotFound());
+        }
+
+        @Test
+        void cannotDeleteOtherWeddingGift() throws Exception {
+            mockMvc.perform(delete("/gift/{id}", OTHER_GIFT)).andExpect(status().isNotFound());
+        }
+    }
+
+    // ==========================================
+    // MESSAGE ENDPOINTS - Own wedding
+    // ==========================================
+
+    @Nested
+    @DisplayName("Messages (own wedding)")
+    class MessageOwn {
+
+        @Test
+        void canListMessages() throws Exception {
+            mockMvc.perform(get("/message")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canPatchMessage() throws Exception {
+            mockMvc.perform(patch("/message/{id}", OWN_MESSAGE).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"is_favorite\": true}")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canReadMessage() throws Exception {
+            mockMvc.perform(patch("/message/{id}/read", OWN_MESSAGE)).andExpect(status().isOk());
+        }
+
+        @Test
+        void canDeleteMessage() throws Exception {
+            mockMvc.perform(delete("/message/{id}", OWN_MESSAGE)).andExpect(status().isNoContent());
+        }
+
+        @Test
+        void cannotPatchOtherWeddingMessage() throws Exception {
+            mockMvc.perform(patch("/message/{id}", OTHER_MESSAGE).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"is_favorite\": true}")).andExpect(status().isNotFound());
+        }
+
+        @Test
+        void cannotDeleteOtherWeddingMessage() throws Exception {
+            mockMvc.perform(delete("/message/{id}", OTHER_MESSAGE)).andExpect(status().isNotFound());
+        }
+    }
+
+    // ==========================================
+    // WEDDING ENDPOINTS - Tenant isolation
+    // ==========================================
+
+    @Nested
+    @DisplayName("Wedding (tenant isolation)")
+    class WeddingTenant {
 
         @Test
         void canGetOwnWedding() throws Exception {
-            mockMvc.perform(get("/wedding/{id}", OWN_WEDDING))
-                    .andExpect(status().isOk());
+            mockMvc.perform(get("/wedding/{id}", OWN_WEDDING)).andExpect(status().isOk());
         }
 
         @Test
-        void canUpdateOwnWedding() throws Exception {
-            mockMvc.perform(patch("/wedding/{id}", OWN_WEDDING)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"couple_name\": \"Alice & Bobby\"}"))
-                    .andExpect(status().isOk());
+        void canPatchOwnWedding() throws Exception {
+            mockMvc.perform(patch("/wedding/{id}", OWN_WEDDING).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"couple_name\": \"Alice & Bobby\"}")).andExpect(status().isOk());
         }
-    }
-
-    @Nested
-    @DisplayName("Other wedding (should return 403)")
-    class OtherWedding {
 
         @Test
         void cannotGetOtherWedding() throws Exception {
-            mockMvc.perform(get("/wedding/{id}", OTHER_WEDDING))
-                    .andExpect(status().isForbidden());
+            mockMvc.perform(get("/wedding/{id}", OTHER_WEDDING)).andExpect(status().isForbidden());
         }
 
         @Test
-        void cannotUpdateOtherWedding() throws Exception {
-            mockMvc.perform(patch("/wedding/{id}", OTHER_WEDDING)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"couple_name\": \"Hacked\"}"))
-                    .andExpect(status().isForbidden());
+        void cannotPatchOtherWedding() throws Exception {
+            mockMvc.perform(patch("/wedding/{id}", OTHER_WEDDING).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"couple_name\": \"Hacked\"}")).andExpect(status().isForbidden());
         }
     }
+
+    // ==========================================
+    // ACCOUNT ENDPOINTS - Self only
+    // ==========================================
+
+    @Nested
+    @DisplayName("Account (self access)")
+    class AccountSelf {
+
+        @Test
+        void canPatchOwnAccount() throws Exception {
+            mockMvc.perform(patch("/account/{id}", OWN_USER).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"Updated Name\"}")).andExpect(status().isOk());
+        }
+
+        @Test
+        void cannotPatchOtherAccount() throws Exception {
+            mockMvc.perform(patch("/account/{id}", ADMIN_USER).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"Hacked\"}")).andExpect(status().isForbidden());
+        }
+    }
+
+    // ==========================================
+    // ADMIN-ONLY ENDPOINTS (should return 403)
+    // ==========================================
 
     @Nested
     @DisplayName("Admin-only endpoints (should return 403)")
     class AdminOnly {
 
         @Test
-        void cannotListAllWeddings() throws Exception {
-            mockMvc.perform(get("/wedding"))
-                    .andExpect(status().isForbidden());
+        void cannotListWeddings() throws Exception {
+            mockMvc.perform(get("/wedding")).andExpect(status().isForbidden());
         }
 
         @Test
         void cannotCreateWedding() throws Exception {
-            mockMvc.perform(post("/wedding")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"couple_name\": \"X & Y\", \"slug\": \"x-y\"}"))
-                    .andExpect(status().isForbidden());
+            mockMvc.perform(post("/wedding").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"couple_name\": \"X & Y\", \"slug\": \"x-y\"}")).andExpect(status().isForbidden());
         }
 
         @Test
         void cannotDeleteWedding() throws Exception {
-            mockMvc.perform(delete("/wedding/{id}", OWN_WEDDING))
-                    .andExpect(status().isForbidden());
+            mockMvc.perform(delete("/wedding/{id}", OWN_WEDDING)).andExpect(status().isForbidden());
         }
 
         @Test
         void cannotListAccounts() throws Exception {
-            mockMvc.perform(get("/account"))
-                    .andExpect(status().isForbidden());
+            mockMvc.perform(get("/account")).andExpect(status().isForbidden());
         }
 
         @Test
         void cannotCreateAccount() throws Exception {
-            mockMvc.perform(post("/account")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"name\": \"Hacker\", \"email\": \"h@h.com\", \"role\": \"ADMIN\", \"auth_user_id\": \"00000000-0000-0000-0000-000000000000\", \"wedding_id\": \"11111111-1111-1111-1111-111111111111\"}"))
+            mockMvc.perform(post("/account").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"X\", \"email\": \"x@x.com\", \"wedding_id\": \"" + OWN_WEDDING + "\"}"))
                     .andExpect(status().isForbidden());
         }
 
         @Test
         void cannotDeleteAccount() throws Exception {
-            mockMvc.perform(delete("/account/{id}", "aaaa0000-0000-0000-0000-000000000001"))
-                    .andExpect(status().isForbidden());
+            mockMvc.perform(delete("/account/{id}", ADMIN_USER)).andExpect(status().isForbidden());
         }
     }
 }
