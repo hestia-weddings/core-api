@@ -146,47 +146,86 @@ This project follows an **8-step incremental development approach**. Each step r
 
 ---
 
-## 📍 Step 3: Multi-tenant
+## 📍 Step 3: Multi-tenant ✅
 
 **Branch**: `step-3-multi-tenant`  
-**Status**: Planned
+**Status**: Completed
 
 ### Deliverables
-- [ ] Tenant identification strategy (subdomain/header/path)
-- [ ] Tenant context management
-- [ ] Database schema per tenant or shared schema with wedding_id
-- [ ] Tenant-aware repositories and queries
-- [ ] Tenant registration and management
-- [ ] Data isolation between tenants
-- [ ] Tenant-specific configuration
+- ✅ Tenant identification via `wedding_id` (shared schema approach)
+- ✅ Slug-based tenant resolution for public/guest endpoints (`/w/{slug}/*`)
+- ✅ `WeddingIdResolver` — Couple uses own `weddingId` from JWT, Admin must pass `wedding_id` param
+- ✅ `SlugResolver` interceptor — resolves slug → `weddingId` for guest-facing routes
+- ✅ Tenant-aware repositories (all queries scoped by `wedding_id`)
+- ✅ Data isolation between weddings (Couple cannot access other wedding's data)
+- ✅ Admin cross-tenant access with explicit `wedding_id` parameter
 
 ### Technical Approach
-- Hibernate multi-tenancy support
-- Tenant resolver implementation
-- Connection provider per tenant
-- Tenant interceptor/filter
+- **Strategy**: Shared schema with `wedding_id` FK on all tenant-scoped tables
+- **Couple**: `weddingId` extracted from `AuthenticatedUser` (resolved from JWT → DB user)
+- **Admin**: Must provide `wedding_id` as query param (returns 400 if missing)
+- **Guest (public)**: `SlugResolver` HandlerInterceptor resolves `/w/{slug}` → `weddingId` via request attribute
+- **Validation**: Controllers use `WeddingIdResolver.resolve(user, weddingId)` to enforce tenant scope
 
 ---
 
-## 📍 Step 4: CRUD Role & Tenant Based
+## 📍 Step 4: Test Suite (RBAC & Tenant Validation) ✅
 
-**Branch**: `step-4-role-tenant-crud`  
-**Status**: Planned
+**Branch**: `step-4-test-suite`  
+**Status**: Completed
 
 ### Deliverables
-- [ ] Role entity and management (Admin, Organizer, Guest, etc.)
-- [ ] Permission-based access control
-- [ ] Method-level security annotations
-- [ ] Tenant + Role combination authorization
-- [ ] User-Role-Tenant relationship mapping
-- [ ] Endpoint protection based on roles
-- [ ] Audit logging for sensitive operations
+- ✅ Integration test infrastructure (H2 in-memory, Flyway test migrations)
+- ✅ Custom security annotations (`@WithMockAdmin`, `@WithMockCouple`)
+- ✅ Role-based access tests (Admin, Couple, Guest/Anonymous)
+- ✅ Tenant isolation tests (couple scoped to own wedding, admin cross-tenant)
+- ✅ Public slug endpoint tests (valid/invalid slug resolution)
+- ✅ JaCoCo coverage reporting
+- ✅ `make test` with colored output, live timer, and coverage summary
+
+### Test Matrix (39 tests)
+
+| Role | Scenario | Expected |
+|------|----------|----------|
+| **Guest (anon)** | Access `/w/{slug}/*` endpoints | ✅ 200*   |
+| **Guest (anon)** | Invalid slug | ✅ 404    |
+| **Guest (anon)** | Access protected endpoints | ✅ 401    |
+| **Couple** | CRUD on own wedding data | ✅ 200*   |
+| **Couple** | Access other wedding | ✅ 403    |
+| **Couple** | Access admin-only endpoints | ✅ 403    |
+| **Admin** | Admin-only endpoints (accounts, weddings) | ✅ 200*   |
+| **Admin** | Cross-tenant access with `wedding_id` param | ✅ 200*   |
+| **Admin** | Missing `wedding_id` param | ✅ 400    |
 
 ### Technical Approach
-- `@PreAuthorize` and `@Secured` annotations
-- Custom security expressions
-- Role hierarchy configuration
-- Tenant-scoped role assignments
+- `@SpringBootTest` + `@AutoConfigureMockMvc` + `@Transactional` (rollback per test)
+- H2 with `MODE=PostgreSQL` and custom domains for enum types
+- `MockSecurityContextFactory` builds real `AuthenticatedUser` principal from annotations
+- Flyway migrations (test-only) with seed data for 2 weddings, 2 users, sample entities
+- JaCoCo for coverage (`target/site/jacoco/index.html`)
+
+### Project Structure
+```
+src/test/
+├── java/com/hestia/api/security/
+│   ├── support/
+│   │   ├── WithMockAuth.java
+│   │   ├── WithMockAdmin.java
+│   │   ├── WithMockCouple.java
+│   │   └── MockSecurityContextFactory.java
+│   └── access/
+│       ├── AdminAccessTest.java
+│       ├── CoupleAccessTest.java
+│       └── GuestAccessTest.java
+└── resources/
+    └── application-test.properties
+```
+
+### Commands
+```bash
+make test                    # Run tests with colored output + coverage
+mvn test -DskipTests=false -Dspring.profiles.active=test  # Raw Maven
+```
 
 ---
 

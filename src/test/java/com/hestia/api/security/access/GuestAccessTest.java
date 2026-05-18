@@ -82,43 +82,43 @@ class GuestAccessTest {
     }
 
     @Nested
-    @DisplayName("Protected endpoints (should block anonymous)")
+    @DisplayName("Protected endpoints (should return 401)")
     class ProtectedEndpoints {
 
         @Test
         void cannotAccessInvites() throws Exception {
             mockMvc.perform(get("/rsvp/invite"))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotAccessGuests() throws Exception {
             mockMvc.perform(get("/rsvp/guest"))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotAccessGifts() throws Exception {
             mockMvc.perform(get("/gift"))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotAccessMessages() throws Exception {
             mockMvc.perform(get("/message"))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotAccessAccounts() throws Exception {
             mockMvc.perform(get("/account"))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotAccessWeddings() throws Exception {
             mockMvc.perform(get("/wedding"))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isUnauthorized());
         }
     }
 }
