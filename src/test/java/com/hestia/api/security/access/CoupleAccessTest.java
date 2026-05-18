@@ -66,7 +66,12 @@ class CoupleAccessTest {
 
         @Test
         void canDeleteInvite() throws Exception {
-            mockMvc.perform(delete("/rsvp/invite/{id}", OWN_INVITE)).andExpect(status().isNoContent());
+            var response = mockMvc.perform(post("/rsvp/invite").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"Deletable Invite\"}"))
+                    .andExpect(status().isCreated())
+                    .andReturn().getResponse().getContentAsString();
+            String id = new com.fasterxml.jackson.databind.ObjectMapper().readTree(response).get("id").asText();
+            mockMvc.perform(delete("/rsvp/invite/{id}", id)).andExpect(status().isNoContent());
         }
 
         @Test
@@ -109,7 +114,12 @@ class CoupleAccessTest {
 
         @Test
         void canDeleteGuest() throws Exception {
-            mockMvc.perform(delete("/rsvp/guest/{id}", OWN_GUEST)).andExpect(status().isNoContent());
+            var response = mockMvc.perform(post("/rsvp/guest").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\": \"Deletable Guest\", \"age_group\": \"ADULT\", \"invite_id\": \"" + OWN_INVITE + "\"}"))
+                    .andExpect(status().isCreated())
+                    .andReturn().getResponse().getContentAsString();
+            String id = new com.fasterxml.jackson.databind.ObjectMapper().readTree(response).get("id").asText();
+            mockMvc.perform(delete("/rsvp/guest/{id}", id)).andExpect(status().isNoContent());
         }
 
         @Test
