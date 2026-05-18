@@ -41,8 +41,13 @@ public class GiftService {
     }
 
     @Transactional(readOnly = true)
-    public GiftAvailabilityResponse getGiftById(UUID weddingId, UUID id) {
-        GiftAvailability gift = giftAvailabilityRepository.findByIdAndWeddingId(id, weddingId)
+    public GiftAvailabilityResponse getGiftById(UUID weddingId, boolean isAdmin, UUID id) {
+        GiftAvailability gift;
+        if (isAdmin)
+            gift = giftAvailabilityRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
+        else
+            gift = giftAvailabilityRepository.findByIdAndWeddingId(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
 
         return giftMapper.toAvailabilityResponse(gift);

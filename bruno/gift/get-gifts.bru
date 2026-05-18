@@ -5,11 +5,17 @@ meta {
 }
 
 get {
-  url: {{base-url}}/gift?page=0&size=10
+  url: {{base-url}}/gift?page=0&size=10&wedding={{wedding-id}}
   body: none
   auth: bearer
 }
 
+params:query {
+  page: 0
+  size: 10
+  wedding: {{wedding-id}}
+}
+
 auth:bearer {
-  token: {{token-couple}}
+  token: {{token-admin}}
 }

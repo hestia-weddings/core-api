@@ -6,6 +6,7 @@ import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
 import com.hestia.api.domain.registry.dto.GiftResponse;
 import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
 import com.hestia.api.domain.registry.service.GiftService;
+import com.hestia.api.domain.wedding.helper.WeddingIdResolver;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,9 +30,11 @@ public class GiftController {
     @GetMapping
     public ResponseEntity<PageResponse<GiftAvailabilityResponse>> getGift(
             @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam(required = false) UUID wedding,
             Pageable pageable
     ) {
-        return ResponseEntity.ok(giftService.getGifts(user.getWeddingId(), pageable));
+        UUID resolvedWeddingId = WeddingIdResolver.resolve(user, wedding);
+        return ResponseEntity.ok(giftService.getGifts(resolvedWeddingId, pageable));
     }
 
     @PostMapping
@@ -47,7 +50,9 @@ public class GiftController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(giftService.getGiftById(user.getWeddingId(), id));
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        return ResponseEntity.ok(giftService.getGiftById(user.getWeddingId(), isAdmin, id));
     }
 
     @PatchMapping("/{id}")

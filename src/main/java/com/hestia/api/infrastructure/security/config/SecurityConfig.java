@@ -29,15 +29,6 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // COUPLE-ACCESSIBLE (subset of account/wedding)
-                        .requestMatchers(HttpMethod.PATCH, "/account/{id}").hasAnyRole("ADMIN", "COUPLE")
-                        .requestMatchers(HttpMethod.GET, "/wedding/{id}").hasAnyRole("ADMIN", "COUPLE")
-                        .requestMatchers(HttpMethod.PATCH, "/wedding/{id}").hasAnyRole("ADMIN", "COUPLE")
-
-                        // STRUCTURAL (ADMIN)
-                        .requestMatchers("/account/**").hasRole("ADMIN")
-                        .requestMatchers("/wedding/**").hasRole("ADMIN")
-
                         // GUEST (PUBLIC)
                         .requestMatchers("/w/**").permitAll()
 
@@ -47,8 +38,16 @@ public class SecurityConfig {
                         // ERROR
                         .requestMatchers("/error").permitAll()
 
-                        // DOMAIN MANAGEMENT (COUPLE)
-                        .anyRequest().hasRole("COUPLE")
+                        // ADMIN-ONLY (structural management)
+                        .requestMatchers(HttpMethod.GET, "/account").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/account").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/account/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/wedding").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/wedding").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/wedding/{id}").hasRole("ADMIN")
+
+                        // ALL AUTHENTICATED (ADMIN + COUPLE)
+                        .anyRequest().hasAnyRole("ADMIN", "COUPLE")
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
