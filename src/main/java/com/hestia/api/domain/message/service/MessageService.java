@@ -53,20 +53,8 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public MessageResponse getMessageById(
-            @Nullable UUID weddingId,
-            UUID id
-    ) {
-        Message payload;
-
-        if (weddingId == null)
-            payload = messageRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
-        else
-            payload = messageRepository.findByIdAndWeddingId(id, weddingId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
-
-        return messageMapper.toResponse(payload);
+    public MessageResponse getMessageById(@Nullable UUID weddingId, UUID id) {
+        return messageMapper.toResponse(getMessage(weddingId, id));
     }
 
     private Message getMessage(@Nullable UUID weddingId, UUID id) {

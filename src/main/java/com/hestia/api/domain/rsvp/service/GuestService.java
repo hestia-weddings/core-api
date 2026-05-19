@@ -59,14 +59,6 @@ public class GuestService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<GuestResponse> getGuests(UUID weddingId, Pageable pageable, UUID inviteId) {
-        Page<GuestResponse> guest = guestRepository.findByWeddingIdAndInviteIdAndIsActiveTrue(weddingId, inviteId, pageable)
-                .map(guestMapper::toResponse);
-
-        return PageMapper.toResponse(guest);
-    }
-
-    @Transactional(readOnly = true)
     public GuestResponse getGuestById(@Nullable UUID weddingId, UUID id) {
         return guestMapper.toResponse(getGuest(weddingId, id));
     }

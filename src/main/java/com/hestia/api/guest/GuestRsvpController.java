@@ -39,7 +39,7 @@ public class GuestRsvpController {
             Pageable pageable,
             @RequestParam(name = "invite_id") UUID inviteId
     ) {
-        return ResponseEntity.ok(guestService.getGuests(weddingId, pageable, inviteId));
+        return ResponseEntity.ok(guestService.getGuests(weddingId, null, inviteId, pageable));
     }
 
     @PatchMapping("/guest/status/{id}")
