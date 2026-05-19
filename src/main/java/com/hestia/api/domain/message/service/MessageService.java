@@ -52,7 +52,27 @@ public class MessageService {
         return PageMapper.toResponse(page.map(messageMapper::toResponse));
     }
 
-    private Message getMessage(UUID weddingId, UUID id) {
+    @Transactional(readOnly = true)
+    public MessageResponse getMessageById(
+            @Nullable UUID weddingId,
+            UUID id
+    ) {
+        Message payload;
+
+        if (weddingId == null)
+            payload = messageRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
+        else
+            payload = messageRepository.findByIdAndWeddingId(id, weddingId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
+
+        return messageMapper.toResponse(payload);
+    }
+
+    private Message getMessage(@Nullable UUID weddingId, UUID id) {
+        if (weddingId == null)
+            return messageRepository.findByIdAndIsActiveTrue(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
         return messageRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
     }
@@ -72,7 +92,7 @@ public class MessageService {
         return messageMapper.toResponse(messageRepository.save(message));
     }
 
-    public MessageResponse updateMessage(UUID weddingId, UUID id, UpdateMessageRequest request) {
+    public MessageResponse updateMessage(@Nullable UUID weddingId, UUID id, UpdateMessageRequest request) {
         Message message = getMessage(weddingId, id);
 
         if (request.getIsFavorite() != null)
@@ -81,13 +101,13 @@ public class MessageService {
         return messageMapper.toResponse(messageRepository.save(message));
     }
 
-    public MessageResponse readMessage(UUID weddingId, UUID id) {
+    public MessageResponse readMessage(@Nullable UUID weddingId, UUID id) {
         Message message = getMessage(weddingId, id);
         message.setIsNew(false);
         return messageMapper.toResponse(messageRepository.save(message));
     }
 
-    public void deleteMessage(UUID weddingId, UUID id) {
+    public void deleteMessage(@Nullable UUID weddingId, UUID id) {
         Message message = getMessage(weddingId, id);
         message.setIsActive(false);
         messageRepository.save(message);

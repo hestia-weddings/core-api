@@ -35,22 +35,21 @@ public class GiftController {
         return ResponseEntity.ok(giftService.getGifts(user.resolveWeddingId(wedding), pageable));
     }
 
-    @PostMapping
-    public ResponseEntity<GiftResponse> postGift(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @Valid @RequestBody CreateGiftRequest request
-    ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(giftService.createGift(user.getWeddingId(), request));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<GiftAvailabilityResponse> getGiftById(
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id
     ) {
-        boolean isAdmin = user.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-        return ResponseEntity.ok(giftService.getGiftById(user.getWeddingId(), isAdmin, id));
+        return ResponseEntity.ok(giftService.getGiftById(user.resolveWeddingId(), id));
+    }
+
+    @PostMapping
+    public ResponseEntity<GiftResponse> postGift(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam(required = false) UUID wedding,
+            @Valid @RequestBody CreateGiftRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(giftService.createGift(user.resolveWeddingId(wedding), request));
     }
 
     @PatchMapping("/{id}")
@@ -59,7 +58,7 @@ public class GiftController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateGiftRequest request
     ) {
-        return ResponseEntity.ok(giftService.updateGift(user.getWeddingId(), id, request));
+        return ResponseEntity.ok(giftService.updateGift(user.resolveWeddingId(), id, request));
     }
 
     @DeleteMapping("/{id}")
@@ -67,7 +66,7 @@ public class GiftController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id
     ) {
-        giftService.deleteGift(user.getWeddingId(), id);
+        giftService.deleteGift(user.resolveWeddingId(), id);
         return ResponseEntity.noContent().build();
     }
 }

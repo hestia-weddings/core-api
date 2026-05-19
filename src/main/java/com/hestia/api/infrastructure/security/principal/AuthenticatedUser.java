@@ -42,6 +42,10 @@ public class AuthenticatedUser implements UserDetails {
         return this.weddingId;
     }
 
+    public UUID resolveWeddingId() {
+        return resolveWeddingId(null);
+    }
+
     @Override
     public String getPassword() {
         return null;

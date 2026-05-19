@@ -26,7 +26,7 @@ public class User extends BaseModel {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(columnDefinition = "user_role_enum", nullable = false)
     private UserRole role;
 

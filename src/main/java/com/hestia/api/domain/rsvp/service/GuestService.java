@@ -66,7 +66,15 @@ public class GuestService {
         return PageMapper.toResponse(guest);
     }
 
-    private Guest getGuest(UUID weddingId, UUID id) {
+    @Transactional(readOnly = true)
+    public GuestResponse getGuestById(@Nullable UUID weddingId, UUID id) {
+        return guestMapper.toResponse(getGuest(weddingId, id));
+    }
+
+    private Guest getGuest(@Nullable UUID weddingId, UUID id) {
+        if (weddingId == null)
+            return guestRepository.findByIdAndIsActiveTrue(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
         return guestRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Guest not found"));
     }
@@ -89,7 +97,7 @@ public class GuestService {
         return guestMapper.toResponse(guestRepository.save(guest));
     }
 
-    public GuestResponse updateGuest(UUID weddingId, UUID id, UpdateGuestRequest request) {
+    public GuestResponse updateGuest(@Nullable UUID weddingId, UUID id, UpdateGuestRequest request) {
         Guest guest = getGuest(weddingId, id);
 
         if (request.getName() != null)
@@ -106,7 +114,7 @@ public class GuestService {
         return guestMapper.toResponse(guestRepository.save(guest));
     }
 
-    public void deleteGuest(UUID weddingId, UUID id) {
+    public void deleteGuest(@Nullable UUID weddingId, UUID id) {
         Guest guest = getGuest(weddingId, id);
 
         if (guest.getStatus() == GuestStatus.CONFIRMED)

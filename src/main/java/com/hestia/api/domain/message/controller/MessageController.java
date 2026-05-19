@@ -33,15 +33,22 @@ public class MessageController {
     ) {
         return ResponseEntity.ok(messageService.getMessages(user.resolveWeddingId(wedding), isNew, isFavorite, pageable));
     }
-    
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MessageResponse> getMessageById(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(messageService.getMessageById(user.resolveWeddingId(), id));
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<MessageResponse> updateMessage(
             @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id,
-            @Valid @RequestBody UpdateMessageRequest request
+            @Valid @RequestBody UpdateMessageRequest request,
+            @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(messageService.updateMessage(user.getWeddingId(), id, request));
+        return ResponseEntity.ok(messageService.updateMessage(user.resolveWeddingId(), id, request));
     }
 
     @PatchMapping("/{id}/read")
@@ -49,7 +56,7 @@ public class MessageController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(messageService.readMessage(user.getWeddingId(), id));
+        return ResponseEntity.ok(messageService.readMessage(user.resolveWeddingId(), id));
     }
 
     @DeleteMapping("/{id}")
@@ -57,7 +64,7 @@ public class MessageController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id
     ) {
-        messageService.deleteMessage(user.getWeddingId(), id);
+        messageService.deleteMessage(user.resolveWeddingId(), id);
         return ResponseEntity.noContent().build();
     }
 }

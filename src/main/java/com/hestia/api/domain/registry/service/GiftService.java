@@ -49,19 +49,26 @@ public class GiftService {
     }
 
     @Transactional(readOnly = true)
-    public GiftAvailabilityResponse getGiftById(UUID weddingId, boolean isAdmin, UUID id) {
-        GiftAvailability gift;
-        if (isAdmin)
-            gift = giftAvailabilityRepository.findById(id)
+    public GiftAvailabilityResponse getGiftById(
+            @Nullable UUID weddingId,
+            UUID id
+    ) {
+        GiftAvailability payload;
+
+        if (weddingId == null)
+            payload = giftAvailabilityRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
         else
-            gift = giftAvailabilityRepository.findByIdAndWeddingId(id, weddingId)
+            payload = giftAvailabilityRepository.findByIdAndWeddingId(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
 
-        return giftMapper.toAvailabilityResponse(gift);
+        return giftMapper.toAvailabilityResponse(payload);
     }
 
-    private Gift getGift(UUID weddingId, UUID id) {
+    private Gift getGift(@Nullable UUID weddingId, UUID id) {
+        if (weddingId == null)
+            return giftRepository.findByIdAndIsActiveTrue(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
         return giftRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
     }
@@ -81,7 +88,7 @@ public class GiftService {
         return giftMapper.toResponse(giftRepository.save(gift));
     }
 
-    public GiftResponse updateGift(UUID weddingId, UUID id, UpdateGiftRequest request) {
+    public GiftResponse updateGift(@Nullable UUID weddingId, UUID id, UpdateGiftRequest request) {
         Gift gift = getGift(weddingId, id);
 
         if (request.getDescription() != null)
@@ -96,7 +103,7 @@ public class GiftService {
         return giftMapper.toResponse(giftRepository.save(gift));
     }
 
-    public void deleteGift(UUID weddingId, UUID id) {
+    public void deleteGift(@Nullable UUID weddingId, UUID id) {
         Gift gift = getGift(weddingId, id);
         gift.setIsActive(false);
         giftRepository.save(gift);

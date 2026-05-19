@@ -37,12 +37,21 @@ public class GuestController {
         return ResponseEntity.ok(guestService.getGuests(user.resolveWeddingId(wedding), status, inviteId, pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<GuestResponse> getGuestById(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(guestService.getGuestById(user.resolveWeddingId(), id));
+    }
+
     @PostMapping
     public ResponseEntity<GuestResponse> postGuest(
             @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam(required = false) UUID wedding,
             @Valid @RequestBody CreateGuestRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(guestService.createGuest(user.getWeddingId(), request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(guestService.createGuest(user.resolveWeddingId(wedding), request));
     }
 
     @PatchMapping("/{id}")
@@ -51,7 +60,7 @@ public class GuestController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateGuestRequest request
     ) {
-        return ResponseEntity.ok(guestService.updateGuest(user.getWeddingId(), id, request));
+        return ResponseEntity.ok(guestService.updateGuest(user.resolveWeddingId(), id, request));
     }
 
     @DeleteMapping("/{id}")
@@ -59,7 +68,7 @@ public class GuestController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id
     ) {
-        guestService.deleteGuest(user.getWeddingId(), id);
+        guestService.deleteGuest(user.resolveWeddingId(), id);
         return ResponseEntity.noContent().build();
     }
 }

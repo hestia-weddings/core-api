@@ -48,7 +48,15 @@ public class InviteService {
         return PageMapper.toResponse(page.map(inviteMapper::toResponse));
     }
 
-    private Invite getInvite(UUID weddingId, UUID id) {
+    @Transactional(readOnly = true)
+    public InviteResponse getInviteById(@Nullable UUID weddingId, UUID id) {
+        return inviteMapper.toResponse(getInvite(weddingId, id));
+    }
+
+    private Invite getInvite(@Nullable UUID weddingId, UUID id) {
+        if (weddingId == null)
+            return inviteRepository.findByIdAndIsActiveTrue(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
         return inviteRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
     }
@@ -83,7 +91,7 @@ public class InviteService {
         return inviteMapper.toResponse(savedInvite);
     }
 
-    public InviteResponse updateInvite(UUID weddingId, UUID id, UpdateInviteRequest request) {
+    public InviteResponse updateInvite(@Nullable UUID weddingId, UUID id, UpdateInviteRequest request) {
         Invite invite = getInvite(weddingId, id);
 
         if (request.getName() != null)
@@ -94,7 +102,7 @@ public class InviteService {
         return inviteMapper.toResponse(inviteRepository.save(invite));
     }
 
-    public void deleteInvite(UUID weddingId, UUID id) {
+    public void deleteInvite(@Nullable UUID weddingId, UUID id) {
         Invite invite = getInvite(weddingId, id);
 
         boolean hasConfirmedGuests = invite.getGuests().stream()

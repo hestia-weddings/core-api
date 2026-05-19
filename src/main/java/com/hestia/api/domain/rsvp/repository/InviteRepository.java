@@ -11,6 +11,7 @@ import java.util.UUID;
 public interface InviteRepository extends JpaRepository<Invite, UUID> {
 
     Page<Invite> findByWeddingIdAndIsActiveTrue(UUID weddingId, Pageable pageable);
+    Optional<Invite> findByIdAndIsActiveTrue(UUID id);
     Optional<Invite> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
     Optional<Invite> findByNameIgnoreCaseAndWeddingIdAndIsActiveTrue(String name, UUID weddingId);
 }

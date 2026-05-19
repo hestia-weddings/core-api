@@ -32,6 +32,6 @@ public class GuestGiftController {
             @RequestAttribute UUID weddingId,
             @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(giftService.getGiftById(weddingId, false, id));
+        return ResponseEntity.ok(giftService.getGiftById(weddingId, id));
     }
 }

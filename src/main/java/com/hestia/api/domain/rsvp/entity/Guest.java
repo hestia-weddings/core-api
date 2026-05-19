@@ -22,12 +22,12 @@ public class Guest extends BaseModel {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "age_group", columnDefinition = "age_group_enum", nullable = false)
     private GuestAge ageGroup;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(columnDefinition = "guest_status_enum", nullable = false)
     private GuestStatus status;
 

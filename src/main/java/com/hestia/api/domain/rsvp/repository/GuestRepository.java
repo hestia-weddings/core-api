@@ -14,5 +14,6 @@ public interface GuestRepository extends JpaRepository<Guest, UUID> {
     Page<Guest> findByWeddingIdAndIsActiveTrue(UUID weddingId, Pageable pageable);
     Page<Guest> findByWeddingIdAndStatusAndIsActiveTrue(UUID weddingId, GuestStatus status, Pageable pageable);
     Page<Guest> findByWeddingIdAndInviteIdAndIsActiveTrue(UUID weddingId, UUID inviteId, Pageable pageable);
+    Optional<Guest> findByIdAndIsActiveTrue(UUID id);
     Optional<Guest> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
 }
