@@ -5,6 +5,8 @@ import com.hestia.api.domain.accounts.enums.UserRole;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -24,6 +26,7 @@ public class User extends BaseModel {
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(columnDefinition = "user_role_enum", nullable = false)
     private UserRole role;
 

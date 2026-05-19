@@ -6,7 +6,6 @@ import com.hestia.api.domain.registry.dto.GiftAvailabilityResponse;
 import com.hestia.api.domain.registry.dto.GiftResponse;
 import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
 import com.hestia.api.domain.registry.service.GiftService;
-import com.hestia.api.domain.wedding.helper.WeddingIdResolver;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,8 +32,7 @@ public class GiftController {
             @RequestParam(required = false) UUID wedding,
             Pageable pageable
     ) {
-        UUID resolvedWeddingId = WeddingIdResolver.resolve(user, wedding);
-        return ResponseEntity.ok(giftService.getGifts(resolvedWeddingId, pageable));
+        return ResponseEntity.ok(giftService.getGifts(user.resolveWeddingId(wedding), pageable));
     }
 
     @PostMapping

@@ -1,6 +1,8 @@
 package com.hestia.api.infrastructure.security.principal;
 
 import com.hestia.api.domain.accounts.entity.User;
+import com.hestia.api.domain.accounts.enums.UserRole;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +30,16 @@ public class AuthenticatedUser implements UserDetails {
         this.authorities = List.of(
                 new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
         );
+    }
+
+    public boolean hasRole(UserRole role) {
+        return authorities.contains(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    public UUID resolveWeddingId(@Nullable UUID requestedWeddingId) {
+        if(hasRole(UserRole.ADMIN))
+            return requestedWeddingId;
+        return this.weddingId;
     }
 
     @Override

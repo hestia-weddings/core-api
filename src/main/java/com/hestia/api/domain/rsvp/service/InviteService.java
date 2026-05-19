@@ -13,6 +13,7 @@ import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,11 +34,18 @@ public class InviteService {
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<InviteResponse> getInvites(UUID weddingId, Pageable pageable) {
-        Page<InviteResponse> invite = inviteRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable)
-                .map(inviteMapper::toResponse);
+    public PageResponse<InviteResponse> getInvites(
+            @Nullable UUID weddingId,
+            Pageable pageable
+    ) {
+        Page<Invite> page;
 
-        return PageMapper.toResponse(invite);
+        if (weddingId == null)
+            page = inviteRepository.findAll(pageable);
+        else
+            page = inviteRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
+
+        return PageMapper.toResponse(page.map(inviteMapper::toResponse));
     }
 
     private Invite getInvite(UUID weddingId, UUID id) {

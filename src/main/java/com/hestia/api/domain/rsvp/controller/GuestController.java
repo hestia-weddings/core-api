@@ -4,7 +4,6 @@ import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.rsvp.dto.CreateGuestRequest;
 import com.hestia.api.domain.rsvp.dto.GuestResponse;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestRequest;
-import com.hestia.api.domain.rsvp.dto.UpdateGuestStatusRequest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
@@ -30,11 +29,12 @@ public class GuestController {
     @GetMapping
     public ResponseEntity<PageResponse<GuestResponse>> getGuest(
             @AuthenticationPrincipal AuthenticatedUser user,
-            Pageable pageable,
             @RequestParam(required = false, name = "status") GuestStatus status,
-            @RequestParam(required = false, name = "invite_id") UUID inviteId
+            @RequestParam(required = false, name = "invite_id") UUID inviteId,
+            @RequestParam(required = false) UUID wedding,
+            Pageable pageable
     ) {
-        return ResponseEntity.ok(guestService.getGuests(user.getWeddingId(), pageable, status, inviteId));
+        return ResponseEntity.ok(guestService.getGuests(user.resolveWeddingId(wedding), status, inviteId, pageable));
     }
 
     @PostMapping

@@ -14,6 +14,7 @@ import com.hestia.api.domain.registry.repository.GiftAvailabilityRepository;
 import com.hestia.api.domain.registry.repository.GiftRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,11 +34,18 @@ public class GiftService {
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<GiftAvailabilityResponse> getGifts(UUID weddingId, Pageable pageable) {
-        Page<GiftAvailabilityResponse> page = giftAvailabilityRepository.findByWeddingId(weddingId, pageable)
-                .map(giftMapper::toAvailabilityResponse);
+    public PageResponse<GiftAvailabilityResponse> getGifts(
+            @Nullable UUID weddingId,
+            Pageable pageable
+    ) {
+        Page<GiftAvailability> page;
 
-        return PageMapper.toResponse(page);
+        if (weddingId == null)
+            page = giftAvailabilityRepository.findAll(pageable);
+        else
+            page = giftAvailabilityRepository.findByWeddingId(weddingId, pageable);
+
+        return PageMapper.toResponse(page.map(giftMapper::toAvailabilityResponse));
     }
 
     @Transactional(readOnly = true)

@@ -16,6 +16,7 @@ import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.rsvp.repository.GuestRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,20 +36,26 @@ public class GuestService {
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<GuestResponse> getGuests(UUID weddingId, Pageable pageable, GuestStatus status, UUID inviteId) {
-        Page<GuestResponse> guest;
+    public PageResponse<GuestResponse> getGuests(
+            @Nullable UUID weddingId,
+            GuestStatus status,
+            UUID inviteId,
+            Pageable pageable
+    ) {
+        Page<Guest> page;
 
-        if (inviteId != null)
-            guest = guestRepository.findByWeddingIdAndInviteIdAndIsActiveTrue(weddingId, inviteId, pageable)
-                    .map(guestMapper::toResponse);
-        else if (status != null)
-            guest = guestRepository.findByWeddingIdAndStatusAndIsActiveTrue(weddingId, status, pageable)
-                    .map(guestMapper::toResponse);
-        else
-            guest = guestRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable)
-                    .map(guestMapper::toResponse);
+        if (weddingId == null)
+            page = guestRepository.findAll(pageable);
+        else {
+            if (inviteId != null)
+                page = guestRepository.findByWeddingIdAndInviteIdAndIsActiveTrue(weddingId, inviteId, pageable);
+            else if (status != null)
+                page = guestRepository.findByWeddingIdAndStatusAndIsActiveTrue(weddingId, status, pageable);
+            else
+                page = guestRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
+        }
 
-        return PageMapper.toResponse(guest);
+        return PageMapper.toResponse(page.map(guestMapper::toResponse));
     }
 
     @Transactional(readOnly = true)

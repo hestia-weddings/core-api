@@ -11,6 +11,7 @@ import com.hestia.api.domain.message.mapper.MessageMapper;
 import com.hestia.api.domain.message.repository.MessageRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,20 +30,26 @@ public class MessageService {
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<MessageResponse> getMessages(UUID weddingId, Pageable pageable, Boolean isNew, Boolean isFavorite) {
-        Page<MessageResponse> message;
+    public PageResponse<MessageResponse> getMessages(
+            @Nullable UUID weddingId,
+            Boolean isNew,
+            Boolean isFavorite,
+            Pageable pageable
+    ) {
+        Page<Message> page;
 
-        if (Boolean.TRUE.equals(isNew))
-            message = messageRepository.findByWeddingIdAndIsNewTrueAndIsActiveTrue(weddingId, pageable)
-                    .map(messageMapper::toResponse);
-        else if (Boolean.TRUE.equals(isFavorite))
-            message = messageRepository.findByWeddingIdAndIsFavoriteTrueAndIsActiveTrue(weddingId, pageable)
-                    .map(messageMapper::toResponse);
-        else
-            message = messageRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable)
-                    .map(messageMapper::toResponse);
+        if (weddingId == null)
+            page = messageRepository.findAll(pageable);
+        else {
+            if (Boolean.TRUE.equals(isNew))
+                page = messageRepository.findByWeddingIdAndIsNewTrueAndIsActiveTrue(weddingId, pageable);
+            else if (Boolean.TRUE.equals(isFavorite))
+                page = messageRepository.findByWeddingIdAndIsFavoriteTrueAndIsActiveTrue(weddingId, pageable);
+            else
+                page = messageRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
+        }
 
-        return PageMapper.toResponse(message);
+        return PageMapper.toResponse(page.map(messageMapper::toResponse));
     }
 
     private Message getMessage(UUID weddingId, UUID id) {

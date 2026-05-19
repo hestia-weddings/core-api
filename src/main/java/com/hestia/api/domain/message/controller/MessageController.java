@@ -2,7 +2,6 @@ package com.hestia.api.domain.message.controller;
 
 import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.message.service.MessageService;
-import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +26,12 @@ public class MessageController {
     @GetMapping
     public ResponseEntity<PageResponse<MessageResponse>> getMessage(
             @AuthenticationPrincipal AuthenticatedUser user,
-            Pageable pageable,
             @RequestParam(required = false, name = "is_new") Boolean isNew,
-            @RequestParam(required = false, name = "is_favorite") Boolean isFavorite
+            @RequestParam(required = false, name = "is_favorite") Boolean isFavorite,
+            @RequestParam(required = false) UUID wedding,
+            Pageable pageable
     ) {
-        return ResponseEntity.ok(messageService.getMessages(user.getWeddingId(), pageable, isNew, isFavorite));
+        return ResponseEntity.ok(messageService.getMessages(user.resolveWeddingId(wedding), isNew, isFavorite, pageable));
     }
     
 

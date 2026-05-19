@@ -28,9 +28,10 @@ public class InviteController {
     @GetMapping
     public ResponseEntity<PageResponse<InviteResponse>> getInvite(
             @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam(required = false) UUID wedding,
             Pageable pageable
     ) {
-        return ResponseEntity.ok(inviteService.getInvites(user.getWeddingId(), pageable));
+        return ResponseEntity.ok(inviteService.getInvites(user.resolveWeddingId(wedding), pageable));
     }
 
     @PostMapping

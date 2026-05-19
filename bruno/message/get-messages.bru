@@ -5,12 +5,15 @@ meta {
 }
 
 get {
-  url: {{base-url}}/message?page=0&size=10
+  url: {{base-url}}/message?page=0&size=10&wedding={{wedding-id}}
   body: none
   auth: bearer
 }
 
 params:query {
+  page: 0
+  size: 10
+  wedding: {{wedding-id}}
   ~is_new: true
   ~is_favorite: true
 }
