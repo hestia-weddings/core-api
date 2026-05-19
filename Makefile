@@ -139,7 +139,7 @@ lint:
 	total=$$(echo "scale=1; ($$end - $$start) / 1000000000" | bc); \
 	printf "\n$${DIM}"; line; printf "$${RESET}\n"; \
 	if [ "$$all_pass" -eq 0 ]; then \
-		printf "$${BOLD}  [$${GREEN}PASS$${RESET}$${BOLD}] All checks passed! $${DIM}$${total}s$${RESET}\n\n"; \
+		printf "$${BOLD}  [$${GREEN}DONE$${RESET}$${BOLD}] All checks passed! $${DIM}$${total}s$${RESET}\n\n"; \
 	else \
 		printf "$${BOLD}  [$${RED}FAIL$${RESET}$${BOLD}] Some checks failed. $${DIM}$${total}s$${RESET}\n\n"; \
 		exit 1; \
