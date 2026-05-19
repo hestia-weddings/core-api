@@ -118,8 +118,13 @@ class AdminAccessTest {
         }
 
         @Test
+        void canGetInviteById() throws Exception {
+            mockMvc.perform(get("/rsvp/invite/{id}", INVITE_A)).andExpect(status().isOk());
+        }
+
+        @Test
         void canCreateInvite() throws Exception {
-            mockMvc.perform(post("/rsvp/invite").contentType(MediaType.APPLICATION_JSON)
+            mockMvc.perform(post("/rsvp/invite").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\": \"Admin Invite\"}")).andExpect(status().isCreated());
         }
 
@@ -131,7 +136,7 @@ class AdminAccessTest {
 
         @Test
         void canDeleteInvite() throws Exception {
-            var response = mockMvc.perform(post("/rsvp/invite").contentType(MediaType.APPLICATION_JSON)
+            var response = mockMvc.perform(post("/rsvp/invite").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\": \"Deletable Invite\"}"))
                     .andExpect(status().isCreated())
                     .andReturn().getResponse().getContentAsString();
@@ -154,8 +159,13 @@ class AdminAccessTest {
         }
 
         @Test
+        void canGetGuestById() throws Exception {
+            mockMvc.perform(get("/rsvp/guest/{id}", GUEST_A)).andExpect(status().isOk());
+        }
+
+        @Test
         void canCreateGuest() throws Exception {
-            mockMvc.perform(post("/rsvp/guest").contentType(MediaType.APPLICATION_JSON)
+            mockMvc.perform(post("/rsvp/guest").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\": \"Admin Guest\", \"age_group\": \"ADULT\", \"invite_id\": \"" + INVITE_A + "\"}"))
                     .andExpect(status().isCreated());
         }
@@ -168,7 +178,7 @@ class AdminAccessTest {
 
         @Test
         void canDeleteGuest() throws Exception {
-            var response = mockMvc.perform(post("/rsvp/guest").contentType(MediaType.APPLICATION_JSON)
+            var response = mockMvc.perform(post("/rsvp/guest").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\": \"Deletable Guest\", \"age_group\": \"ADULT\", \"invite_id\": \"" + INVITE_A + "\"}"))
                     .andExpect(status().isCreated())
                     .andReturn().getResponse().getContentAsString();
@@ -196,13 +206,13 @@ class AdminAccessTest {
         }
 
         @Test
-        void listGiftsWithoutWeddingReturns400() throws Exception {
-            mockMvc.perform(get("/gift")).andExpect(status().isBadRequest());
+        void listGiftsWithoutWeddingReturnsAll() throws Exception {
+            mockMvc.perform(get("/gift")).andExpect(status().isOk());
         }
 
         @Test
         void canCreateGift() throws Exception {
-            mockMvc.perform(post("/gift").contentType(MediaType.APPLICATION_JSON)
+            mockMvc.perform(post("/gift").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"description\": \"Admin Gift\", \"price\": 10000, \"stock\": 3}"))
                     .andExpect(status().isCreated());
         }
@@ -240,6 +250,11 @@ class AdminAccessTest {
         @Test
         void canListMessages() throws Exception {
             mockMvc.perform(get("/message")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canGetMessageById() throws Exception {
+            mockMvc.perform(get("/message/{id}", MESSAGE_A)).andExpect(status().isOk());
         }
 
         @Test

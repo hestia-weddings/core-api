@@ -1,11 +1,11 @@
 meta {
-  name: Delete Invite
+  name: Get Guest By Id
   type: http
-  seq: 5
+  seq: 2
 }
 
-delete {
-  url: {{base-url}}/rsvp/invite/:id
+get {
+  url: {{base-url}}/rsvp/guest/:id
   body: none
   auth: bearer
 }

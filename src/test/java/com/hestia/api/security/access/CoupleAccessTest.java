@@ -53,6 +53,16 @@ class CoupleAccessTest {
         }
 
         @Test
+        void canGetInviteById() throws Exception {
+            mockMvc.perform(get("/rsvp/invite/{id}", OWN_INVITE)).andExpect(status().isOk());
+        }
+
+        @Test
+        void cannotGetOtherWeddingInvite() throws Exception {
+            mockMvc.perform(get("/rsvp/invite/{id}", OTHER_INVITE)).andExpect(status().isNotFound());
+        }
+
+        @Test
         void canCreateInvite() throws Exception {
             mockMvc.perform(post("/rsvp/invite").contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\": \"New Family\"}")).andExpect(status().isCreated());
@@ -97,6 +107,16 @@ class CoupleAccessTest {
         @Test
         void canListGuests() throws Exception {
             mockMvc.perform(get("/rsvp/guest")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canGetGuestById() throws Exception {
+            mockMvc.perform(get("/rsvp/guest/{id}", OWN_GUEST)).andExpect(status().isOk());
+        }
+
+        @Test
+        void cannotGetOtherWeddingGuest() throws Exception {
+            mockMvc.perform(get("/rsvp/guest/{id}", OTHER_GUEST)).andExpect(status().isNotFound());
         }
 
         @Test
@@ -198,6 +218,16 @@ class CoupleAccessTest {
         @Test
         void canListMessages() throws Exception {
             mockMvc.perform(get("/message")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canGetMessageById() throws Exception {
+            mockMvc.perform(get("/message/{id}", OWN_MESSAGE)).andExpect(status().isOk());
+        }
+
+        @Test
+        void cannotGetOtherWeddingMessage() throws Exception {
+            mockMvc.perform(get("/message/{id}", OTHER_MESSAGE)).andExpect(status().isNotFound());
         }
 
         @Test

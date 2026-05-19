@@ -9,8 +9,7 @@ import java.lang.annotation.*;
         authUserId = "aaaa0000-0000-0000-0000-aaaaaaaaaaaa",
         email = "admin@hestia.com",
         name = "Admin User",
-        role = "ADMIN",
-        weddingId = "11111111-1111-1111-1111-111111111111"
+        role = "ADMIN"
 )
 public @interface WithMockAdmin {
 }
