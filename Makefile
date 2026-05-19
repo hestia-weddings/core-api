@@ -106,36 +106,35 @@ lint:
 	start=$$(date +%s%N); \
 	printf "\n$${DIM}"; line; printf "$${RESET}\n"; \
 	printf "$${BOLD}  == Lint ==$${RESET}\n\n"; \
+	labels=("Spotless — auto-format code style" "Checkstyle — naming, imports & patterns" "SpotBugs — detect potential bugs"); \
+	cmds=("mvn spotless:apply -q" "mvn checkstyle:check -q" "mvn spotbugs:check -q"); \
+	printf "  [$${YELLOW}WAIT$${RESET}] %s $${DIM}0.0s$${RESET}\n" "$${labels[0]}"; \
+	printf "  [$${YELLOW}WAIT$${RESET}] %s $${DIM}0.0s$${RESET}\n" "$${labels[1]}"; \
+	printf "  [$${YELLOW}WAIT$${RESET}] %s $${DIM}0.0s$${RESET}\n" "$${labels[2]}"; \
 	all_pass=0; \
-	run_step() { \
-		label="$$1"; cmd="$$2"; \
+	for i in 0 1 2; do \
+		tput cuu $$((3 - i)); tput el; \
 		s=$$(date +%s%N); \
 		tmp=$$(mktemp); \
-		(eval "$$cmd" > "$$tmp" 2>&1) & \
+		(eval "$${cmds[$$i]}" > "$$tmp" 2>&1) & \
 		pid=$$!; \
 		while kill -0 $$pid 2>/dev/null; do \
 			now=$$(date +%s%N); \
 			elapsed=$$(echo "scale=1; ($$now - $$s) / 1000000000" | bc); \
-			printf "\r  [$${BLUE}RUN$${RESET}] $$label... $${DIM}$${elapsed}s$${RESET}  "; \
+			printf "\r  [$${BLUE}RUN$${RESET}]  %s $${DIM}$${elapsed}s$${RESET}  " "$${labels[$$i]}"; \
 			sleep 0.1; \
 		done; \
 		wait $$pid; rc=$$?; \
 		e=$$(date +%s%N); t=$$(echo "scale=1; ($$e - $$s) / 1000000000" | bc); \
 		if [ "$$rc" -eq 0 ]; then \
-			printf "\r  [$${GREEN}PASS$${RESET}] $$label $${DIM}$${t}s$${RESET}                    \n"; \
+			printf "\r  [$${GREEN}PASS$${RESET}] %s $${DIM}$${t}s$${RESET}                    \n" "$${labels[$$i]}"; \
 		else \
-			printf "\r  [$${RED}FAIL$${RESET}] $$label $${DIM}$${t}s$${RESET}                    \n"; \
-			cat "$$tmp" | grep -i "warn\|violation\|bug\|error" | head -10 | while read -r l; do \
-				printf "    $${YELLOW}$$l$${RESET}\n"; \
-			done; \
+			printf "\r  [$${RED}FAIL$${RESET}] %s $${DIM}$${t}s$${RESET}                    \n" "$${labels[$$i]}"; \
 			all_pass=1; \
 		fi; \
+		tput cud $$((2 - i)); \
 		rm -f "$$tmp"; \
-		return $$rc; \
-	}; \
-	run_step "Spotless (format)" "mvn spotless:apply -q"; \
-	run_step "Checkstyle" "mvn checkstyle:check -q"; \
-	run_step "SpotBugs" "mvn spotbugs:check -q"; \
+	done; \
 	end=$$(date +%s%N); \
 	total=$$(echo "scale=1; ($$end - $$start) / 1000000000" | bc); \
 	printf "\n$${DIM}"; line; printf "$${RESET}\n"; \
