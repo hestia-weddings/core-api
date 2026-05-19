@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclude Lombok-generated code -->
+    <Match>
+        <Source name="~.*\.java"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+    <!-- Exclude DTOs and entities (Lombok getters expose mutable fields) -->
+    <Match>
+        <Package name="~com\.hestia\.api\.domain\..*\.dto"/>
+    </Match>
+    <Match>
+        <Package name="~com\.hestia\.api\.domain\..*\.entity"/>
+    </Match>
+</FindBugsFilter>
