@@ -20,7 +20,6 @@
         <!-- Imports -->
         <module name="UnusedImports"/>
         <module name="RedundantImport"/>
-        <module name="AvoidStarImport"/>
 
         <!-- Code quality -->
         <module name="EqualsHashCode"/>
@@ -32,9 +31,6 @@
         <module name="MissingSwitchDefault"/>
         <module name="FallThrough"/>
         <module name="EmptyBlock"/>
-        <module name="NeedBraces">
-            <property name="allowSingleLineStatement" value="true"/>
-        </module>
 
         <!-- Suppress for Lombok generated code -->
         <module name="SuppressionXpathSingleFilter">

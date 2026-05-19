@@ -1,4 +1,4 @@
-.PHONY: test
+.PHONY: test lint
 
 SHELL := /bin/bash
 
@@ -92,3 +92,56 @@ test:
 		printf "$${BOLD}  [$${RED}FAIL$${RESET}$${BOLD}] $${RED}Tests failed. Check logs above.$${RESET}\n\n"; \
 	fi; \
 	exit $$exit_code'
+
+lint:
+	@bash -c '\
+	use_color=0; \
+	if [ -t 1 ] && command -v tput >/dev/null && [ -z "$$NO_COLOR" ] && [ "$$TERM" != "dumb" ]; then \
+		BOLD=$$(tput bold); DIM=$$(tput dim); RESET=$$(tput sgr0); \
+		RED=$$(tput setaf 1); BLUE=$$(tput setaf 4); GREEN=$$(tput setaf 2); YELLOW=$$(tput setaf 3); \
+		use_color=1; \
+	else \
+		BOLD=""; DIM=""; RESET=""; RED=""; BLUE=""; GREEN=""; YELLOW=""; \
+	fi; \
+	cols=$$(tput cols 2>/dev/null || echo 80); \
+	line() { printf "%*s\n" "$$cols" "" | tr " " "-"; }; \
+	printf "\n$${DIM}"; line; printf "$${RESET}\n"; \
+	printf "$${BOLD}  == Lint ==$${RESET}\n\n"; \
+	all_pass=0; \
+	printf "  [$${BLUE}RUN$${RESET}] Spotless (format check)...\n"; \
+	spotless_out=$$(mvn spotless:check -q 2>&1); spotless_rc=$$?; \
+	if [ "$$spotless_rc" -eq 0 ]; then \
+		printf "  [$${GREEN}PASS$${RESET}] Spotless\n"; \
+	else \
+		printf "  [$${RED}FAIL$${RESET}] Spotless — run $${BOLD}mvn spotless:apply$${RESET} to fix\n"; \
+		all_pass=1; \
+	fi; \
+	printf "  [$${BLUE}RUN$${RESET}] Checkstyle...\n"; \
+	checkstyle_out=$$(mvn checkstyle:check -q 2>&1); checkstyle_rc=$$?; \
+	if [ "$$checkstyle_rc" -eq 0 ]; then \
+		printf "  [$${GREEN}PASS$${RESET}] Checkstyle\n"; \
+	else \
+		printf "  [$${RED}FAIL$${RESET}] Checkstyle\n"; \
+		echo "$$checkstyle_out" | grep "\[WARN\]\|violation" | head -20 | while read -r l; do \
+			printf "    $${YELLOW}$$l$${RESET}\n"; \
+		done; \
+		all_pass=1; \
+	fi; \
+	printf "  [$${BLUE}RUN$${RESET}] SpotBugs...\n"; \
+	spotbugs_out=$$(mvn spotbugs:check -q 2>&1); spotbugs_rc=$$?; \
+	if [ "$$spotbugs_rc" -eq 0 ]; then \
+		printf "  [$${GREEN}PASS$${RESET}] SpotBugs\n"; \
+	else \
+		printf "  [$${RED}FAIL$${RESET}] SpotBugs\n"; \
+		echo "$$spotbugs_out" | grep -i "bug\|error" | head -20 | while read -r l; do \
+			printf "    $${YELLOW}$$l$${RESET}\n"; \
+		done; \
+		all_pass=1; \
+	fi; \
+	printf "\n$${DIM}"; line; printf "$${RESET}\n"; \
+	if [ "$$all_pass" -eq 0 ]; then \
+		printf "$${BOLD}  [$${GREEN}PASS$${RESET}$${BOLD}] All checks passed!$${RESET}\n\n"; \
+	else \
+		printf "$${BOLD}  [$${RED}FAIL$${RESET}$${BOLD}] Some checks failed.$${RESET}\n\n"; \
+		exit 1; \
+	fi'
