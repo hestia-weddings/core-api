@@ -11,14 +11,17 @@ import com.hestia.api.domain.message.mapper.MessageMapper;
 import com.hestia.api.domain.message.repository.MessageRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
+
 import jakarta.annotation.Nullable;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -31,22 +34,16 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public PageResponse<MessageResponse> getMessages(
-            @Nullable UUID weddingId,
-            Boolean isNew,
-            Boolean isFavorite,
-            Pageable pageable
-    ) {
+            @Nullable UUID weddingId, Boolean isNew, Boolean isFavorite, Pageable pageable) {
         Page<Message> page;
 
-        if (weddingId == null)
-            page = messageRepository.findAll(pageable);
+        if (weddingId == null) page = messageRepository.findAll(pageable);
         else {
             if (Boolean.TRUE.equals(isNew))
                 page = messageRepository.findByWeddingIdAndIsNewTrueAndIsActiveTrue(weddingId, pageable);
             else if (Boolean.TRUE.equals(isFavorite))
                 page = messageRepository.findByWeddingIdAndIsFavoriteTrueAndIsActiveTrue(weddingId, pageable);
-            else
-                page = messageRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
+            else page = messageRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
         }
 
         return PageMapper.toResponse(page.map(messageMapper::toResponse));
@@ -59,14 +56,17 @@ public class MessageService {
 
     private Message getMessage(@Nullable UUID weddingId, UUID id) {
         if (weddingId == null)
-            return messageRepository.findByIdAndIsActiveTrue(id)
+            return messageRepository
+                    .findByIdAndIsActiveTrue(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
-        return messageRepository.findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
+        return messageRepository
+                .findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
     }
 
     public MessageResponse createMessage(UUID weddingId, CreateMessageRequest request) {
-        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(weddingId)
+        Wedding wedding = weddingRepository
+                .findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
         Message message = Message.builder()
@@ -83,8 +83,7 @@ public class MessageService {
     public MessageResponse updateMessage(@Nullable UUID weddingId, UUID id, UpdateMessageRequest request) {
         Message message = getMessage(weddingId, id);
 
-        if (request.getIsFavorite() != null)
-            message.setIsFavorite(request.getIsFavorite());
+        if (request.getIsFavorite() != null) message.setIsFavorite(request.getIsFavorite());
 
         return messageMapper.toResponse(messageRepository.save(message));
     }

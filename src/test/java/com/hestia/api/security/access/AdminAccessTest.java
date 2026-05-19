@@ -1,6 +1,10 @@
 package com.hestia.api.security.access;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.hestia.api.security.support.WithMockAdmin;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,9 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -50,8 +51,9 @@ class AdminAccessTest {
 
         @Test
         void canCreateWedding() throws Exception {
-            mockMvc.perform(post("/wedding").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"couple_name\": \"Eve & Frank\", \"slug\": \"eve-frank\"}"))
+            mockMvc.perform(post("/wedding")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"couple_name\": \"Eve & Frank\", \"slug\": \"eve-frank\"}"))
                     .andExpect(status().isCreated());
         }
 
@@ -62,8 +64,10 @@ class AdminAccessTest {
 
         @Test
         void canPatchAnyWedding() throws Exception {
-            mockMvc.perform(patch("/wedding/{id}", WEDDING_B).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"couple_name\": \"Carol & Danny\"}")).andExpect(status().isOk());
+            mockMvc.perform(patch("/wedding/{id}", WEDDING_B)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"couple_name\": \"Carol & Danny\"}"))
+                    .andExpect(status().isOk());
         }
 
         @Test
@@ -87,15 +91,19 @@ class AdminAccessTest {
 
         @Test
         void canCreateAccount() throws Exception {
-            mockMvc.perform(post("/account").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"New User\", \"email\": \"new@hestia.com\", \"wedding_id\": \"" + WEDDING_B + "\"}"))
+            mockMvc.perform(post("/account")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"New User\", \"email\": \"new@hestia.com\", \"wedding_id\": \""
+                                    + WEDDING_B + "\"}"))
                     .andExpect(status().isCreated());
         }
 
         @Test
         void canPatchAnyAccount() throws Exception {
-            mockMvc.perform(patch("/account/{id}", USER_COUPLE).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"Updated\"}")).andExpect(status().isOk());
+            mockMvc.perform(patch("/account/{id}", USER_COUPLE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"Updated\"}"))
+                    .andExpect(status().isOk());
         }
 
         @Test
@@ -124,23 +132,35 @@ class AdminAccessTest {
 
         @Test
         void canCreateInvite() throws Exception {
-            mockMvc.perform(post("/rsvp/invite").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"Admin Invite\"}")).andExpect(status().isCreated());
+            mockMvc.perform(post("/rsvp/invite")
+                            .param("wedding", WEDDING_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"Admin Invite\"}"))
+                    .andExpect(status().isCreated());
         }
 
         @Test
         void canPatchInvite() throws Exception {
-            mockMvc.perform(patch("/rsvp/invite/{id}", INVITE_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"Updated\"}")).andExpect(status().isOk());
+            mockMvc.perform(patch("/rsvp/invite/{id}", INVITE_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"Updated\"}"))
+                    .andExpect(status().isOk());
         }
 
         @Test
         void canDeleteInvite() throws Exception {
-            var response = mockMvc.perform(post("/rsvp/invite").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"Deletable Invite\"}"))
+            var response = mockMvc.perform(post("/rsvp/invite")
+                            .param("wedding", WEDDING_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"Deletable Invite\"}"))
                     .andExpect(status().isCreated())
-                    .andReturn().getResponse().getContentAsString();
-            String id = new com.fasterxml.jackson.databind.ObjectMapper().readTree(response).get("id").asText();
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+            String id = new com.fasterxml.jackson.databind.ObjectMapper()
+                    .readTree(response)
+                    .get("id")
+                    .asText();
             mockMvc.perform(delete("/rsvp/invite/{id}", id)).andExpect(status().isNoContent());
         }
     }
@@ -165,24 +185,37 @@ class AdminAccessTest {
 
         @Test
         void canCreateGuest() throws Exception {
-            mockMvc.perform(post("/rsvp/guest").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"Admin Guest\", \"age_group\": \"ADULT\", \"invite_id\": \"" + INVITE_A + "\"}"))
+            mockMvc.perform(post("/rsvp/guest")
+                            .param("wedding", WEDDING_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"Admin Guest\", \"age_group\": \"ADULT\", \"invite_id\": \""
+                                    + INVITE_A + "\"}"))
                     .andExpect(status().isCreated());
         }
 
         @Test
         void canPatchGuest() throws Exception {
-            mockMvc.perform(patch("/rsvp/guest/{id}", GUEST_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"Updated\"}")).andExpect(status().isOk());
+            mockMvc.perform(patch("/rsvp/guest/{id}", GUEST_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"Updated\"}"))
+                    .andExpect(status().isOk());
         }
 
         @Test
         void canDeleteGuest() throws Exception {
-            var response = mockMvc.perform(post("/rsvp/guest").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"Deletable Guest\", \"age_group\": \"ADULT\", \"invite_id\": \"" + INVITE_A + "\"}"))
+            var response = mockMvc.perform(post("/rsvp/guest")
+                            .param("wedding", WEDDING_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"Deletable Guest\", \"age_group\": \"ADULT\", \"invite_id\": \""
+                                    + INVITE_A + "\"}"))
                     .andExpect(status().isCreated())
-                    .andReturn().getResponse().getContentAsString();
-            String id = new com.fasterxml.jackson.databind.ObjectMapper().readTree(response).get("id").asText();
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+            String id = new com.fasterxml.jackson.databind.ObjectMapper()
+                    .readTree(response)
+                    .get("id")
+                    .asText();
             mockMvc.perform(delete("/rsvp/guest/{id}", id)).andExpect(status().isNoContent());
         }
     }
@@ -212,8 +245,10 @@ class AdminAccessTest {
 
         @Test
         void canCreateGift() throws Exception {
-            mockMvc.perform(post("/gift").param("wedding", WEDDING_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"description\": \"Admin Gift\", \"price\": 10000, \"stock\": 3}"))
+            mockMvc.perform(post("/gift")
+                            .param("wedding", WEDDING_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"description\": \"Admin Gift\", \"price\": 10000, \"stock\": 3}"))
                     .andExpect(status().isCreated());
         }
 
@@ -229,8 +264,10 @@ class AdminAccessTest {
 
         @Test
         void canPatchGift() throws Exception {
-            mockMvc.perform(patch("/gift/{id}", GIFT_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"description\": \"Updated\"}")).andExpect(status().isOk());
+            mockMvc.perform(patch("/gift/{id}", GIFT_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"description\": \"Updated\"}"))
+                    .andExpect(status().isOk());
         }
 
         @Test
@@ -259,8 +296,10 @@ class AdminAccessTest {
 
         @Test
         void canPatchMessage() throws Exception {
-            mockMvc.perform(patch("/message/{id}", MESSAGE_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"is_favorite\": true}")).andExpect(status().isOk());
+            mockMvc.perform(patch("/message/{id}", MESSAGE_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"is_favorite\": true}"))
+                    .andExpect(status().isOk());
         }
 
         @Test

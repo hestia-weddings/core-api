@@ -7,9 +7,9 @@ import com.hestia.api.domain.registry.dto.GiftResponse;
 import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
 import com.hestia.api.domain.registry.service.GiftService;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/gift")
@@ -30,16 +33,13 @@ public class GiftController {
     public ResponseEntity<PageResponse<GiftAvailabilityResponse>> getGift(
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam(required = false) UUID wedding,
-            Pageable pageable
-    ) {
+            Pageable pageable) {
         return ResponseEntity.ok(giftService.getGifts(user.resolveWeddingId(wedding), pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GiftAvailabilityResponse> getGiftById(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id
-    ) {
+            @AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
         return ResponseEntity.ok(giftService.getGiftById(user.resolveWeddingId(), id));
     }
 
@@ -47,25 +47,21 @@ public class GiftController {
     public ResponseEntity<GiftResponse> postGift(
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam(required = false) UUID wedding,
-            @Valid @RequestBody CreateGiftRequest request
-    ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(giftService.createGift(user.resolveWeddingId(wedding), request));
+            @Valid @RequestBody CreateGiftRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(giftService.createGift(user.resolveWeddingId(wedding), request));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<GiftResponse> patchGift(
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id,
-            @Valid @RequestBody UpdateGiftRequest request
-    ) {
+            @Valid @RequestBody UpdateGiftRequest request) {
         return ResponseEntity.ok(giftService.updateGift(user.resolveWeddingId(), id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGift(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id
-    ) {
+    public ResponseEntity<Void> deleteGift(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
         giftService.deleteGift(user.resolveWeddingId(), id);
         return ResponseEntity.noContent().build();
     }

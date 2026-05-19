@@ -10,7 +10,5 @@ import java.lang.annotation.*;
         email = "couple@hestia.com",
         name = "Couple User",
         role = "COUPLE",
-        weddingId = "11111111-1111-1111-1111-111111111111"
-)
-public @interface WithMockCouple {
-}
+        weddingId = "11111111-1111-1111-1111-111111111111")
+public @interface WithMockCouple {}

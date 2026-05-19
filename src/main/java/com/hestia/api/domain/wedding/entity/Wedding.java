@@ -1,12 +1,14 @@
 package com.hestia.api.domain.wedding.entity;
 
 import com.hestia.api.common.model.BaseModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.*;
 
 import java.time.LocalDateTime;
+
+import lombok.*;
 
 @Entity
 @Table(name = "weddings")

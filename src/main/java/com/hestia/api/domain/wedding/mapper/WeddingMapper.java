@@ -2,6 +2,7 @@ package com.hestia.api.domain.wedding.mapper;
 
 import com.hestia.api.domain.wedding.dto.WeddingResponse;
 import com.hestia.api.domain.wedding.entity.Wedding;
+
 import org.springframework.stereotype.Component;
 
 @Component

@@ -4,10 +4,13 @@ import com.hestia.api.common.model.BaseModel;
 import com.hestia.api.domain.rsvp.enums.GuestAge;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.wedding.entity.Wedding;
+
 import jakarta.persistence.*;
-import lombok.*;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
+import lombok.*;
 
 @Entity
 @Table(name = "guests")

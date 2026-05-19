@@ -4,6 +4,7 @@ import com.hestia.api.domain.accounts.entity.User;
 import com.hestia.api.domain.accounts.enums.UserRole;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,9 +32,8 @@ public class MockSecurityContextFactory implements WithSecurityContextFactory<Wi
 
         AuthenticatedUser principal = new AuthenticatedUser(user);
 
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                principal, null, principal.getAuthorities()
-        );
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(auth);

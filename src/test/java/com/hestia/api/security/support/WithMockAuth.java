@@ -9,9 +9,14 @@ import java.lang.annotation.*;
 @WithSecurityContext(factory = MockSecurityContextFactory.class)
 public @interface WithMockAuth {
     String userId();
+
     String authUserId();
+
     String email();
+
     String name() default "Test User";
+
     String role();
+
     String weddingId() default "";
 }

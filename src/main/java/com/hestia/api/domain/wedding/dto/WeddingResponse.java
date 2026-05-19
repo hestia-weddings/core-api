@@ -1,9 +1,9 @@
 package com.hestia.api.domain.wedding.dto;
 
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import lombok.Builder;
 
 @Builder
 public record WeddingResponse(
@@ -13,5 +13,4 @@ public record WeddingResponse(
         String inviteMessage,
         String giftMessage,
         String slug,
-        LocalDateTime createdAt
-) {}
+        LocalDateTime createdAt) {}

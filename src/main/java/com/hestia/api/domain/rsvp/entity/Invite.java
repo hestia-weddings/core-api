@@ -2,12 +2,13 @@ package com.hestia.api.domain.rsvp.entity;
 
 import com.hestia.api.common.model.BaseModel;
 import com.hestia.api.domain.wedding.entity.Wedding;
+
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
+import lombok.*;
 
 @Entity
 @Table(name = "invites")

@@ -1,17 +1,12 @@
 package com.hestia.api.domain.accounts.dto;
 
 import com.hestia.api.domain.accounts.enums.UserRole;
-import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import lombok.Builder;
+
 @Builder
 public record UserResponse(
-        UUID id,
-        String name,
-        String email,
-        UserRole role,
-        LocalDateTime createdAt,
-        UUID authUserId
-) {}
+        UUID id, String name, String email, UserRole role, LocalDateTime createdAt, UUID authUserId) {}

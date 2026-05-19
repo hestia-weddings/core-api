@@ -12,13 +12,15 @@ import com.hestia.api.domain.accounts.mapper.UserMapper;
 import com.hestia.api.domain.accounts.repository.UserRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -31,19 +33,20 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public PageResponse<UserResponse> getUsers(Pageable pageable) {
-        Page<UserResponse> user = userRepository.findByIsActiveTrue(pageable)
-                .map(userMapper::toResponse);
+        Page<UserResponse> user = userRepository.findByIsActiveTrue(pageable).map(userMapper::toResponse);
 
         return PageMapper.toResponse(user);
     }
 
     private User getUser(UUID id) {
-        return userRepository.findByIdAndIsActiveTrue(id)
+        return userRepository
+                .findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     public UserResponse createUser(CreateUserRequest request) {
-        Wedding wedding = weddingRepository.findByIdAndIsActiveTrue(request.getWeddingId())
+        Wedding wedding = weddingRepository
+                .findByIdAndIsActiveTrue(request.getWeddingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
         User user = User.builder()

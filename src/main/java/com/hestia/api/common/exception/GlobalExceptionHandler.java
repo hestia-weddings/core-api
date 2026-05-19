@@ -1,6 +1,7 @@
 package com.hestia.api.common.exception;
 
 import com.hestia.api.common.dto.ErrorResponse;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,10 +20,7 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({
-            CannotDeleteInviteWithConfirmedGuestsException.class,
-            CannotDeleteConfirmedGuestException.class
-    })
+    @ExceptionHandler({CannotDeleteInviteWithConfirmedGuestsException.class, CannotDeleteConfirmedGuestException.class})
     public ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex) {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
@@ -35,8 +33,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> fields = new HashMap<>();
-        ex.getBindingResult().getFieldErrors()
-                .forEach(e -> fields.put(e.getField(), e.getDefaultMessage()));
+        ex.getBindingResult().getFieldErrors().forEach(e -> fields.put(e.getField(), e.getDefaultMessage()));
 
         ErrorResponse body = ErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())

@@ -7,14 +7,17 @@ import com.hestia.api.domain.rsvp.dto.SearchInviteRequest;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestStatusRequest;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import com.hestia.api.domain.rsvp.service.InviteService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/w/{slug}/rsvp")
@@ -27,18 +30,13 @@ public class GuestRsvpController {
 
     @PostMapping("/invite/search")
     public ResponseEntity<InviteResponse> searchInvite(
-            @RequestAttribute UUID weddingId,
-            @Valid @RequestBody SearchInviteRequest request
-    ) {
+            @RequestAttribute UUID weddingId, @Valid @RequestBody SearchInviteRequest request) {
         return ResponseEntity.ok(inviteService.searchInvite(weddingId, request));
     }
 
     @GetMapping("/guest")
     public ResponseEntity<PageResponse<GuestResponse>> getGuest(
-            @RequestAttribute UUID weddingId,
-            Pageable pageable,
-            @RequestParam(name = "invite_id") UUID inviteId
-    ) {
+            @RequestAttribute UUID weddingId, Pageable pageable, @RequestParam(name = "invite_id") UUID inviteId) {
         return ResponseEntity.ok(guestService.getGuests(weddingId, null, inviteId, pageable));
     }
 
@@ -46,8 +44,7 @@ public class GuestRsvpController {
     public ResponseEntity<GuestResponse> patchGuestStatus(
             @RequestAttribute UUID weddingId,
             @PathVariable UUID id,
-            @Valid @RequestBody UpdateGuestStatusRequest request
-    ) {
+            @Valid @RequestBody UpdateGuestStatusRequest request) {
         return ResponseEntity.ok(guestService.updateGuestStatus(weddingId, id, request));
     }
 }

@@ -2,14 +2,17 @@ package com.hestia.api.infrastructure.security.principal;
 
 import com.hestia.api.domain.accounts.entity.User;
 import com.hestia.api.domain.accounts.enums.UserRole;
+
 import jakarta.annotation.Nullable;
-import lombok.Getter;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
+import lombok.Getter;
 
 @Getter
 public class AuthenticatedUser implements UserDetails {
@@ -27,9 +30,8 @@ public class AuthenticatedUser implements UserDetails {
         this.weddingId = user.getWedding() != null ? user.getWedding().getId() : null;
         this.email = user.getEmail();
         this.isActive = user.getIsActive();
-        this.authorities = List.of(
-                new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
-        );
+        this.authorities =
+                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
     public boolean hasRole(UserRole role) {
@@ -37,8 +39,7 @@ public class AuthenticatedUser implements UserDetails {
     }
 
     public UUID resolveWeddingId(@Nullable UUID requestedWeddingId) {
-        if(hasRole(UserRole.ADMIN))
-            return requestedWeddingId;
+        if (hasRole(UserRole.ADMIN)) return requestedWeddingId;
         return this.weddingId;
     }
 

@@ -1,9 +1,9 @@
 package com.hestia.api.domain.registry.dto;
 
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import lombok.Builder;
 
 @Builder
 public record GiftAvailabilityResponse(
@@ -14,5 +14,4 @@ public record GiftAvailabilityResponse(
         Integer stock,
         Integer remain,
         Boolean availability,
-        LocalDateTime createdAt
-) {}
+        LocalDateTime createdAt) {}

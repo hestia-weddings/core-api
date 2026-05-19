@@ -2,10 +2,10 @@ package com.hestia.api.domain.message.entity;
 
 import com.hestia.api.common.model.BaseModel;
 import com.hestia.api.domain.wedding.entity.Wedding;
-import jakarta.persistence.*;
-import lombok.*;
 
-import java.util.UUID;
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Table(name = "messages")

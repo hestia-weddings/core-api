@@ -1,21 +1,11 @@
 package com.hestia.api.common.dto;
 
-import lombok.Builder;
-
 import java.util.List;
 
+import lombok.Builder;
+
 @Builder
-public record PageResponse<T>(
-        List<T> data,
-        Meta meta
-) {
+public record PageResponse<T>(List<T> data, Meta meta) {
     @Builder
-    public record Meta(
-            int page,
-            int size,
-            long totalElements,
-            int totalPages,
-            boolean hasNext,
-            boolean hasPrevious
-    ) {}
+    public record Meta(int page, int size, long totalElements, int totalPages, boolean hasNext, boolean hasPrevious) {}
 }

@@ -1,6 +1,7 @@
 package com.hestia.api.domain.message.dto;
 
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.Getter;
 import lombok.Setter;
 

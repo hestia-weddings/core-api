@@ -11,11 +11,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 public class JwtConfig {
 
     @Bean
-    public JwtDecoder jwtDecoder(
-            @Value("${supabase.jwt.jwk-set-uri}") String jwkSetUri
-    ) {
-        return NimbusJwtDecoder
-                .withJwkSetUri(jwkSetUri)
+    public JwtDecoder jwtDecoder(@Value("${supabase.jwt.jwk-set-uri}") String jwkSetUri) {
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri)
                 .jwsAlgorithm(SignatureAlgorithm.ES256)
                 .build();
     }

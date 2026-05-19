@@ -1,5 +1,8 @@
 package com.hestia.api.security.access;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,9 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -61,15 +61,13 @@ class GuestAccessTest {
 
         @Test
         void returnsOkWithValidSlug() throws Exception {
-            mockMvc.perform(get("/w/{slug}/rsvp/guest", VALID_SLUG)
-                            .param("invite_id", INVITE_A))
+            mockMvc.perform(get("/w/{slug}/rsvp/guest", VALID_SLUG).param("invite_id", INVITE_A))
                     .andExpect(status().isOk());
         }
 
         @Test
         void returns404WithInvalidSlug() throws Exception {
-            mockMvc.perform(get("/w/{slug}/rsvp/guest", INVALID_SLUG)
-                            .param("invite_id", INVITE_A))
+            mockMvc.perform(get("/w/{slug}/rsvp/guest", INVALID_SLUG).param("invite_id", INVITE_A))
                     .andExpect(status().isNotFound());
         }
     }
@@ -101,14 +99,12 @@ class GuestAccessTest {
 
         @Test
         void returnsOkWithValidSlug() throws Exception {
-            mockMvc.perform(get("/w/{slug}/gift", VALID_SLUG))
-                    .andExpect(status().isOk());
+            mockMvc.perform(get("/w/{slug}/gift", VALID_SLUG)).andExpect(status().isOk());
         }
 
         @Test
         void returns404WithInvalidSlug() throws Exception {
-            mockMvc.perform(get("/w/{slug}/gift", INVALID_SLUG))
-                    .andExpect(status().isNotFound());
+            mockMvc.perform(get("/w/{slug}/gift", INVALID_SLUG)).andExpect(status().isNotFound());
         }
     }
 
@@ -118,14 +114,12 @@ class GuestAccessTest {
 
         @Test
         void returnsOkWithValidSlug() throws Exception {
-            mockMvc.perform(get("/w/{slug}/gift/{id}", VALID_SLUG, GIFT_A))
-                    .andExpect(status().isOk());
+            mockMvc.perform(get("/w/{slug}/gift/{id}", VALID_SLUG, GIFT_A)).andExpect(status().isOk());
         }
 
         @Test
         void returns404WithInvalidSlug() throws Exception {
-            mockMvc.perform(get("/w/{slug}/gift/{id}", INVALID_SLUG, GIFT_A))
-                    .andExpect(status().isNotFound());
+            mockMvc.perform(get("/w/{slug}/gift/{id}", INVALID_SLUG, GIFT_A)).andExpect(status().isNotFound());
         }
     }
 
@@ -165,14 +159,18 @@ class GuestAccessTest {
 
         @Test
         void cannotCreateInvite() throws Exception {
-            mockMvc.perform(post("/rsvp/invite").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"X\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(post("/rsvp/invite")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"X\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotPatchInvite() throws Exception {
-            mockMvc.perform(patch("/rsvp/invite/{id}", INVITE_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"X\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(patch("/rsvp/invite/{id}", INVITE_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"X\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
@@ -187,14 +185,19 @@ class GuestAccessTest {
 
         @Test
         void cannotCreateGuest() throws Exception {
-            mockMvc.perform(post("/rsvp/guest").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"X\", \"age_group\": \"ADULT\", \"invite_id\": \"" + INVITE_A + "\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(post("/rsvp/guest")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\": \"X\", \"age_group\": \"ADULT\", \"invite_id\": \"" + INVITE_A + "\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotPatchGuest() throws Exception {
-            mockMvc.perform(patch("/rsvp/guest/{id}", GUEST_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"X\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(patch("/rsvp/guest/{id}", GUEST_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"X\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
@@ -209,8 +212,10 @@ class GuestAccessTest {
 
         @Test
         void cannotCreateGift() throws Exception {
-            mockMvc.perform(post("/gift").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"description\": \"X\", \"price\": 1000, \"stock\": 1}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(post("/gift")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"description\": \"X\", \"price\": 1000, \"stock\": 1}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
@@ -220,8 +225,10 @@ class GuestAccessTest {
 
         @Test
         void cannotPatchGift() throws Exception {
-            mockMvc.perform(patch("/gift/{id}", GIFT_A).contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"description\": \"X\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(patch("/gift/{id}", GIFT_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"description\": \"X\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
@@ -236,18 +243,22 @@ class GuestAccessTest {
 
         @Test
         void cannotPatchMessage() throws Exception {
-            mockMvc.perform(patch("/message/{id}", "ffff0000-0000-0000-0000-000000000001").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"is_favorite\": true}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(patch("/message/{id}", "ffff0000-0000-0000-0000-000000000001")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"is_favorite\": true}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotReadMessage() throws Exception {
-            mockMvc.perform(patch("/message/{id}/read", "ffff0000-0000-0000-0000-000000000001")).andExpect(status().isUnauthorized());
+            mockMvc.perform(patch("/message/{id}/read", "ffff0000-0000-0000-0000-000000000001"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotDeleteMessage() throws Exception {
-            mockMvc.perform(delete("/message/{id}", "ffff0000-0000-0000-0000-000000000001")).andExpect(status().isUnauthorized());
+            mockMvc.perform(delete("/message/{id}", "ffff0000-0000-0000-0000-000000000001"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
@@ -257,24 +268,30 @@ class GuestAccessTest {
 
         @Test
         void cannotCreateWedding() throws Exception {
-            mockMvc.perform(post("/wedding").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"couple_name\": \"X\", \"slug\": \"x\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(post("/wedding")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"couple_name\": \"X\", \"slug\": \"x\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotGetWeddingById() throws Exception {
-            mockMvc.perform(get("/wedding/{id}", "11111111-1111-1111-1111-111111111111")).andExpect(status().isUnauthorized());
+            mockMvc.perform(get("/wedding/{id}", "11111111-1111-1111-1111-111111111111"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotPatchWedding() throws Exception {
-            mockMvc.perform(patch("/wedding/{id}", "11111111-1111-1111-1111-111111111111").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"couple_name\": \"X\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(patch("/wedding/{id}", "11111111-1111-1111-1111-111111111111")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"couple_name\": \"X\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotDeleteWedding() throws Exception {
-            mockMvc.perform(delete("/wedding/{id}", "11111111-1111-1111-1111-111111111111")).andExpect(status().isUnauthorized());
+            mockMvc.perform(delete("/wedding/{id}", "11111111-1111-1111-1111-111111111111"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
@@ -284,19 +301,26 @@ class GuestAccessTest {
 
         @Test
         void cannotCreateAccount() throws Exception {
-            mockMvc.perform(post("/account").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"X\", \"email\": \"x@x.com\", \"wedding_id\": \"11111111-1111-1111-1111-111111111111\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(
+                            post("/account")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(
+                                            "{\"name\": \"X\", \"email\": \"x@x.com\", \"wedding_id\": \"11111111-1111-1111-1111-111111111111\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotPatchAccount() throws Exception {
-            mockMvc.perform(patch("/account/{id}", "bbbb0000-0000-0000-0000-000000000001").contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\": \"X\"}")).andExpect(status().isUnauthorized());
+            mockMvc.perform(patch("/account/{id}", "bbbb0000-0000-0000-0000-000000000001")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"X\"}"))
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
         void cannotDeleteAccount() throws Exception {
-            mockMvc.perform(delete("/account/{id}", "bbbb0000-0000-0000-0000-000000000001")).andExpect(status().isUnauthorized());
+            mockMvc.perform(delete("/account/{id}", "bbbb0000-0000-0000-0000-000000000001"))
+                    .andExpect(status().isUnauthorized());
         }
     }
 }

@@ -7,9 +7,9 @@ import com.hestia.api.domain.rsvp.dto.UpdateGuestRequest;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/rsvp/guest")
@@ -32,16 +35,13 @@ public class GuestController {
             @RequestParam(required = false, name = "status") GuestStatus status,
             @RequestParam(required = false, name = "invite_id") UUID inviteId,
             @RequestParam(required = false) UUID wedding,
-            Pageable pageable
-    ) {
+            Pageable pageable) {
         return ResponseEntity.ok(guestService.getGuests(user.resolveWeddingId(wedding), status, inviteId, pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GuestResponse> getGuestById(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id
-    ) {
+            @AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
         return ResponseEntity.ok(guestService.getGuestById(user.resolveWeddingId(), id));
     }
 
@@ -49,25 +49,21 @@ public class GuestController {
     public ResponseEntity<GuestResponse> postGuest(
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam(required = false) UUID wedding,
-            @Valid @RequestBody CreateGuestRequest request
-    ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(guestService.createGuest(user.resolveWeddingId(wedding), request));
+            @Valid @RequestBody CreateGuestRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(guestService.createGuest(user.resolveWeddingId(wedding), request));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<GuestResponse> patchGuest(
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id,
-            @Valid @RequestBody UpdateGuestRequest request
-    ) {
+            @Valid @RequestBody UpdateGuestRequest request) {
         return ResponseEntity.ok(guestService.updateGuest(user.resolveWeddingId(), id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGuest(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id
-    ) {
+    public ResponseEntity<Void> deleteGuest(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
         guestService.deleteGuest(user.resolveWeddingId(), id);
         return ResponseEntity.noContent().build();
     }

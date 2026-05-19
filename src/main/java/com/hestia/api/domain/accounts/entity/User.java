@@ -3,12 +3,15 @@ package com.hestia.api.domain.accounts.entity;
 import com.hestia.api.common.model.BaseModel;
 import com.hestia.api.domain.accounts.enums.UserRole;
 import com.hestia.api.domain.wedding.entity.Wedding;
+
 import jakarta.persistence.*;
-import lombok.*;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
+
+import lombok.*;
 
 @Entity
 @Table(name = "users")
