@@ -1,4 +1,4 @@
-.PHONY: test lint
+.PHONY: test lint install run
 
 SHELL := /bin/bash
 
@@ -144,3 +144,9 @@ lint:
 		printf "$${BOLD}  [$${RED}FAIL$${RESET}$${BOLD}] Some checks failed. $${DIM}$${total}s$${RESET}\n\n"; \
 		exit 1; \
 	fi'
+
+install:
+	mvn clean install -DskipTests
+
+run:
+	mvn spring-boot:run

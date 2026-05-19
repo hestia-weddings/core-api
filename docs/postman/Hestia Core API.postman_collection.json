@@ -1,0 +1,1018 @@
+{
+  "info": {
+    "name": "Hestia Core API",
+    "_postman_id": "c9fce5a2-9c9b-4f36-8f0c-5a8b3c6d2c2a",
+    "description": "Postman collection generated from /bruno",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Account",
+      "item": [
+        {
+          "name": "Get Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/account?page=0&size=10"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Joao Silva\",\n  \"email\": \"joao@example.com\",\n  \"wedding_id\": \"{{wedding-id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/account"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Joao Updated\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/account/{{user-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/account/{{user-id}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Wedding",
+      "item": [
+        {
+          "name": "Get Weddings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/wedding?page=0&size=10"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Wedding",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"couple_name\": \"Joao & Maria\",\n  \"date\": \"2026-08-15T16:00:00\",\n  \"invite_message\": \"We'd love to celebrate with you!\",\n  \"gift_message\": \"Your presence is our greatest gift.\",\n  \"slug\": \"joao-and-maria\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/wedding"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Wedding By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/wedding/{{wedding-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Wedding",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"couple_name\": \"Joao & Maria Updated\",\n  \"date\": \"2026-09-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/wedding/{{wedding-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Wedding",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/wedding/{{wedding-id}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Message",
+      "item": [
+        {
+          "name": "Get Messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/message?page=0&size=10&wedding={{wedding-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Message By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/message/{{message-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Message",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_favorite\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/message/{{message-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Read Message",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/message/{{message-id}}/read"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Message",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/message/{{message-id}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gift",
+      "item": [
+        {
+          "name": "Get Gifts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/gift?page=0&size=10"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Gift By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-admin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/gift/{{gift-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Gift",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Kitchen Blender\",\n  \"picture\": \"https://example.com/blender.jpg\",\n  \"price\": 15000,\n  \"stock\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/gift"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Gift",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Kitchen Blender Pro\",\n  \"price\": 20000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/gift/{{gift-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Gift",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/gift/{{gift-id}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "RSVP",
+      "item": [
+        {
+          "name": "Invite",
+          "item": [
+            {
+              "name": "Get Invites",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-admin}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": "{{base-url}}/rsvp/invite?page=0&size=10"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Invite By Id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-couple}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": "{{base-url}}/rsvp/invite/{{invite-id}}"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Invite",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-couple}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Familia Silva\",\n  \"phone\": \"11999999999\",\n  \"guests\": [\n    {\n      \"name\": \"Carlos Silva\",\n      \"age_group\": \"ADULT\",\n      \"invite_id\": \"\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{base-url}}/rsvp/invite"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Invite",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-couple}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Familia Silva Updated\",\n  \"phone\": \"11988888888\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{base-url}}/rsvp/invite/{{invite-id}}"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Invite",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-couple}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": "{{base-url}}/rsvp/invite/{{invite-id}}"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Guest",
+          "item": [
+            {
+              "name": "Get Guests",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-admin}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": "{{base-url}}/rsvp/guest?page=0&size=10&wedding={{wedding-id}}"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Guest By Id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-couple}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": "{{base-url}}/rsvp/guest/{{guest-id}}"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Guest",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-couple}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Ana Silva\",\n  \"age_group\": \"ADULT\",\n  \"invite_id\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{base-url}}/rsvp/guest"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Guest",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-couple}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Ana Silva Updated\",\n  \"age_group\": \"CHILD\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{base-url}}/rsvp/guest/{{guest-id}}"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Guest",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token-couple}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "url": "{{base-url}}/rsvp/guest/{{guest-id}}"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Guest (Public)",
+      "item": [
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sender\": \"Tio Carlos\",\n  \"message\": \"Felicidades ao casal!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/w/{{slug}}/message"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Gifts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base-url}}/w/{{slug}}/gift?page=0&size=10"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Gift By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base-url}}/w/{{slug}}/gift/{{gift-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Invite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Familia Silva\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/w/{{slug}}/rsvp/invite/search"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Guests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base-url}}/w/{{slug}}/rsvp/guest?invite_id={{invite-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Guest Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/w/{{slug}}/rsvp/guest/status/{{guest-id}}"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "uri",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "version",
+      "value": "api/v2",
+      "type": "string"
+    },
+    {
+      "key": "base-url",
+      "value": "{{uri}}/{{version}}",
+      "type": "string"
+    },
+    {
+      "key": "token-admin",
+      "value": "eyJhbGciOiJFUzI1NiIsImtpZCI6IjU1M2FhNmU4LWIwNDEtNDE0My04NGZjLTA5N2EyMTE0NjUxNyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2x5a3FvemJ1em1obm9idGNnY25hLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJlYTM1YWMyNS0zOGNhLTQ0MjctOWI2NS01OTZkMDgyMjcyYzQiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzc5MTk5MzM2LCJpYXQiOjE3NzkxOTU3MzYsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdLCJ3ZWRkaW5nX2lkIjoiNzk4NzQ5MGItZWQwMi00ZTNmLTg3ZGYtNGUwNjNlZWVkNjA0In0sInVzZXJfbWV0YWRhdGEiOnsiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJhZG1pbiJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzc5MTk1NzM2fV0sInNlc3Npb25faWQiOiI5MDA5NjRhMS1mMzgyLTRmYTMtODVlZC0xOWUwYjc1NTQ0NGQiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.L5Cee_mEk9sxt2Bkuzwj8jZAJy2-osXdtPH-YWDIuZcm77jx0SMua7qWu9K9Q0KarEY3ogX2ek12oTT7_EusDA",
+      "type": "string"
+    },
+    {
+      "key": "token-couple",
+      "value": "eyJhbGciOiJFUzI1NiIsImtpZCI6IjU1M2FhNmU4LWIwNDEtNDE0My04NGZjLTA5N2EyMTE0NjUxNyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2x5a3FvemJ1em1obm9idGNnY25hLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI4NGEzMGMwYy03YWNkLTQ0M2UtYmVlMi0wOTI4ZjQ3ODIwMjQiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzc5MTk5NTIxLCJpYXQiOjE3NzkxOTU5MjEsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl0sIndlZGRpbmdfaWQiOiJkMDAxNjFjOC1mZjNhLTRlNzEtYTIzZC03YzExMmNjN2RkMGMifSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3NzkxOTU5MjF9XSwic2Vzc2lvbl9pZCI6ImM4ZmMwNWExLTg1YjQtNDE5MC1hYmZlLTQzN2Q4M2I2ODI2NCIsImlzX2Fub255bW91cyI6ZmFsc2V9.BAxb8Z7y7hn7dlhQmxFyzSI_qM0IZwg-KyPj_2Y-S0SKQC3XujPfNLQNxEOvjNdOEScFARwB5xEx-5FB6bs3Xw",
+      "type": "string"
+    },
+    {
+      "key": "wedding-id",
+      "value": "7987490b-ed02-4e3f-87df-4e063eeed604",
+      "type": "string"
+    },
+    {
+      "key": "slug",
+      "value": "anna-e-joao",
+      "type": "string"
+    },
+    {
+      "key": "user-id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "message-id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "gift-id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "invite-id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "guest-id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
