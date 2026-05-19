@@ -107,42 +107,35 @@ lint:
 	printf "\n$${DIM}"; line; printf "$${RESET}\n"; \
 	printf "$${BOLD}  == Lint ==$${RESET}\n\n"; \
 	all_pass=0; \
-	s1=$$(date +%s%N); \
-	printf "  [$${BLUE}RUN$${RESET}] Spotless (format)...\n"; \
-	spotless_out=$$(mvn spotless:apply -q 2>&1); spotless_rc=$$?; \
-	e1=$$(date +%s%N); t1=$$(echo "scale=1; ($$e1 - $$s1) / 1000000000" | bc); \
-	if [ "$$spotless_rc" -eq 0 ]; then \
-		printf "  [$${GREEN}PASS$${RESET}] Spotless (formatted) $${DIM}$${t1}s$${RESET}\n"; \
-	else \
-		printf "  [$${RED}FAIL$${RESET}] Spotless $${DIM}$${t1}s$${RESET}\n"; \
-		all_pass=1; \
-	fi; \
-	s2=$$(date +%s%N); \
-	printf "  [$${BLUE}RUN$${RESET}] Checkstyle...\n"; \
-	checkstyle_out=$$(mvn checkstyle:check -q 2>&1); checkstyle_rc=$$?; \
-	e2=$$(date +%s%N); t2=$$(echo "scale=1; ($$e2 - $$s2) / 1000000000" | bc); \
-	if [ "$$checkstyle_rc" -eq 0 ]; then \
-		printf "  [$${GREEN}PASS$${RESET}] Checkstyle $${DIM}$${t2}s$${RESET}\n"; \
-	else \
-		printf "  [$${RED}FAIL$${RESET}] Checkstyle $${DIM}$${t2}s$${RESET}\n"; \
-		echo "$$checkstyle_out" | grep "\[WARN\]\|violation" | head -20 | while read -r l; do \
-			printf "    $${YELLOW}$$l$${RESET}\n"; \
+	run_step() { \
+		label="$$1"; cmd="$$2"; \
+		s=$$(date +%s%N); \
+		tmp=$$(mktemp); \
+		(eval "$$cmd" > "$$tmp" 2>&1) & \
+		pid=$$!; \
+		while kill -0 $$pid 2>/dev/null; do \
+			now=$$(date +%s%N); \
+			elapsed=$$(echo "scale=1; ($$now - $$s) / 1000000000" | bc); \
+			printf "\r  [$${BLUE}RUN$${RESET}] $$label... $${DIM}$${elapsed}s$${RESET}  "; \
+			sleep 0.1; \
 		done; \
-		all_pass=1; \
-	fi; \
-	s3=$$(date +%s%N); \
-	printf "  [$${BLUE}RUN$${RESET}] SpotBugs...\n"; \
-	spotbugs_out=$$(mvn spotbugs:check -q 2>&1); spotbugs_rc=$$?; \
-	e3=$$(date +%s%N); t3=$$(echo "scale=1; ($$e3 - $$s3) / 1000000000" | bc); \
-	if [ "$$spotbugs_rc" -eq 0 ]; then \
-		printf "  [$${GREEN}PASS$${RESET}] SpotBugs $${DIM}$${t3}s$${RESET}\n"; \
-	else \
-		printf "  [$${RED}FAIL$${RESET}] SpotBugs $${DIM}$${t3}s$${RESET}\n"; \
-		echo "$$spotbugs_out" | grep -i "bug\|error" | head -20 | while read -r l; do \
-			printf "    $${YELLOW}$$l$${RESET}\n"; \
-		done; \
-		all_pass=1; \
-	fi; \
+		wait $$pid; rc=$$?; \
+		e=$$(date +%s%N); t=$$(echo "scale=1; ($$e - $$s) / 1000000000" | bc); \
+		if [ "$$rc" -eq 0 ]; then \
+			printf "\r  [$${GREEN}PASS$${RESET}] $$label $${DIM}$${t}s$${RESET}                    \n"; \
+		else \
+			printf "\r  [$${RED}FAIL$${RESET}] $$label $${DIM}$${t}s$${RESET}                    \n"; \
+			cat "$$tmp" | grep -i "warn\|violation\|bug\|error" | head -10 | while read -r l; do \
+				printf "    $${YELLOW}$$l$${RESET}\n"; \
+			done; \
+			all_pass=1; \
+		fi; \
+		rm -f "$$tmp"; \
+		return $$rc; \
+	}; \
+	run_step "Spotless (format)" "mvn spotless:apply -q"; \
+	run_step "Checkstyle" "mvn checkstyle:check -q"; \
+	run_step "SpotBugs" "mvn spotbugs:check -q"; \
 	end=$$(date +%s%N); \
 	total=$$(echo "scale=1; ($$end - $$start) / 1000000000" | bc); \
 	printf "\n$${DIM}"; line; printf "$${RESET}\n"; \
