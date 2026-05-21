@@ -110,10 +110,13 @@ public class InviteService {
 
         if (hasConfirmedGuests) throw new CannotDeleteInviteWithConfirmedGuestsException();
 
+        List<Guest> activeGuests = invite.getGuests().stream()
+                .filter(Guest::getIsActive)
+                .toList();
+        activeGuests.forEach(guest -> guest.setIsActive(false));
+        guestRepository.saveAll(activeGuests);
+
         invite.setIsActive(false);
-
-        invite.getGuests().stream().filter(Guest::getIsActive).forEach(guest -> guest.setIsActive(false));
-
         inviteRepository.save(invite);
     }
 

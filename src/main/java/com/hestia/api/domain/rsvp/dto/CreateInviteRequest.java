@@ -17,5 +17,5 @@ public class CreateInviteRequest {
 
     private String phone;
 
-    private List<@Valid CreateGuestRequest> guests;
+    private List<@Valid InlineGuestRequest> guests;
 }
