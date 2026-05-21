@@ -1,6 +1,6 @@
 # 🗺️ Development Roadmap
 
-This project follows an **8-step incremental development approach**. Each step represents a major feature milestone and will be developed on a separate branch before merging to production.
+This project follows an **8-step incremental development approach**. Each step represents a major feature milestone and will be developed on a separate branch.
 
 ## Branch Strategy
 
