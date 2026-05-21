@@ -17,7 +17,6 @@ import lombok.Setter;
 @Table(name = "gift_availability")
 @Immutable
 @Getter
-@Setter
 public class GiftAvailability {
 
     @Id
