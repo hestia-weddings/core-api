@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "gift_availability")
