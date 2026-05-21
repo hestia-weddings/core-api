@@ -13,8 +13,6 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
 
     Page<Message> findByWeddingIdAndIsActiveTrue(UUID weddingId, Pageable pageable);
 
-    Optional<Message> findByIdAndWeddingId(UUID id, UUID weddingId);
-
     Optional<Message> findByIdAndIsActiveTrue(UUID id);
 
     Page<Message> findByWeddingIdAndIsNewTrueAndIsActiveTrue(UUID weddingId, Pageable pageable);

@@ -15,6 +15,7 @@ public class MessageMapper {
                 .message(message.getMessage())
                 .isFavorite(message.getIsFavorite())
                 .isNew(message.getIsNew())
+                .createdAt(message.getCreatedAt())
                 .build();
     }
 }

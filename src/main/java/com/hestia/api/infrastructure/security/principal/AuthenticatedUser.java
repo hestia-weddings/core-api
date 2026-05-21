@@ -40,6 +40,7 @@ public class AuthenticatedUser implements UserDetails {
 
     public UUID resolveWeddingId(@Nullable UUID requestedWeddingId) {
         if (hasRole(UserRole.ADMIN)) return requestedWeddingId;
+        if (weddingId == null) throw new IllegalStateException("Non-admin user must have a wedding associated");
         return this.weddingId;
     }
 
