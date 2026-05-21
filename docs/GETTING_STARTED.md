@@ -108,10 +108,10 @@ Request → SecurityFilter (JWT) → Controller → Service → Repository → D
 
 ### Three types of endpoints
 
-| Path | Auth | Who uses it |
-|------|------|-------------|
-| `/api/v2/*` | JWT required | Couple & Admin (dashboard) |
-| `/w/{slug}/*` | Public | Wedding guests (RSVP, view gifts, send messages) |
+| Path                                 | Auth | Who uses it |
+|--------------------------------------|------|-------------|
+| `/api/v2/*`                          | JWT required | Couple & Admin (dashboard) |
+| `/api/v2/w/{slug}/*`                 | Public | Wedding guests (RSVP, view gifts, send messages) |
 | `/api/v2/wedding`, `/api/v2/account` | Admin only | Platform management |
 
 ### Multi-tenant isolation
