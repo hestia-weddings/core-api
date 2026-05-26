@@ -951,6 +951,125 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Payment Config",
+      "item": [
+        {
+          "name": "Get Payment Configs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/payment-config?page=0&size=10"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment Config By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/payment-config/{{payment-config-id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Payment Config",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apiKey\": \"$aact_hmlg_000MjY2ODM2MWY2OGM3\",\n  \"environment\": \"SANDBOX\",\n  \"webhookToken\": \"wh_secret_abc123def456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/payment-config"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Payment Config",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"environment\": \"PRODUCTION\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/payment-config/{{payment-config-id}}"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [
@@ -1011,6 +1130,11 @@
     },
     {
       "key": "guest-id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "payment-config-id",
       "value": "",
       "type": "string"
     }
