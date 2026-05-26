@@ -1,0 +1,23 @@
+meta {
+  name: Create Payment Config
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base-url}}/payment-config
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "apiKey": "$aact_hmlg_000MjY2ODM2MWY2OGM3",
+    "environment": "SANDBOX",
+    "webhookToken": "wh_secret_abc123def456"
+  }
+}

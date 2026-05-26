@@ -1,0 +1,21 @@
+meta {
+  name: Get Payment Configs
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base-url}}/payment-config?page=0&size=10
+  body: none
+  auth: bearer
+}
+
+params:query {
+  page: 0
+  size: 10
+  ~wedding: {{wedding-id}}
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}

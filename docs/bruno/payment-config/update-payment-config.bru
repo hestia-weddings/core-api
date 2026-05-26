@@ -1,0 +1,25 @@
+meta {
+  name: Update Payment Config
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base-url}}/payment-config/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "environment": "PRODUCTION"
+  }
+}
