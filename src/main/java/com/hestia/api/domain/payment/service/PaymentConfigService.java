@@ -11,14 +11,17 @@ import com.hestia.api.domain.payment.mapper.PaymentConfigMapper;
 import com.hestia.api.domain.payment.repository.PaymentConfigRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
+
 import jakarta.annotation.Nullable;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +33,7 @@ public class PaymentConfigService {
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<PaymentConfigResponse> getPaymentConfigs(
-            @Nullable UUID weddingId, Pageable pageable) {
+    public PageResponse<PaymentConfigResponse> getPaymentConfigs(@Nullable UUID weddingId, Pageable pageable) {
         Page<PaymentConfig> page;
 
         if (weddingId == null) page = paymentConfigRepository.findAll(pageable);

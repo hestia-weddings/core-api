@@ -6,9 +6,9 @@ import com.hestia.api.domain.payment.dto.PaymentConfigResponse;
 import com.hestia.api.domain.payment.dto.UpdatePaymentConfigRequest;
 import com.hestia.api.domain.payment.service.PaymentConfigService;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("payment-config")
@@ -30,8 +33,7 @@ public class PaymentConfigController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam(required = false) UUID wedding,
             Pageable pageable) {
-        return ResponseEntity.ok(
-                paymentConfigService.getPaymentConfigs(user.resolveWeddingId(wedding), pageable));
+        return ResponseEntity.ok(paymentConfigService.getPaymentConfigs(user.resolveWeddingId(wedding), pageable));
     }
 
     @GetMapping("/{id}")
