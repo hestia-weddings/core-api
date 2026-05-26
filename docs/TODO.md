@@ -99,18 +99,18 @@ Guest (Frontend)          Héstia API              Asaas API
 
 ### Task 5: Guest checkout endpoint (public)
 
-- [ ] `POST /w/{slug}/gift/{giftId}/checkout`
+- [X] `POST /w/{slug}/gift/{giftId}/checkout`
   - Request: `{guestName, guestEmail}`
   - Response: `{checkoutUrl}`
-- [ ] Logic:
+- [X] Logic:
   1. Validate gift exists & has stock (from `gift_availability` view)
   2. Load `PaymentConfig` for the wedding
   3. Create `Order` (PENDING)
   4. Call `AsaasCheckoutClient` → get session ID
   5. Save `payment_id` on Order
   6. Return checkout URL
-- [ ] Edge cases: out of stock, no payment config, Asaas error (rollback)
-- [ ] Integration tests (mocked Asaas client)
+- [X] Edge cases: out of stock, no payment config, Asaas error (rollback)
+- [X] Integration tests (mocked Asaas client)
 
 ### Task 6: Webhook endpoint
 
