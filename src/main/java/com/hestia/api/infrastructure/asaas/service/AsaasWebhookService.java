@@ -6,11 +6,13 @@ import com.hestia.api.domain.registry.entity.Order;
 import com.hestia.api.domain.registry.enums.OrderStatus;
 import com.hestia.api.domain.registry.repository.OrderRepository;
 import com.hestia.api.infrastructure.asaas.dto.AsaasWebhookPayload;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +47,9 @@ public class AsaasWebhookService {
             case "CHECKOUT_PAID" -> order.setStatus(OrderStatus.PAID);
             case "CHECKOUT_EXPIRED" -> order.setStatus(OrderStatus.EXPIRED);
             case "CHECKOUT_CANCELED" -> order.setStatus(OrderStatus.FAILED);
-            default -> { return; } // ignore unknown events
+            default -> {
+                return;
+            } // ignore unknown events
         }
 
         orderRepository.save(order);

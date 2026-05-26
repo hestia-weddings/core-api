@@ -37,7 +37,8 @@ class AsaasWebhookControllerTest {
                         "status": "PAID"
                     }
                 }
-                """.formatted(event, checkoutId);
+                """
+                .formatted(event, checkoutId);
     }
 
     @Test
