@@ -36,6 +36,7 @@ class AdminAccessTest {
     private static final String MESSAGE_A = "ffff0000-0000-0000-0000-000000000001";
     private static final String USER_COUPLE = "bbbb0000-0000-0000-0000-000000000001";
     private static final String PAYMENT_CONFIG_A = "aaaa1111-0000-0000-0000-000000000001";
+    private static final String ORDER_A = "bbbb1111-0000-0000-0000-000000000001";
 
     // ==========================================
     // WEDDING ENDPOINTS (admin-only)
@@ -349,6 +350,25 @@ class AdminAccessTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"environment\": \"PRODUCTION\"}"))
                     .andExpect(status().isOk());
+        }
+    }
+
+    // ==========================================
+    // ORDER ENDPOINTS (cross-tenant)
+    // ==========================================
+
+    @Nested
+    @DisplayName("Orders (cross-tenant)")
+    class OrderAdmin {
+
+        @Test
+        void canListOrders() throws Exception {
+            mockMvc.perform(get("/order").param("wedding", WEDDING_A)).andExpect(status().isOk());
+        }
+
+        @Test
+        void canGetOrderById() throws Exception {
+            mockMvc.perform(get("/order/{id}", ORDER_A)).andExpect(status().isOk());
         }
     }
 }

@@ -41,6 +41,7 @@ class CoupleAccessTest {
     private static final String ADMIN_USER = "aaaa0000-0000-0000-0000-000000000001";
     private static final String OWN_PAYMENT_CONFIG = "aaaa1111-0000-0000-0000-000000000001";
     private static final String OTHER_PAYMENT_CONFIG = "aaaa1111-0000-0000-0000-000000000002";
+    private static final String OWN_ORDER = "bbbb1111-0000-0000-0000-000000000001";
 
     // ==========================================
     // INVITE ENDPOINTS - Own wedding
@@ -447,6 +448,31 @@ class CoupleAccessTest {
             mockMvc.perform(patch("/payment-config/{id}", OTHER_PAYMENT_CONFIG)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"environment\": \"PRODUCTION\"}"))
+                    .andExpect(status().isNotFound());
+        }
+    }
+
+    // ==========================================
+    // ORDER ENDPOINTS (own wedding, read-only)
+    // ==========================================
+
+    @Nested
+    @DisplayName("Orders (own wedding)")
+    class OrderOwn {
+
+        @Test
+        void canListOrders() throws Exception {
+            mockMvc.perform(get("/order")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canGetOrderById() throws Exception {
+            mockMvc.perform(get("/order/{id}", OWN_ORDER)).andExpect(status().isOk());
+        }
+
+        @Test
+        void cannotGetOtherWeddingOrder() throws Exception {
+            mockMvc.perform(get("/order/{id}", "bbbb1111-0000-0000-0000-000000000099"))
                     .andExpect(status().isNotFound());
         }
     }

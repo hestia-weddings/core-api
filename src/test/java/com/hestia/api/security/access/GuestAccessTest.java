@@ -337,5 +337,16 @@ class GuestAccessTest {
                                             "{\"api_key\": \"$aact_hmlg_x\", \"environment\": \"SANDBOX\", \"webhook_token\": \"wh_x\"}"))
                     .andExpect(status().isUnauthorized());
         }
+
+        @Test
+        void cannotListOrders() throws Exception {
+            mockMvc.perform(get("/order")).andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void cannotGetOrderById() throws Exception {
+            mockMvc.perform(get("/order/{id}", "bbbb1111-0000-0000-0000-000000000001"))
+                    .andExpect(status().isUnauthorized());
+        }
     }
 }
