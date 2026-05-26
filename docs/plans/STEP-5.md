@@ -126,11 +126,11 @@ Guest (Frontend)          Héstia API              Asaas API
 
 ### Task 7: Order query endpoints (Couple + Admin)
 
-- [ ] `GET /api/v2/order` — paginated, tenant-scoped
-- [ ] `GET /api/v2/order/{id}` — single order detail
-- [ ] `OrderResponse` DTO, `OrderMapper`, `OrderService`
-- [ ] Access control: COUPLE sees own wedding, ADMIN with `wedding_id` param
-- [ ] Integration tests
+- [X] `GET /api/v2/order` — paginated, tenant-scoped
+- [X] `GET /api/v2/order/{id}` — single order detail
+- [X] `OrderResponse` DTO, `OrderMapper`, `OrderService`
+- [X] Access control: COUPLE sees own wedding, ADMIN with `wedding_id` param
+- [X] Integration tests
 
 ## Technical Decisions
 
