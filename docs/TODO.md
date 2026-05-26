@@ -81,7 +81,7 @@ Guest (Frontend)          Héstia API              Asaas API
 
 ### Task 4: Asaas Checkout integration client
 
-- [ ] `AsaasCheckoutClient` (RestClient)
+- [X] `AsaasCheckoutClient` (RestClient)
   - `POST {baseUrl}/v3/checkouts` (baseUrl from PaymentConfig.environment)
   - Headers: `access_token`, `Content-Type: application/json`, `User-Agent: Hestia/1.0`
   - Request body:
@@ -93,9 +93,9 @@ Guest (Frontend)          Héstia API              Asaas API
     - `customerData: {name, email}` (from guest input)
     - `callback: {successUrl, cancelUrl, expiredUrl}`
   - Response: `{id, link, status}` — use `link` directly as checkout URL
-- [ ] `AsaasCheckoutRequest` / `AsaasCheckoutResponse` DTOs
-- [ ] Error handling (401 invalid key, 400 bad request, timeout)
-- [ ] Unit tests with mocked HTTP responses
+- [X] `AsaasCheckoutRequest` / `AsaasCheckoutResponse` DTOs
+- [X] Error handling (401 invalid key, 400 bad request, timeout)
+- [X] Unit tests with mocked HTTP responses
 
 ### Task 5: Guest checkout endpoint (public)
 

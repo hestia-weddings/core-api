@@ -1,4 +1,4 @@
-package com.hestia.api.guest;
+package com.hestia.api.guest.controller;
 
 import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.rsvp.dto.GuestResponse;

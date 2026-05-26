@@ -1,4 +1,4 @@
-package com.hestia.api.guest;
+package com.hestia.api.guest.controller;
 
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;

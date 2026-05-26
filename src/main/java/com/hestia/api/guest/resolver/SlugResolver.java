@@ -1,4 +1,4 @@
-package com.hestia.api.guest;
+package com.hestia.api.guest.resolver;
 
 import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.domain.wedding.entity.Wedding;

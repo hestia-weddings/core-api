@@ -1,6 +1,6 @@
 package com.hestia.api.infrastructure.config;
 
-import com.hestia.api.guest.SlugResolver;
+import com.hestia.api.guest.resolver.SlugResolver;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
