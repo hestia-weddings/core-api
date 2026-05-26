@@ -2,10 +2,12 @@ package com.hestia.api.domain.registry.entity;
 
 import com.hestia.api.common.model.BaseTenantModel;
 import com.hestia.api.domain.registry.enums.OrderStatus;
+
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.UUID;
+
+import lombok.*;
 
 @Entity
 @Table(name = "orders")
