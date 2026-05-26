@@ -76,7 +76,7 @@ public class InviteService {
 
         if (request.getGuests() != null && !request.getGuests().isEmpty()) {
             List<Guest> guests = request.getGuests().stream()
-                    .map(guestRequest -> Guest.builder()
+                    .map(guestRequest -> (Guest) Guest.builder()
                             .name(guestRequest.getName())
                             .ageGroup(guestRequest.getAgeGroup())
                             .status(GuestStatus.PENDING)

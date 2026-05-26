@@ -5,6 +5,7 @@ import com.hestia.api.common.model.BaseTenantModel;
 import jakarta.persistence.*;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "messages")
@@ -12,7 +13,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Message extends BaseTenantModel {
 
     @Column(nullable = false)

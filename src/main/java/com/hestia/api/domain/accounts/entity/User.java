@@ -11,6 +11,7 @@ import org.hibernate.type.SqlTypes;
 import java.util.UUID;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "users")
@@ -18,7 +19,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class User extends BaseTenantModel {
 
     @Column(nullable = false)

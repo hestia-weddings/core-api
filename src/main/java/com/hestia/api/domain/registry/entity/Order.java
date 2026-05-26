@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "orders")
@@ -15,7 +16,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Order extends BaseTenantModel {
 
     @Column(name = "guest_name", nullable = false)

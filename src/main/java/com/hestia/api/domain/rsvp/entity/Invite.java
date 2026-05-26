@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "invites")
@@ -15,7 +16,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Invite extends BaseTenantModel {
 
     @Column(nullable = false)
