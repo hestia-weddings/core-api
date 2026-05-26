@@ -39,9 +39,9 @@ Guest (Frontend)          Héstia API              Asaas API
   - `webhook_token` (VARCHAR) — secret token to validate incoming webhooks
   - `wedding_id` (UUID, FK → weddings, UNIQUE)
   - `created_at`, `updated_at`, `is_active`
-- [ ] `PaymentConfig` entity in `domain/payment/`
-- [ ] `PaymentEnvironment` enum (SANDBOX, PRODUCTION)
-- [ ] `PaymentConfigRepository`
+- [X] `PaymentConfig` entity in `domain/payment/`
+- [X] `PaymentEnvironment` enum (SANDBOX, PRODUCTION)
+- [X] `PaymentConfigRepository`
 
 **Model rationale (based on Asaas docs):**
 - `api_key`: The ONLY credential needed. Asaas identifies the account entirely by this key.
