@@ -107,26 +107,33 @@ This project follows an **8-step incremental development approach**. Each step r
 
 ---
 
-## 📍 Step 5: Payment Gateway
+## 📍 Step 5: Payment Gateway ✅
+
+> 📖 Full payment documentation: [docs/PAYMENT.md](./PAYMENT.md)
 
 **Branch**: `step-5-payment-gateway`  
-**Status**: Planned
+**Status**: Completed
 
 ### Deliverables
-- [ ] Payment gateway integration (Asaas)
-- [ ] Payment processing endpoints
-- [ ] Order/Transaction entity
-- [ ] Payment status tracking
-- [ ] Webhook handling for payment events
-- [ ] Refund management
-- [ ] Payment history and receipts
-- [ ] Gift contribution payments
+- ✅ Payment gateway integration (Asaas Checkout)
+- ✅ Payment configuration per wedding (`payment_configs` table)
+- ✅ Order/Transaction entity with status tracking (PENDING → PAID/EXPIRED/FAILED)
+- ✅ Guest checkout endpoint (`POST /w/{slug}/gift/{giftId}/checkout`)
+- ✅ Webhook handling for payment events (`CHECKOUT_PAID`, `CHECKOUT_EXPIRED`, `CHECKOUT_CANCELED`)
+- ✅ Order query endpoints (Couple + Admin, read-only)
+- ✅ Duplicate payment config prevention (one per wedding)
+- ✅ Auto-generated webhook token for security
+- ✅ Integration tests (149 total, 89% instruction coverage)
 
 ### Technical Approach
-- Asaas SDK or similar payment provider
-- Idempotency for payment operations
-- Secure API key management
-- Payment event listeners
+- **Provider**: Asaas Checkout (PCI-DSS hosted page, PIX + Credit Card)
+- **Credential model**: Each couple configures their own Asaas API key (tax/legal isolation)
+- **Checkout flow**: Backend creates Asaas Checkout session → guest redirected → webhook confirms payment
+- **Stock management**: Automatic via `gift_availability` DB view (counts PAID orders)
+- **Webhook validation**: Secret token in URL path (auto-generated per wedding)
+- **Idempotency**: Duplicate webhook events ignored (only PENDING orders are processed)
+- **HTTP client**: Spring `RestClient` with error wrapping (`AsaasCheckoutException` → 502)
+- **Testing**: `@MockitoBean` on `AsaasCheckoutClient` for integration tests, `MockRestServiceServer` for client unit tests
 
 ---
 

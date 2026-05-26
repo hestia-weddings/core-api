@@ -88,4 +88,5 @@ src/main/java/com/hestia/api/
 | `make install` | Clean install (skip tests) |
 | `make run` | Start the application |
 | `make test` | Run tests with coverage report |
+| `make test-no-lint` | Run tests only (skip formatting/linting, faster) |
 | `make lint` | Format code + run Checkstyle and SpotBugs |

@@ -330,11 +330,9 @@ class GuestAccessTest {
 
         @Test
         void cannotCreatePaymentConfig() throws Exception {
-            mockMvc.perform(
-                            post("/payment-config")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(
-                                            "{\"api_key\": \"$aact_hmlg_x\", \"environment\": \"SANDBOX\"}"))
+            mockMvc.perform(post("/payment-config")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"api_key\": \"$aact_hmlg_x\", \"environment\": \"SANDBOX\"}"))
                     .andExpect(status().isUnauthorized());
         }
 

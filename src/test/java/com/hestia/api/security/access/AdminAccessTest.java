@@ -335,12 +335,10 @@ class AdminAccessTest {
 
         @Test
         void canCreatePaymentConfig() throws Exception {
-            mockMvc.perform(
-                            post("/payment-config")
-                                    .param("wedding", WEDDING_B)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(
-                                            "{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\"}"))
+            mockMvc.perform(post("/payment-config")
+                            .param("wedding", WEDDING_B)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\"}"))
                     .andExpect(status().isCreated());
         }
 
