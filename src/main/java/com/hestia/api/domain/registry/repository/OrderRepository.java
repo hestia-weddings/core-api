@@ -12,4 +12,6 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Optional<Order> findByIdAndIsActiveTrue(UUID id);
 
     Optional<Order> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
+
+    Optional<Order> findByPaymentIdAndIsActiveTrue(UUID paymentId);
 }

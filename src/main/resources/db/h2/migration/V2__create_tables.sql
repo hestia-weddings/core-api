@@ -92,7 +92,7 @@ CREATE TABLE orders (
     gift_id UUID NOT NULL,
     CONSTRAINT fk_orders_gift FOREIGN KEY (gift_id) REFERENCES gifts(id) ON DELETE CASCADE,
     CONSTRAINT fk_orders_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
-    CONSTRAINT chk_order_status CHECK (status IN ('PENDING', 'PAID'))
+    CONSTRAINT chk_order_status CHECK (status IN ('PENDING', 'PAID', 'FAILED', 'EXPIRED'))
 );
 
 CREATE TABLE payment_configs (

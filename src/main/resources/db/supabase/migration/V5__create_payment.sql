@@ -1,7 +1,9 @@
 -- Enum for order status
 CREATE TYPE order_status_enum AS ENUM (
     'PENDING',
-    'PAID'
+    'PAID',
+    'FAILED',
+    'EXPIRED'
 );
 
 -- Enum for payment environment

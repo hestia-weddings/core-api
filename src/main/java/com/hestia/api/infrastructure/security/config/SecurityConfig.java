@@ -36,6 +36,10 @@ public class SecurityConfig {
                         .requestMatchers("/w/**")
                         .permitAll()
 
+                        // WEBHOOK (PUBLIC)
+                        .requestMatchers("/webhook/**")
+                        .permitAll()
+
                         // SWAGGER
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll()

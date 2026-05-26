@@ -16,12 +16,14 @@ import com.hestia.api.guest.dto.CheckoutResponse;
 import com.hestia.api.infrastructure.asaas.AsaasCheckoutClient;
 import com.hestia.api.infrastructure.asaas.dto.AsaasCheckoutRequest;
 import com.hestia.api.infrastructure.asaas.dto.AsaasCheckoutResponse;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +44,6 @@ public class GuestCheckoutService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gift not found"));
 
         if (!gift.getAvailability()) throw new IllegalArgumentException("Gift is out of stock");
-
 
         // 2. Load PaymentConfig
         PaymentConfig paymentConfig = paymentConfigRepository
@@ -73,14 +74,15 @@ public class GuestCheckoutService {
                 .minutesToExpire(60)
                 .externalReference(order.getId().toString())
                 .callback(AsaasCheckoutRequest.Callback.builder()
-                                .successUrl("https://hestia.com/payment/success")  // TODO: configure per wedding
-                                .cancelUrl("https://hestia.com/payment/cancel")
-                                .expiredUrl("https://hestia.com/payment/expired")
-                                .build())
+                        .successUrl("https://hestia.com/payment/success") // TODO: configure per wedding
+                        .cancelUrl("https://hestia.com/payment/cancel")
+                        .expiredUrl("https://hestia.com/payment/expired")
+                        .build())
                 .items(List.of(AsaasCheckoutRequest.Item.builder()
-                        .name(gift.getDescription().length() > 30
-                                ? gift.getDescription().substring(0, 30)
-                                : gift.getDescription())
+                        .name(
+                                gift.getDescription().length() > 30
+                                        ? gift.getDescription().substring(0, 30)
+                                        : gift.getDescription())
                         .description(gift.getDescription())
                         .quantity(1)
                         .value(gift.getPrice() / 100.0) // cents → reais

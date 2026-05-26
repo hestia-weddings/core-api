@@ -53,8 +53,8 @@ class GuestCheckoutControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"guest_name\": \"João Silva\", \"guest_email\": \"joao@email.com\"}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.checkout_url").value(
-                        "https://sandbox.asaas.com/checkoutSession/show/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"));
+                .andExpect(jsonPath("$.checkout_url")
+                        .value("https://sandbox.asaas.com/checkoutSession/show/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"));
     }
 
     @Test
