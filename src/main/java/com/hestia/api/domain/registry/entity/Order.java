@@ -1,8 +1,7 @@
 package com.hestia.api.domain.registry.entity;
 
-import com.hestia.api.common.model.BaseModel;
+import com.hestia.api.common.model.BaseTenantModel;
 import com.hestia.api.domain.registry.enums.OrderStatus;
-import com.hestia.api.domain.wedding.entity.Wedding;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Order extends BaseModel {
+public class Order extends BaseTenantModel {
 
     @Column(name = "guest_name", nullable = false)
     private String guestName;
@@ -35,8 +34,4 @@ public class Order extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "gift_id")
     private Gift gift;
-
-    @ManyToOne
-    @JoinColumn(name = "wedding_id")
-    private Wedding wedding;
 }

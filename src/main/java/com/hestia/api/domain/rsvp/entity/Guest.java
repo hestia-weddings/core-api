@@ -1,9 +1,8 @@
 package com.hestia.api.domain.rsvp.entity;
 
-import com.hestia.api.common.model.BaseModel;
+import com.hestia.api.common.model.BaseTenantModel;
 import com.hestia.api.domain.rsvp.enums.GuestAge;
 import com.hestia.api.domain.rsvp.enums.GuestStatus;
-import com.hestia.api.domain.wedding.entity.Wedding;
 
 import jakarta.persistence.*;
 
@@ -19,7 +18,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Guest extends BaseModel {
+public class Guest extends BaseTenantModel {
 
     @Column(nullable = false)
     private String name;
@@ -37,8 +36,4 @@ public class Guest extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "invite_id")
     private Invite invite;
-
-    @ManyToOne
-    @JoinColumn(name = "wedding_id")
-    private Wedding wedding;
 }

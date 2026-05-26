@@ -1,7 +1,6 @@
 package com.hestia.api.domain.message.entity;
 
-import com.hestia.api.common.model.BaseModel;
-import com.hestia.api.domain.wedding.entity.Wedding;
+import com.hestia.api.common.model.BaseTenantModel;
 
 import jakarta.persistence.*;
 
@@ -14,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Message extends BaseModel {
+public class Message extends BaseTenantModel {
 
     @Column(nullable = false)
     private String sender;
@@ -27,8 +26,4 @@ public class Message extends BaseModel {
 
     @Column(name = "is_new", nullable = false)
     private Boolean isNew;
-
-    @ManyToOne
-    @JoinColumn(name = "wedding_id")
-    private Wedding wedding;
 }

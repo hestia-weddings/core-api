@@ -1,7 +1,6 @@
 package com.hestia.api.domain.registry.entity;
 
-import com.hestia.api.common.model.BaseModel;
-import com.hestia.api.domain.wedding.entity.Wedding;
+import com.hestia.api.common.model.BaseTenantModel;
 
 import jakarta.persistence.*;
 
@@ -14,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Gift extends BaseModel {
+public class Gift extends BaseTenantModel {
 
     @Column(nullable = false)
     private String description;
@@ -27,8 +26,4 @@ public class Gift extends BaseModel {
 
     @Column(nullable = false)
     private Integer stock;
-
-    @ManyToOne
-    @JoinColumn(name = "wedding_id")
-    private Wedding wedding;
 }

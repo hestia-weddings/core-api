@@ -1,8 +1,7 @@
 package com.hestia.api.domain.accounts.entity;
 
-import com.hestia.api.common.model.BaseModel;
+import com.hestia.api.common.model.BaseTenantModel;
 import com.hestia.api.domain.accounts.enums.UserRole;
-import com.hestia.api.domain.wedding.entity.Wedding;
 
 import jakarta.persistence.*;
 
@@ -20,7 +19,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User extends BaseModel {
+public class User extends BaseTenantModel {
 
     @Column(nullable = false)
     private String name;
@@ -35,8 +34,4 @@ public class User extends BaseModel {
 
     @Column(name = "auth_user_id", nullable = false)
     private UUID authUserId;
-
-    @ManyToOne
-    @JoinColumn(name = "wedding_id")
-    private Wedding wedding;
 }
