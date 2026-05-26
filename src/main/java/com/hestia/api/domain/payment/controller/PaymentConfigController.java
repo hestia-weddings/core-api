@@ -56,12 +56,4 @@ public class PaymentConfigController {
             @PathVariable UUID id) {
         return ResponseEntity.ok(paymentConfigService.updatePaymentConfig(user.resolveWeddingId(), id, request));
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePaymentConfig(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id) {
-        paymentConfigService.deletePaymentConfig(user.resolveWeddingId(), id);
-        return ResponseEntity.noContent().build();
-    }
 }

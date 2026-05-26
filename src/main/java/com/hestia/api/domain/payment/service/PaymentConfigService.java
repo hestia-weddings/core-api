@@ -80,10 +80,4 @@ public class PaymentConfigService {
 
         return paymentConfigMapper.toResponse(paymentConfigRepository.save(paymentConfig));
     }
-
-    public void deletePaymentConfig(@Nullable UUID weddingId, UUID id) {
-        PaymentConfig paymentConfig = getPaymentConfig(weddingId, id);
-        paymentConfig.setIsActive(false);
-        paymentConfigRepository.save(paymentConfig);
-    }
 }
