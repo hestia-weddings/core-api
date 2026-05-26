@@ -1070,6 +1070,115 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Order",
+      "item": [
+        {
+          "name": "Get Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/order?page=0&size=10"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base-url}}/order/{{order-id}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Guest Checkout",
+      "item": [
+        {
+          "name": "Checkout Gift",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guest_name\": \"João Silva\",\n  \"guest_email\": \"joao@email.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{uri}}/w/{{slug}}/gift/{{gift-id}}/checkout"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Webhook",
+      "item": [
+        {
+          "name": "Webhook Asaas (CHECKOUT_PAID)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"evt_test123\",\n  \"event\": \"CHECKOUT_PAID\",\n  \"checkout\": {\n    \"id\": \"replace-with-payment-id\",\n    \"status\": \"PAID\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{uri}}/webhook/asaas/{{webhook-token}}"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [
@@ -1135,6 +1244,16 @@
     },
     {
       "key": "payment-config-id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "order-id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "webhook-token",
       "value": "",
       "type": "string"
     }

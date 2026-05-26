@@ -1,0 +1,26 @@
+meta {
+  name: Webhook Asaas (CHECKOUT_PAID)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{uri}}/webhook/asaas/:webhookToken
+  body: json
+  auth: none
+}
+
+params:path {
+  webhookToken: 
+}
+
+body:json {
+  {
+    "id": "evt_test123",
+    "event": "CHECKOUT_PAID",
+    "checkout": {
+      "id": "replace-with-payment-id",
+      "status": "PAID"
+    }
+  }
+}

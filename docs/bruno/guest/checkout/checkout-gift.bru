@@ -1,0 +1,22 @@
+meta {
+  name: Checkout Gift
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{uri}}/w/{{slug}}/gift/:giftId/checkout
+  body: json
+  auth: none
+}
+
+params:path {
+  giftId: 
+}
+
+body:json {
+  {
+    "guest_name": "João Silva",
+    "guest_email": "joao@email.com"
+  }
+}
