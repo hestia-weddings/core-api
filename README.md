@@ -8,6 +8,7 @@ A Spring Boot REST API for managing wedding/event planning features including RS
 |----------|-------------|
 | [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) | New here? Start here — setup, architecture, and where to look |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Development roadmap with all steps |
+| [docs/PAYMENT.md](docs/PAYMENT.md) | Payment gateway integration (Asaas Checkout) |
 | [src/test/TESTING.md](src/test/TESTING.md) | Test suite documentation |
 
 
