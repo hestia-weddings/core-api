@@ -62,7 +62,7 @@ Guest (Frontend)          Héstia API              Asaas API
 - [X] `PaymentConfigService` (create, update, get by wedding)
 - [X] `PaymentConfigController` at `/api/v2/payment-config`
   - COUPLE role only, tenant-scoped
-- [ ] Integration tests (access control + CRUD)
+- [X] Integration tests (access control + CRUD)
 
 ### Task 3: `orders` table + entity
 
