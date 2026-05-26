@@ -80,11 +80,11 @@ CREATE TABLE gifts (
 
 CREATE TABLE orders (
     id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
-    purchased_by VARCHAR NOT NULL,
-    price INT NOT NULL,
-    asaas_id VARCHAR NOT NULL,
-    link_url VARCHAR NOT NULL,
+    guest_name VARCHAR NOT NULL,
+    guest_email VARCHAR NOT NULL,
+    amount INT NOT NULL,
     status order_status_enum NOT NULL DEFAULT 'PENDING',
+    payment_id UUID NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
@@ -93,4 +93,17 @@ CREATE TABLE orders (
     CONSTRAINT fk_orders_gift FOREIGN KEY (gift_id) REFERENCES gifts(id) ON DELETE CASCADE,
     CONSTRAINT fk_orders_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
     CONSTRAINT chk_order_status CHECK (status IN ('PENDING', 'PAID'))
+);
+
+CREATE TABLE payment_configs (
+    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+    api_key VARCHAR NOT NULL,
+    environment payment_env_enum NOT NULL DEFAULT 'SANDBOX',
+    webhook_token VARCHAR(64) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    wedding_id UUID NOT NULL UNIQUE,
+    CONSTRAINT fk_payment_config_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
+    CONSTRAINT chk_payment_env CHECK (environment IN ('PRODUCTION', 'SANDBOX'))
 );
