@@ -114,15 +114,15 @@ Guest (Frontend)          Héstia API              Asaas API
 
 ### Task 6: Webhook endpoint
 
-- [ ] `POST /webhook/asaas/{webhookToken}` (public, validated by path token matching PaymentConfig)
-- [ ] Parse webhook payload: extract `event` type + `checkout.id`
-- [ ] Event handling:
+- [X] `POST /webhook/asaas/{webhookToken}` (public, validated by path token matching PaymentConfig)
+- [X] Parse webhook payload: extract `event` type + `checkout.id`
+- [X] Event handling:
   - `CHECKOUT_PAID` → find Order by `payment_id` (checkout ID) → update to PAID + decrement stock
   - `CHECKOUT_EXPIRED` → find Order by `payment_id` → update to EXPIRED
   - `CHECKOUT_CANCELED` → find Order by `payment_id` → update to FAILED
-- [ ] Idempotency: ignore duplicate events for already-processed orders
-- [ ] Resolve wedding from webhook token → scope the Order lookup
-- [ ] Integration tests (simulated webhook payloads)
+- [X] Idempotency: ignore duplicate events for already-processed orders
+- [X] Resolve wedding from webhook token → scope the Order lookup
+- [X] Integration tests (simulated webhook payloads)
 
 ### Task 7: Order query endpoints (Couple + Admin)
 
