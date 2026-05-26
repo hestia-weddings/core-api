@@ -66,7 +66,7 @@ Guest (Frontend)          Héstia API              Asaas API
 
 ### Task 3: `orders` table + entity
 
-- [ ] Flyway migration: `orders` table
+- [X] Flyway migration: `orders` table
   - `id` (UUID, PK)
   - `guest_name` (VARCHAR)
   - `guest_email` (VARCHAR)
@@ -76,8 +76,8 @@ Guest (Frontend)          Héstia API              Asaas API
   - `gift_id` (UUID, FK → gifts)
   - `wedding_id` (UUID, FK → weddings)
   - `created_at`, `updated_at`, `is_active`
-- [ ] `Order` entity, `OrderStatus` enum
-- [ ] `OrderRepository`
+- [X] `Order` entity, `OrderStatus` enum
+- [X] `OrderRepository`
 
 ### Task 4: Asaas Checkout integration client
 
@@ -168,13 +168,13 @@ Guest (Frontend)          Héstia API              Asaas API
 {
   "id": "131ca662-56c8-4479-b5b3-fd61a413fce7",
   "link": "https://sandbox.asaas.com/checkoutSession/show/131ca662-...",
-  "status": "ACTIVE",  // ACTIVE | CANCELED | EXPIRED | PAID
+  "status": "ACTIVE",
   "billingTypes": ["CREDIT_CARD", "PIX"],
   "chargeTypes": ["DETACHED"],
   "minutesToExpire": 60,
   "externalReference": "our-order-uuid",
   "callback": { "successUrl": "...", "cancelUrl": "...", "expiredUrl": "..." },
-  "items": [...]
+  "items": []
 }
 ```
 
@@ -189,8 +189,7 @@ Guest (Frontend)          Héstia API              Asaas API
     "id": "2bd251f0-09b2-44ff-8a0c-a5cb29e5bbda",
     "status": "PAID",
     "customer": "cus_000000018936",
-    "items": [...],
-    ...
+    "items": []
   }
 }
 ```
