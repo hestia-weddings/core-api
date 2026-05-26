@@ -17,7 +17,4 @@ public class CreatePaymentConfigRequest {
 
     @NotNull
     private PaymentEnvironment environment;
-
-    @NotBlank
-    private String webhookToken;
 }

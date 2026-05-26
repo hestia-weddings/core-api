@@ -70,7 +70,8 @@ public class PaymentConfigService {
         PaymentConfig paymentConfig = PaymentConfig.builder()
                 .apiKey(request.getApiKey())
                 .environment(request.getEnvironment())
-                .webhookToken(request.getWebhookToken())
+                .webhookToken(UUID.randomUUID().toString().replace("-", "")
+                        + UUID.randomUUID().toString().replace("-", ""))
                 .wedding(wedding)
                 .build();
 
@@ -83,7 +84,6 @@ public class PaymentConfigService {
 
         if (request.getApiKey() != null) paymentConfig.setApiKey(request.getApiKey());
         if (request.getEnvironment() != null) paymentConfig.setEnvironment(request.getEnvironment());
-        if (request.getWebhookToken() != null) paymentConfig.setWebhookToken(request.getWebhookToken());
 
         return paymentConfigMapper.toResponse(paymentConfigRepository.save(paymentConfig));
     }

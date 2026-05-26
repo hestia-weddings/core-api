@@ -340,7 +340,7 @@ class AdminAccessTest {
                                     .param("wedding", WEDDING_B)
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(
-                                            "{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\", \"webhook_token\": \"wh_new_token_1234567890abcdef1234567890abcdef12345678\"}"))
+                                            "{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\"}"))
                     .andExpect(status().isCreated());
         }
 

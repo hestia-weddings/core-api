@@ -43,8 +43,18 @@ Authorization: Bearer {couple-token}
 
 {
   "api_key": "$aact_hmlg_000YourKeyHere...",
+  "environment": "SANDBOX"
+}
+```
+
+The response will include an auto-generated `webhook_token`:
+
+```json
+{
+  "id": "...",
+  "api_key": "$aact_hmlg_000YourKeyHere...",
   "environment": "SANDBOX",
-  "webhook_token": "any-secret-string-up-to-64-chars"
+  "webhook_token": "a1b2c3d4e5f6..."
 }
 ```
 
@@ -52,7 +62,7 @@ Authorization: Bearer {couple-token}
 |-------|-------------|
 | `api_key` | Your Asaas API key |
 | `environment` | `SANDBOX` for testing, `PRODUCTION` for real payments |
-| `webhook_token` | A secret you choose — used to validate incoming webhooks |
+| `webhook_token` | Auto-generated secret — use it in step 4 |
 
 ### 4. Configure Webhook in Asaas
 
@@ -60,11 +70,11 @@ In the Asaas dashboard: **Integrations → Webhooks → New Webhook**
 
 | Setting | Value |
 |---------|-------|
-| URL | `https://your-domain.com/webhook/asaas/{your-webhook-token}` |
+| URL | `https://your-domain.com/webhook/asaas/{webhook_token}` |
 | Events | `CHECKOUT_PAID`, `CHECKOUT_EXPIRED`, `CHECKOUT_CANCELED` |
 | Send type | `SEQUENTIALLY` |
 
-Replace `{your-webhook-token}` with the same value you saved in step 3.
+Replace `{webhook_token}` with the value returned in step 3.
 
 ## API Endpoints
 

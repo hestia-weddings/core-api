@@ -1025,7 +1025,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"apiKey\": \"$aact_hmlg_000MjY2ODM2MWY2OGM3\",\n  \"environment\": \"SANDBOX\",\n  \"webhookToken\": \"wh_secret_abc123def456\"\n}",
+              "raw": "{\n  \"apiKey\": \"$aact_hmlg_000MjY2ODM2MWY2OGM3\",\n  \"environment\": \"SANDBOX\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

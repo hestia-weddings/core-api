@@ -12,6 +12,4 @@ public class UpdatePaymentConfigRequest {
     private String apiKey;
 
     private PaymentEnvironment environment;
-
-    private String webhookToken;
 }
