@@ -2,6 +2,7 @@ package com.hestia.api.common.exception;
 
 import com.hestia.api.common.dto.ErrorResponse;
 import com.hestia.api.domain.payment.exception.DuplicatePaymentConfigException;
+import com.hestia.api.infrastructure.asaas.exception.AsaasCheckoutException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,11 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(AsaasCheckoutException.class)
+    public ResponseEntity<ErrorResponse> handleAsaasError(AsaasCheckoutException ex) {
+        return buildResponse(HttpStatus.BAD_GATEWAY, ex.getMessage());
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {
