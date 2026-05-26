@@ -416,22 +416,21 @@ class CoupleAccessTest {
 
         @Test
         void canGetPaymentConfigById() throws Exception {
-            mockMvc.perform(get("/payment-config/{id}", OWN_PAYMENT_CONFIG))
-                    .andExpect(status().isOk());
+            mockMvc.perform(get("/payment-config/{id}", OWN_PAYMENT_CONFIG)).andExpect(status().isOk());
         }
 
         @Test
         void cannotGetOtherWeddingPaymentConfig() throws Exception {
-            mockMvc.perform(get("/payment-config/{id}", OTHER_PAYMENT_CONFIG))
-                    .andExpect(status().isNotFound());
+            mockMvc.perform(get("/payment-config/{id}", OTHER_PAYMENT_CONFIG)).andExpect(status().isNotFound());
         }
 
         @Test
         void cannotCreateDuplicatePaymentConfig() throws Exception {
-            mockMvc.perform(post("/payment-config")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(
-                                    "{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\", \"webhook_token\": \"wh_new_token_1234567890abcdef1234567890abcdef12345678\"}"))
+            mockMvc.perform(
+                            post("/payment-config")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(
+                                            "{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\", \"webhook_token\": \"wh_new_token_1234567890abcdef1234567890abcdef12345678\"}"))
                     .andExpect(status().isConflict());
         }
 

@@ -1,7 +1,6 @@
 package com.hestia.api.common.exception;
 
 import com.hestia.api.common.dto.ErrorResponse;
-
 import com.hestia.api.domain.payment.exception.DuplicatePaymentConfigException;
 
 import org.springframework.http.HttpStatus;
