@@ -13,4 +13,6 @@ public interface PaymentConfigRepository extends JpaRepository<PaymentConfig, UU
     Page<PaymentConfig> findByWeddingIdAndIsActiveTrue(UUID weddingId, Pageable pageable);
 
     Optional<PaymentConfig> findByIdAndIsActiveTrue(UUID id);
+
+    Optional<PaymentConfig> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
 }

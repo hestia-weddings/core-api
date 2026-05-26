@@ -57,10 +57,10 @@ Guest (Frontend)          Héstia API              Asaas API
 
 ### Task 2: PaymentConfig CRUD (Couple-only)
 
-- [ ] `CreatePaymentConfigRequest` / `UpdatePaymentConfigRequest` DTOs
-- [ ] `PaymentConfigResponse` DTO
-- [ ] `PaymentConfigService` (create, update, get by wedding)
-- [ ] `PaymentConfigController` at `/api/v2/payment-config`
+- [X] `CreatePaymentConfigRequest` / `UpdatePaymentConfigRequest` DTOs
+- [X] `PaymentConfigResponse` DTO
+- [X] `PaymentConfigService` (create, update, get by wedding)
+- [X] `PaymentConfigController` at `/api/v2/payment-config`
   - COUPLE role only, tenant-scoped
 - [ ] Integration tests (access control + CRUD)
 
