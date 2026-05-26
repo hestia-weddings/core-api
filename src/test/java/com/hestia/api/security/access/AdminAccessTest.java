@@ -35,6 +35,7 @@ class AdminAccessTest {
     private static final String GIFT_B = "eeee0000-0000-0000-0000-000000000002";
     private static final String MESSAGE_A = "ffff0000-0000-0000-0000-000000000001";
     private static final String USER_COUPLE = "bbbb0000-0000-0000-0000-000000000001";
+    private static final String PAYMENT_CONFIG_A = "aaaa1111-0000-0000-0000-000000000001";
 
     // ==========================================
     // WEDDING ENDPOINTS (admin-only)
@@ -310,6 +311,45 @@ class AdminAccessTest {
         @Test
         void canDeleteMessage() throws Exception {
             mockMvc.perform(delete("/message/{id}", MESSAGE_A)).andExpect(status().isNoContent());
+        }
+    }
+
+    // ==========================================
+    // PAYMENT CONFIG ENDPOINTS (cross-tenant)
+    // ==========================================
+
+    @Nested
+    @DisplayName("Payment Configs (cross-tenant with wedding param)")
+    class PaymentConfigAdmin {
+
+        @Test
+        void canListPaymentConfigs() throws Exception {
+            mockMvc.perform(get("/payment-config").param("wedding", WEDDING_A))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void canGetPaymentConfigById() throws Exception {
+            mockMvc.perform(get("/payment-config/{id}", PAYMENT_CONFIG_A))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void canCreatePaymentConfig() throws Exception {
+            mockMvc.perform(post("/payment-config")
+                            .param("wedding", WEDDING_B)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\", \"webhook_token\": \"wh_new_token_1234567890abcdef1234567890abcdef12345678\"}"))
+                    .andExpect(status().isCreated());
+        }
+
+        @Test
+        void canPatchPaymentConfig() throws Exception {
+            mockMvc.perform(patch("/payment-config/{id}", PAYMENT_CONFIG_A)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"environment\": \"PRODUCTION\"}"))
+                    .andExpect(status().isOk());
         }
     }
 }

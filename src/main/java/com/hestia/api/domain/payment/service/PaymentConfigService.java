@@ -7,6 +7,7 @@ import com.hestia.api.domain.payment.dto.CreatePaymentConfigRequest;
 import com.hestia.api.domain.payment.dto.PaymentConfigResponse;
 import com.hestia.api.domain.payment.dto.UpdatePaymentConfigRequest;
 import com.hestia.api.domain.payment.entity.PaymentConfig;
+import com.hestia.api.domain.payment.exception.DuplicatePaymentConfigException;
 import com.hestia.api.domain.payment.mapper.PaymentConfigMapper;
 import com.hestia.api.domain.payment.repository.PaymentConfigRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
@@ -61,6 +62,10 @@ public class PaymentConfigService {
         Wedding wedding = weddingRepository
                 .findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
+
+        if (paymentConfigRepository.existsByWeddingIdAndIsActiveTrue(weddingId)) {
+            throw new DuplicatePaymentConfigException("Payment config already exists for this wedding");
+        }
 
         PaymentConfig paymentConfig = PaymentConfig.builder()
                 .apiKey(request.getApiKey())

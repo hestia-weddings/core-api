@@ -322,5 +322,19 @@ class GuestAccessTest {
             mockMvc.perform(delete("/account/{id}", "bbbb0000-0000-0000-0000-000000000001"))
                     .andExpect(status().isUnauthorized());
         }
+
+        @Test
+        void cannotListPaymentConfigs() throws Exception {
+            mockMvc.perform(get("/payment-config")).andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void cannotCreatePaymentConfig() throws Exception {
+            mockMvc.perform(post("/payment-config")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"api_key\": \"$aact_hmlg_x\", \"environment\": \"SANDBOX\", \"webhook_token\": \"wh_x\"}"))
+                    .andExpect(status().isUnauthorized());
+        }
     }
 }

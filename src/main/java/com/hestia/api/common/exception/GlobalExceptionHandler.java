@@ -2,6 +2,8 @@ package com.hestia.api.common.exception;
 
 import com.hestia.api.common.dto.ErrorResponse;
 
+import com.hestia.api.domain.payment.exception.DuplicatePaymentConfigException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,7 +22,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({CannotDeleteInviteWithConfirmedGuestsException.class, CannotDeleteConfirmedGuestException.class})
+    @ExceptionHandler({
+        CannotDeleteInviteWithConfirmedGuestsException.class,
+        CannotDeleteConfirmedGuestException.class,
+        DuplicatePaymentConfigException.class
+    })
     public ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex) {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }

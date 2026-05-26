@@ -16,4 +16,6 @@ public interface PaymentConfigRepository extends JpaRepository<PaymentConfig, UU
     Optional<PaymentConfig> findByIdAndIsActiveTrue(UUID id);
 
     Optional<PaymentConfig> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
+
+    boolean existsByWeddingIdAndIsActiveTrue(UUID weddingId);
 }

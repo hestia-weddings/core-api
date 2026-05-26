@@ -39,6 +39,8 @@ class CoupleAccessTest {
     private static final String OTHER_MESSAGE = "ffff0000-0000-0000-0000-000000000002";
     private static final String OWN_USER = "bbbb0000-0000-0000-0000-000000000001";
     private static final String ADMIN_USER = "aaaa0000-0000-0000-0000-000000000001";
+    private static final String OWN_PAYMENT_CONFIG = "aaaa1111-0000-0000-0000-000000000001";
+    private static final String OTHER_PAYMENT_CONFIG = "aaaa1111-0000-0000-0000-000000000002";
 
     // ==========================================
     // INVITE ENDPOINTS - Own wedding
@@ -396,6 +398,57 @@ class CoupleAccessTest {
         @Test
         void cannotDeleteAccount() throws Exception {
             mockMvc.perform(delete("/account/{id}", ADMIN_USER)).andExpect(status().isForbidden());
+        }
+    }
+
+    // ==========================================
+    // PAYMENT CONFIG ENDPOINTS (own wedding)
+    // ==========================================
+
+    @Nested
+    @DisplayName("Payment Configs (own wedding)")
+    class PaymentConfigOwn {
+
+        @Test
+        void canListPaymentConfigs() throws Exception {
+            mockMvc.perform(get("/payment-config")).andExpect(status().isOk());
+        }
+
+        @Test
+        void canGetPaymentConfigById() throws Exception {
+            mockMvc.perform(get("/payment-config/{id}", OWN_PAYMENT_CONFIG))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void cannotGetOtherWeddingPaymentConfig() throws Exception {
+            mockMvc.perform(get("/payment-config/{id}", OTHER_PAYMENT_CONFIG))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        void cannotCreateDuplicatePaymentConfig() throws Exception {
+            mockMvc.perform(post("/payment-config")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\", \"webhook_token\": \"wh_new_token_1234567890abcdef1234567890abcdef12345678\"}"))
+                    .andExpect(status().isConflict());
+        }
+
+        @Test
+        void canPatchPaymentConfig() throws Exception {
+            mockMvc.perform(patch("/payment-config/{id}", OWN_PAYMENT_CONFIG)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"environment\": \"PRODUCTION\"}"))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void cannotPatchOtherWeddingPaymentConfig() throws Exception {
+            mockMvc.perform(patch("/payment-config/{id}", OTHER_PAYMENT_CONFIG)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"environment\": \"PRODUCTION\"}"))
+                    .andExpect(status().isNotFound());
         }
     }
 }
