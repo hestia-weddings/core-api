@@ -1,7 +1,6 @@
 package com.hestia.api.infrastructure.asaas.service;
 
 import com.hestia.api.common.exception.ResourceNotFoundException;
-import com.hestia.api.domain.payment.repository.PaymentConfigRepository;
 import com.hestia.api.domain.registry.entity.Order;
 import com.hestia.api.domain.registry.enums.OrderStatus;
 import com.hestia.api.domain.registry.repository.OrderRepository;

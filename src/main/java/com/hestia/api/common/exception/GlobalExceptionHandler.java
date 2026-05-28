@@ -1,7 +1,6 @@
 package com.hestia.api.common.exception;
 
 import com.hestia.api.common.dto.ErrorResponse;
-import com.hestia.api.domain.payment.exception.DuplicatePaymentConfigException;
 import com.hestia.api.domain.payment.exception.DuplicateWalletException;
 import com.hestia.api.infrastructure.asaas.exception.AsaasCheckoutException;
 
@@ -26,7 +25,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
         CannotDeleteInviteWithConfirmedGuestsException.class,
         CannotDeleteConfirmedGuestException.class,
-        DuplicatePaymentConfigException.class,
         DuplicateWalletException.class
     })
     public ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex) {

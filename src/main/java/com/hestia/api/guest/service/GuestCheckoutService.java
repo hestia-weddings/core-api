@@ -1,8 +1,6 @@
 package com.hestia.api.guest.service;
 
 import com.hestia.api.common.exception.ResourceNotFoundException;
-import com.hestia.api.domain.payment.entity.PaymentConfig;
-import com.hestia.api.domain.payment.repository.PaymentConfigRepository;
 import com.hestia.api.domain.registry.entity.GiftAvailability;
 import com.hestia.api.domain.registry.entity.Order;
 import com.hestia.api.domain.registry.enums.OrderStatus;
