@@ -14,4 +14,22 @@ public class CheckoutRequest {
 
     @NotBlank
     private String guestEmail;
+
+    @NotBlank
+    private String cpfCnpj;
+
+    @NotBlank
+    private String phoneNumber;
+
+    @NotBlank
+    private String address;
+
+    @NotBlank
+    private String addressNumber;
+
+    @NotBlank
+    private String postalCode;
+
+    @NotBlank
+    private String province;
 }

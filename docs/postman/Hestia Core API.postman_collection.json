@@ -1177,7 +1177,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"guest_name\": \"João Silva\",\n  \"guest_email\": \"joao@email.com\"\n}",
+              "raw": "{\n  \"guest_name\": \"João Silva\",\n  \"guest_email\": \"joao@email.com\",\n  \"cpf_cnpj\": \"12345678900\",\n  \"phone_number\": \"47999999999\",\n  \"address\": \"Rua Exemplo\",\n  \"address_number\": \"123\",\n  \"postal_code\": \"89000000\",\n  \"province\": \"Joinville\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

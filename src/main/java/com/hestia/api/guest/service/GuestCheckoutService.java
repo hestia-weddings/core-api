@@ -82,6 +82,12 @@ public class GuestCheckoutService {
                 .customerData(AsaasCheckoutRequest.CustomerData.builder()
                         .name(request.getGuestName())
                         .email(request.getGuestEmail())
+                        .cpfCnpj(request.getCpfCnpj())
+                        .phoneNumber(request.getPhoneNumber())
+                        .address(request.getAddress())
+                        .addressNumber(request.getAddressNumber())
+                        .postalCode(request.getPostalCode())
+                        .province(request.getProvince())
                         .build())
                 .build();
 

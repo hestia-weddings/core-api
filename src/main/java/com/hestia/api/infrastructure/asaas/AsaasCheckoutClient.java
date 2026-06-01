@@ -7,8 +7,11 @@ import com.hestia.api.infrastructure.asaas.exception.AsaasCheckoutException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class AsaasCheckoutClient {
@@ -18,10 +21,14 @@ public class AsaasCheckoutClient {
     private final AsaasEnvironment environment;
 
     public AsaasCheckoutClient(
-            RestClient.Builder restClientBuilder,
-            @Value("${asaas.api-key}") String apiKey,
-            @Value("${asaas.environment}") AsaasEnvironment environment) {
-        this.restClient = restClientBuilder.build();
+            @Value("${asaas.api-key}") String apiKey, @Value("${asaas.environment}") AsaasEnvironment environment) {
+        ObjectMapper camelCaseMapper = new ObjectMapper();
+        this.restClient = RestClient.builder()
+                .messageConverters(converters -> {
+                    converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
+                    converters.add(new MappingJackson2HttpMessageConverter(camelCaseMapper));
+                })
+                .build();
         this.apiKey = apiKey;
         this.environment = environment;
     }

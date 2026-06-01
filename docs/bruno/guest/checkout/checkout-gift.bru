@@ -5,18 +5,24 @@ meta {
 }
 
 post {
-  url: {{uri}}/w/{{slug}}/gift/:giftId/checkout
+  url: {{base-url}}/w/{{slug}}/gift/:giftId/checkout
   body: json
   auth: none
 }
 
 params:path {
-  giftId: 
+  giftId: 5799ba45-4f8b-497d-b913-92b7515e7b2f
 }
 
 body:json {
   {
     "guest_name": "João Silva",
-    "guest_email": "joao@email.com"
+    "guest_email": "joao@email.com",
+    "cpf_cnpj": "17767366057",
+    "phone_number": "47999999999",
+    "address": "Rua Falcão Lacerda",
+    "address_number": "123",
+    "postal_code": "04229005",
+    "province": "São Paulo"
   }
 }
