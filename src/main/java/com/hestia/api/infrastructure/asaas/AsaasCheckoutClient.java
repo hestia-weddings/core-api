@@ -5,6 +5,7 @@ import com.hestia.api.infrastructure.asaas.dto.AsaasCheckoutResponse;
 import com.hestia.api.infrastructure.asaas.enums.AsaasEnvironment;
 import com.hestia.api.infrastructure.asaas.exception.AsaasCheckoutException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -20,10 +21,15 @@ public class AsaasCheckoutClient {
     private final String apiKey;
     private final AsaasEnvironment environment;
 
+    @Autowired
     public AsaasCheckoutClient(
             @Value("${asaas.api-key}") String apiKey, @Value("${asaas.environment}") AsaasEnvironment environment) {
+        this(RestClient.builder().build(), apiKey, environment);
+    }
+
+    AsaasCheckoutClient(RestClient restClient, String apiKey, AsaasEnvironment environment) {
         this.asaasMapper = new ObjectMapper();
-        this.restClient = RestClient.builder().build();
+        this.restClient = restClient;
         this.apiKey = apiKey;
         this.environment = environment;
     }

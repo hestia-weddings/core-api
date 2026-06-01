@@ -5,9 +5,6 @@ import com.hestia.api.domain.registry.enums.OrderStatus;
 
 import jakarta.persistence.*;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import java.util.UUID;
 
 import lombok.*;
@@ -32,7 +29,6 @@ public class Order extends BaseTenantModel {
     private Integer amount;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(nullable = false)
     private OrderStatus status;
 
