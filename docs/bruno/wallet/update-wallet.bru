@@ -1,11 +1,11 @@
 meta {
-  name: Update Payment Config
+  name: Update Wallet
   type: http
   seq: 4
 }
 
 patch {
-  url: {{base-url}}/payment-config/:id
+  url: {{base-url}}/wallet/:id
   body: json
   auth: bearer
 }
@@ -20,6 +20,6 @@ auth:bearer {
 
 body:json {
   {
-    "environment": "PRODUCTION"
+    "pixKey": "new-pix-key@example.com"
   }
 }

@@ -953,10 +953,10 @@
       ]
     },
     {
-      "name": "Payment Config",
+      "name": "Wallet",
       "item": [
         {
-          "name": "Get Payment Configs",
+          "name": "Get Wallets",
           "request": {
             "method": "GET",
             "header": [
@@ -975,12 +975,12 @@
                 }
               ]
             },
-            "url": "{{base-url}}/payment-config?page=0&size=10"
+            "url": "{{base-url}}/wallet?page=0&size=10"
           },
           "response": []
         },
         {
-          "name": "Get Payment Config By Id",
+          "name": "Get Wallet By Id",
           "request": {
             "method": "GET",
             "header": [
@@ -999,12 +999,12 @@
                 }
               ]
             },
-            "url": "{{base-url}}/payment-config/{{payment-config-id}}"
+            "url": "{{base-url}}/wallet/{{wallet-id}}"
           },
           "response": []
         },
         {
-          "name": "Create Payment Config",
+          "name": "Create Wallet",
           "request": {
             "method": "POST",
             "header": [
@@ -1025,19 +1025,19 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"apiKey\": \"$aact_hmlg_000MjY2ODM2MWY2OGM3\",\n  \"environment\": \"SANDBOX\"\n}",
+              "raw": "{\n  \"pixKey\": \"email@example.com\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "url": "{{base-url}}/payment-config"
+            "url": "{{base-url}}/wallet"
           },
           "response": []
         },
         {
-          "name": "Update Payment Config",
+          "name": "Update Wallet",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1058,14 +1058,52 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"environment\": \"PRODUCTION\"\n}",
+              "raw": "{\n  \"pixKey\": \"new-pix-key@example.com\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "url": "{{base-url}}/payment-config/{{payment-config-id}}"
+            "url": "{{base-url}}/wallet/{{wallet-id}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transfer",
+      "item": [
+        {
+          "name": "Create Transfer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token-couple}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 10000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base-url}}/transfers"
           },
           "response": []
         }
@@ -1243,7 +1281,7 @@
       "type": "string"
     },
     {
-      "key": "payment-config-id",
+      "key": "wallet-id",
       "value": "",
       "type": "string"
     },

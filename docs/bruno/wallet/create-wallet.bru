@@ -1,0 +1,21 @@
+meta {
+  name: Create Wallet
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base-url}}/wallet
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token-couple}}
+}
+
+body:json {
+  {
+    "pixKey": "email@example.com"
+  }
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Webhook Asaas (TRANSFER_DONE)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{uri}}/webhook/asaas/:webhookToken
+  body: json
+  auth: none
+}
+
+params:path {
+  webhookToken: 
+}
+
+body:json {
+  {
+    "id": "evt_test456",
+    "event": "TRANSFER_DONE",
+    "transfer": {
+      "id": "replace-with-asaas-transfer-id"
+    }
+  }
+}
