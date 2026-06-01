@@ -1,0 +1,5 @@
+package com.hestia.api.infrastructure.asaas.dto;
+
+import java.math.BigDecimal;
+
+public record AsaasTransferResponse(String id, String status, BigDecimal value) {}

@@ -12,8 +12,6 @@ public class TransactionMapper {
         return TransferResponse.builder()
                 .id(transaction.getId())
                 .amount(transaction.getAmount())
-                .fee(transaction.getFee())
-                .netAmount(transaction.getAmount() - transaction.getFee())
                 .status(transaction.getStatus().name())
                 .createdAt(transaction.getCreatedAt())
                 .build();

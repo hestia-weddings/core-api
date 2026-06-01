@@ -83,7 +83,8 @@ class AsaasCheckoutClientTest {
     @Test
     void usesProductionUrlWhenEnvironmentIsProduction() {
         RestClient.Builder builder = RestClient.builder();
-        MockRestServiceServer prodMockServer = MockRestServiceServer.bindTo(builder).build();
+        MockRestServiceServer prodMockServer =
+                MockRestServiceServer.bindTo(builder).build();
         AsaasCheckoutClient prodClient = new AsaasCheckoutClient(builder, "prod-key", AsaasEnvironment.PRODUCTION);
 
         String responseJson =

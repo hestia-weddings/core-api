@@ -6,4 +6,4 @@ import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record WalletResponse(UUID id, String pixKey, Integer availableBalance, LocalDateTime createdAt) {}
+public record TransferResponse(UUID id, Integer amount, String status, LocalDateTime createdAt) {}

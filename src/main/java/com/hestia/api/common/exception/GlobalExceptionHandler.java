@@ -2,7 +2,9 @@ package com.hestia.api.common.exception;
 
 import com.hestia.api.common.dto.ErrorResponse;
 import com.hestia.api.domain.payment.exception.DuplicateWalletException;
+import com.hestia.api.domain.payment.exception.InsufficientBalanceException;
 import com.hestia.api.infrastructure.asaas.exception.AsaasCheckoutException;
+import com.hestia.api.infrastructure.asaas.exception.AsaasTransferException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +57,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AsaasCheckoutException.class)
     public ResponseEntity<ErrorResponse> handleAsaasError(AsaasCheckoutException ex) {
         return buildResponse(HttpStatus.BAD_GATEWAY, ex.getMessage());
+    }
+
+    @ExceptionHandler(AsaasTransferException.class)
+    public ResponseEntity<ErrorResponse> handleAsaasTransferError(AsaasTransferException ex) {
+        return buildResponse(HttpStatus.BAD_GATEWAY, ex.getMessage());
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientBalance(InsufficientBalanceException ex) {
+        return buildResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {
