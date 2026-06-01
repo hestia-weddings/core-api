@@ -15,6 +15,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     @Query("SELECT COALESCE(SUM(t.amount + t.fee), 0) FROM Transaction t"
             + " WHERE t.wallet.id = :walletId"
-            + " AND t.status = com.hestia.api.domain.payment.enums.TransactionStatus.PENDING")
-    Integer sumPendingAmountsByWalletId(@Param("walletId") UUID walletId);
+            + " AND t.status = :status")
+    Integer sumPendingAmountsByWalletId(
+            @Param("walletId") UUID walletId,
+            @Param("status") com.hestia.api.domain.payment.enums.TransactionStatus status);
 }

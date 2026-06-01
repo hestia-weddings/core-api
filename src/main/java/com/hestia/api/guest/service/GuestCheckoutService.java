@@ -79,16 +79,6 @@ public class GuestCheckoutService {
                         .quantity(1)
                         .value(gift.getPrice() / 100.0) // cents → reais
                         .build()))
-                .customerData(AsaasCheckoutRequest.CustomerData.builder()
-                        .name(request.getGuestName())
-                        .email(request.getGuestEmail())
-                        .cpfCnpj(request.getCpfCnpj())
-                        .phoneNumber(request.getPhoneNumber())
-                        .address(request.getAddress())
-                        .addressNumber(request.getAddressNumber())
-                        .postalCode(request.getPostalCode())
-                        .province(request.getProvince())
-                        .build())
                 .build();
 
         AsaasCheckoutResponse asaasResponse = asaasCheckoutClient.createCheckout(asaasRequest);

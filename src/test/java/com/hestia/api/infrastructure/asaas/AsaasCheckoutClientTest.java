@@ -29,7 +29,7 @@ class AsaasCheckoutClientTest {
     void setUp() {
         RestClient.Builder builder = RestClient.builder();
         mockServer = MockRestServiceServer.bindTo(builder).build();
-        client = new AsaasCheckoutClient(builder, "test-key", AsaasEnvironment.SANDBOX);
+        client = new AsaasCheckoutClient("test-key", AsaasEnvironment.SANDBOX);
     }
 
     private AsaasCheckoutRequest buildRequest() {
@@ -85,7 +85,7 @@ class AsaasCheckoutClientTest {
         RestClient.Builder builder = RestClient.builder();
         MockRestServiceServer prodMockServer =
                 MockRestServiceServer.bindTo(builder).build();
-        AsaasCheckoutClient prodClient = new AsaasCheckoutClient(builder, "prod-key", AsaasEnvironment.PRODUCTION);
+        AsaasCheckoutClient prodClient = new AsaasCheckoutClient("prod-key", AsaasEnvironment.PRODUCTION);
 
         String responseJson =
                 """

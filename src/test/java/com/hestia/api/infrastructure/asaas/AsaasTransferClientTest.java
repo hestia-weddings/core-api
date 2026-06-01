@@ -29,7 +29,7 @@ class AsaasTransferClientTest {
     void setUp() {
         RestClient.Builder builder = RestClient.builder();
         mockServer = MockRestServiceServer.bindTo(builder).build();
-        client = new AsaasTransferClient(builder, "test-key", AsaasEnvironment.SANDBOX);
+        client = new AsaasTransferClient("test-key", AsaasEnvironment.SANDBOX);
     }
 
     @Test
