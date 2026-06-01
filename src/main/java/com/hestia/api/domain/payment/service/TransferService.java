@@ -21,7 +21,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TransferService {
@@ -58,7 +60,10 @@ public class TransferService {
                 .build();
 
         AsaasTransferRequest asaasRequest = new AsaasTransferRequest(
-                BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(100)), "PIX", wallet.getPixKey());
+                BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(100)),
+                "PIX",
+                wallet.getPixKey(),
+                resolvePixKeyType(wallet.getPixKey()));
 
         AsaasTransferResponse response = asaasTransferClient.createTransfer(asaasRequest);
         transaction.setAsaasTransferId(response.id());
@@ -69,10 +74,19 @@ public class TransferService {
     @Transactional
     public void handleTransferDone(String asaasTransferId) {
         Optional<Transaction> opt = transactionRepository.findByAsaasTransferId(asaasTransferId);
-        if (opt.isEmpty()) return;
+        if (opt.isEmpty()) {
+            log.warn("TRANSFER_DONE webhook ignored: no transaction found for asaasTransferId={}", asaasTransferId);
+            return;
+        }
 
         Transaction transaction = opt.get();
-        if (transaction.getStatus() != TransactionStatus.PENDING) return;
+        if (transaction.getStatus() != TransactionStatus.PENDING) {
+            log.warn(
+                    "TRANSFER_DONE webhook ignored: transaction {} already {}",
+                    transaction.getId(),
+                    transaction.getStatus());
+            return;
+        }
 
         transaction.setStatus(TransactionStatus.COMPLETED);
         Wallet wallet = transaction.getWallet();
@@ -84,12 +98,29 @@ public class TransferService {
     @Transactional
     public void handleTransferFailed(String asaasTransferId) {
         Optional<Transaction> opt = transactionRepository.findByAsaasTransferId(asaasTransferId);
-        if (opt.isEmpty()) return;
+        if (opt.isEmpty()) {
+            log.warn("TRANSFER_FAILED webhook ignored: no transaction found for asaasTransferId={}", asaasTransferId);
+            return;
+        }
 
         Transaction transaction = opt.get();
-        if (transaction.getStatus() != TransactionStatus.PENDING) return;
+        if (transaction.getStatus() != TransactionStatus.PENDING) {
+            log.warn(
+                    "TRANSFER_FAILED webhook ignored: transaction {} already {}",
+                    transaction.getId(),
+                    transaction.getStatus());
+            return;
+        }
 
         transaction.setStatus(TransactionStatus.FAILED);
         transactionRepository.save(transaction);
+    }
+
+    private String resolvePixKeyType(String pixKey) {
+        if (pixKey.contains("@")) return "EMAIL";
+        if (pixKey.matches("\\d{11}") && pixKey.charAt(2) == '9') return "PHONE";
+        if (pixKey.matches("\\d{11}")) return "CPF";
+        if (pixKey.matches("\\d{14}")) return "CNPJ";
+        return "EVP";
     }
 }

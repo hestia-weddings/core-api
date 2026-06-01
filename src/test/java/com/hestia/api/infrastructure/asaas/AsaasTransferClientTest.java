@@ -46,7 +46,8 @@ class AsaasTransferClientTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andRespond(withSuccess(responseJson, MediaType.APPLICATION_JSON));
 
-        AsaasTransferRequest request = new AsaasTransferRequest(BigDecimal.valueOf(100), "PIX", "pix@test.com");
+        AsaasTransferRequest request =
+                new AsaasTransferRequest(BigDecimal.valueOf(100), "PIX", "pix@test.com", "EMAIL");
         AsaasTransferResponse response = client.createTransfer(request);
 
         assertNotNull(response);
@@ -61,7 +62,8 @@ class AsaasTransferClientTest {
                 .expect(requestTo("https://api-sandbox.asaas.com/v3/transfers"))
                 .andRespond(withServerError());
 
-        AsaasTransferRequest request = new AsaasTransferRequest(BigDecimal.valueOf(100), "PIX", "pix@test.com");
+        AsaasTransferRequest request =
+                new AsaasTransferRequest(BigDecimal.valueOf(100), "PIX", "pix@test.com", "EMAIL");
         assertThrows(AsaasTransferException.class, () -> client.createTransfer(request));
         mockServer.verify();
     }
