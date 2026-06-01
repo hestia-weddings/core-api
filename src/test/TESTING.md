@@ -2,9 +2,23 @@
 
 ## Overview
 
-Integration tests validating **authorization (RBAC)**, **multi-tenant isolation**, **payment gateway integration**, and **webhook handling** across all API endpoints. Tests run against an H2 in-memory database with PostgreSQL compatibility mode.
+Integration tests validating **authorization (RBAC)**, **multi-tenant isolation**, **payment lifecycle**, **transfer flow**, and **webhook handling** across all API endpoints. Tests run against an H2 in-memory database with PostgreSQL compatibility mode.
 
-**149 tests** covering 3 roles × all endpoints × expected behaviors + Asaas client unit tests + checkout/webhook integration tests.
+**158 tests** covering 3 roles × all endpoints × expected behaviors + Asaas client unit tests + checkout/webhook integration tests + end-to-end payment lifecycle.
+
+## Run
+
+```bash
+make test           # Full suite (lint + tests + coverage) ~65s
+make test-no-lint   # Tests only (faster)
+```
+
+## Results
+
+```
+Tests run: 158, Failures: 0, Errors: 0, Skipped: 0
+Coverage — Instructions: 88%  |  Branches: 65%
+```
 
 ## Architecture
 
@@ -22,16 +36,35 @@ src/test/java/com/hestia/api/
 │       └── GuestAccessTest.java          # Anonymous: public endpoints only
 ├── guest/
 │   └── GuestCheckoutControllerTest.java  # Checkout flow (mocked Asaas client)
+├── domain/payment/
+│   └── TransferControllerTest.java       # Transfer + webhook lifecycle
+├── payment/
+│   └── PaymentLifecycleTest.java         # E2E: guest pays → wallet credited → couple withdraws
 └── infrastructure/asaas/
     ├── AsaasCheckoutClientTest.java      # HTTP client unit tests (MockRestServiceServer)
+    ├── AsaasTransferClientTest.java      # Transfer client unit tests
     └── AsaasWebhookControllerTest.java   # Webhook event handling
 ```
+
+## Test Suites
+
+| Suite | Tests | Description |
+|-------|-------|-------------|
+| Asaas Checkout Client | 5 | HTTP client: sandbox/prod URLs, error handling |
+| Asaas Transfer Client | 2 | Transfer client: success + error handling |
+| Asaas Webhook | 7 | Webhook events: PAID, EXPIRED, CANCELED, idempotency |
+| Payment Lifecycle E2E | 2 | Full flow: checkout → payment → wallet credit → transfer → completion |
+| Guest Checkout | 4 | Public checkout: success, 404s, validation |
+| Transfer Controller | 5 | Transfer: create, insufficient balance, webhook done/failed, idempotency |
+| Admin Access | 33 | Admin RBAC: full CRUD on all resources |
+| Couple Access | 32 | Couple RBAC: own-wedding scope, tenant isolation |
+| Guest (Anonymous) Access | 18 | Public endpoints only, 401 on protected |
 
 ## Test Database
 
 - **Engine**: H2 with `MODE=PostgreSQL`
 - **Schema**: Flyway migrations (`db/h2/migration/`)
-- **Seed data**: `V4__test_data.sql` — 2 weddings, 2 users, sample entities, payment config, order
+- **Seed data**: `V4__test_data.sql` — 2 weddings, users, gifts, orders, wallet (balance=50000)
 - **Isolation**: `@Transactional` rolls back after each test
 
 ### Seed Data IDs
@@ -45,7 +78,7 @@ src/test/java/com/hestia/api/
 | Guest | `dddd0000-...-000000000001` | `dddd0000-...-000000000002` |
 | Gift | `eeee0000-...-000000000001` | `eeee0000-...-000000000002` |
 | Message | `ffff0000-...-000000000001` | `ffff0000-...-000000000002` |
-| Payment Config | `aaaa1111-...-000000000001` | — |
+| Wallet | `11111111-1111-...-111111111111` | — |
 | Order (PENDING) | `bbbb1111-...-000000000001` | — |
 
 ## Mock Security
@@ -57,98 +90,42 @@ Custom annotations replace Spring Security context with a fake `AuthenticatedUse
 @WithMockCouple  // role=COUPLE, weddingId=WEDDING_A
 ```
 
-## Test Suites
+## Key Test Scenarios
 
-### Admin (`AdminAccessTest`)
+### Payment Lifecycle E2E (`PaymentLifecycleTest`)
 
-| Domain | GET all | GET /{id} | POST | PATCH /{id} | DELETE /{id} |
-|--------|---------|-----------|------|-------------|--------------|
-| Wedding | ✅ 200 | ✅ 200 | ✅ 201 | ✅ 200 | ✅ 204 |
-| Account | ✅ 200 | — | ✅ 201 | ✅ 200 | ✅ 204 |
-| Invite | ✅ 200 | ✅ 200 | ✅ 201 | ✅ 200 | ✅ 204 |
-| Guest | ✅ 200 | ✅ 200 | ✅ 201 | ✅ 200 | ✅ 204 |
-| Gift | ✅ 200 | ✅ 200 | ✅ 201 | ✅ 200 | ✅ 204 |
-| Message | ✅ 200 | ✅ 200 | — | ✅ 200 | ✅ 204 |
-| Payment Config | ✅ 200 | ✅ 200 | ✅ 201 | ✅ 200 | — |
-| Order | ✅ 200 | ✅ 200 | — | — | — |
+```
+Guest checkout → Asaas CHECKOUT_PAID webhook → wallet balance credited
+→ Couple sees availableBalance (fee-adjusted) → Couple requests transfer
+→ Asaas TRANSFER_DONE webhook → transaction COMPLETED, balance deducted
+```
 
-### Couple (`CoupleAccessTest`)
+Also tests: transfer failure keeps balance untouched.
 
-| Domain | GET all | GET own | GET other | POST | PATCH own | PATCH other |
-|--------|---------|---------|-----------|------|-----------|-------------|
-| Invite | ✅ 200 | ✅ 200 | ✅ 404 | ✅ 201 | ✅ 200 | ✅ 404 |
-| Guest | ✅ 200 | ✅ 200 | ✅ 404 | ✅ 201 | ✅ 200 | ✅ 404 |
-| Gift | ✅ 200 | ✅ 200 | ✅ 404 | ✅ 201 | ✅ 200 | ✅ 404 |
-| Message | ✅ 200 | ✅ 200 | ✅ 404 | — | ✅ 200 | ✅ 404 |
-| Payment Config | ✅ 200 | ✅ 200 | ✅ 404 | ✅ 409 (dup) | ✅ 200 | ✅ 404 |
-| Order | ✅ 200 | ✅ 200 | ✅ 404 | — | — | — |
-| Wedding (own) | — | ✅ 200 | ✅ 403 | — | ✅ 200 | ✅ 403 |
-| Admin-only | ✅ 403 | — | — | ✅ 403 | — | ✅ 403 |
+### Transfer Controller (`TransferControllerTest`)
 
-### Guest/Anonymous (`GuestAccessTest`)
-
-| Endpoint | Valid slug | Invalid slug |
-|----------|-----------|--------------|
-| `POST /w/{slug}/rsvp/invite/search` | ✅ 200 | ✅ 404 |
-| `GET /w/{slug}/rsvp/guest` | ✅ 200 | ✅ 404 |
-| `PATCH /w/{slug}/rsvp/guest/status/{id}` | ✅ 200 | ✅ 404 |
-| `GET /w/{slug}/gift` | ✅ 200 | ✅ 404 |
-| `GET /w/{slug}/gift/{id}` | ✅ 200 | ✅ 404 |
-| `POST /w/{slug}/message` | ✅ 201 | ✅ 404 |
-| All protected endpoints | ✅ 401 | — |
-
-### Guest Checkout (`GuestCheckoutControllerTest`)
-
-| Test | Expected |
+| Test | Verifies |
 |------|----------|
-| Creates checkout successfully | ✅ 200 + `checkout_url` |
-| Invalid slug | ✅ 404 |
-| Nonexistent gift | ✅ 404 |
-| Missing required fields | ✅ 400 |
-
-### Asaas Checkout Client (`AsaasCheckoutClientTest`)
-
-| Test | Expected |
-|------|----------|
-| Creates checkout (sandbox URL) | ✅ Response with id + link |
-| Uses production URL | ✅ Correct base URL |
-| Unauthorized (401) | ✅ Throws AsaasCheckoutException |
-| Bad request (400) | ✅ Throws AsaasCheckoutException |
-| Server error (500) | ✅ Throws AsaasCheckoutException |
+| Creates transfer | Transaction PENDING, Asaas called |
+| Insufficient balance | 422 returned |
+| TRANSFER_DONE webhook | Transaction → COMPLETED, balance deducted |
+| Idempotent webhook | Duplicate ignored, balance unchanged |
+| TRANSFER_FAILED webhook | Transaction → FAILED, balance untouched |
 
 ### Asaas Webhook (`AsaasWebhookControllerTest`)
 
-| Test | Expected |
-|------|----------|
-| CHECKOUT_PAID | ✅ 200, order → PAID |
-| CHECKOUT_EXPIRED | ✅ 200, order → EXPIRED |
-| CHECKOUT_CANCELED | ✅ 200, order → FAILED |
-| Invalid token | ✅ 404 |
-| Unknown payment ID | ✅ 404 |
-| Duplicate event (idempotent) | ✅ 200, no state change |
-| Unknown event type | ✅ 200, ignored |
-
-## Running Tests
-
-```bash
-# Full suite with formatting, linting, coverage
-make test
-
-# Tests only — skip lint (faster, ~30s vs ~90s)
-make test-no-lint
-
-# Single test class
-mvn test -DskipTests=false -Dcheckstyle.skip=true -Dspotbugs.skip=true -Dspotless.check.skip=true -Dtest="AsaasWebhookControllerTest" -pl .
-```
+| Event | Result |
+|-------|--------|
+| `CHECKOUT_PAID` | Order → PAID, wallet balance credited |
+| `CHECKOUT_EXPIRED` | Order → EXPIRED |
+| `CHECKOUT_CANCELED` | Order → FAILED |
+| Invalid token | 404 |
+| Duplicate event | Idempotent (no state change) |
+| Unknown event | 200, ignored |
 
 ## Coverage
 
-JaCoCo generates coverage reports at `target/site/jacoco/index.html` after `make test`.
-
-```
-  == Coverage ==
-    [COV] Instructions: 89%  |  Branches: 68%
-```
+JaCoCo generates reports at `target/site/jacoco/index.html` after `make test`.
 
 ## Adding New Tests
 
