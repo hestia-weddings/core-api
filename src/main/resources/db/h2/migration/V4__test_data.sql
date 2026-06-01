@@ -50,10 +50,6 @@ VALUES ('ffff0000-0000-0000-0000-000000000001', 'Tia Maria', 'Parabéns pelo cas
 INSERT INTO messages (id, sender, message, wedding_id, created_at, updated_at, is_active)
 VALUES ('ffff0000-0000-0000-0000-000000000002', 'Vovó Ana', 'Felicidades!', '22222222-2222-2222-2222-222222222222', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
--- Payment Config for wedding A
-INSERT INTO payment_configs (id, api_key, environment, webhook_token, wedding_id, created_at, updated_at, is_active)
-VALUES ('aaaa1111-0000-0000-0000-000000000001', '$aact_hmlg_000TestKey123', 'SANDBOX', 'wh_test_token_abc123def456ghi789jkl012mno345pqr678st', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
-
 -- Order for webhook tests (PENDING, linked to gift A, wedding A)
 INSERT INTO orders (id, guest_name, guest_email, amount, status, payment_id, wedding_id, gift_id, created_at, updated_at, is_active)
 VALUES ('bbbb1111-0000-0000-0000-000000000001', 'Test Guest', 'guest@test.com', 25000, 'PENDING', 'cccc1111-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'eeee0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);

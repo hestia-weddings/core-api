@@ -35,7 +35,7 @@ class AdminAccessTest {
     private static final String GIFT_B = "eeee0000-0000-0000-0000-000000000002";
     private static final String MESSAGE_A = "ffff0000-0000-0000-0000-000000000001";
     private static final String USER_COUPLE = "bbbb0000-0000-0000-0000-000000000001";
-    private static final String PAYMENT_CONFIG_A = "aaaa1111-0000-0000-0000-000000000001";
+    private static final String WALLET_A = "11111111-1111-1111-1111-111111111111";
     private static final String ORDER_A = "bbbb1111-0000-0000-0000-000000000001";
 
     // ==========================================
@@ -316,37 +316,37 @@ class AdminAccessTest {
     }
 
     // ==========================================
-    // PAYMENT CONFIG ENDPOINTS (cross-tenant)
+    // WALLET ENDPOINTS (cross-tenant)
     // ==========================================
 
     @Nested
-    @DisplayName("Payment Configs (cross-tenant with wedding param)")
-    class PaymentConfigAdmin {
+    @DisplayName("Wallets (cross-tenant with wedding param)")
+    class WalletAdmin {
 
         @Test
-        void canListPaymentConfigs() throws Exception {
-            mockMvc.perform(get("/payment-config").param("wedding", WEDDING_A)).andExpect(status().isOk());
+        void canListWallets() throws Exception {
+            mockMvc.perform(get("/wallet").param("wedding", WEDDING_A)).andExpect(status().isOk());
         }
 
         @Test
-        void canGetPaymentConfigById() throws Exception {
-            mockMvc.perform(get("/payment-config/{id}", PAYMENT_CONFIG_A)).andExpect(status().isOk());
+        void canGetWalletById() throws Exception {
+            mockMvc.perform(get("/wallet/{id}", WALLET_A)).andExpect(status().isOk());
         }
 
         @Test
-        void canCreatePaymentConfig() throws Exception {
-            mockMvc.perform(post("/payment-config")
+        void canCreateWallet() throws Exception {
+            mockMvc.perform(post("/wallet")
                             .param("wedding", WEDDING_B)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\"}"))
+                            .content("{\"pix_key\": \"new@pix.com\"}"))
                     .andExpect(status().isCreated());
         }
 
         @Test
-        void canPatchPaymentConfig() throws Exception {
-            mockMvc.perform(patch("/payment-config/{id}", PAYMENT_CONFIG_A)
+        void canPatchWallet() throws Exception {
+            mockMvc.perform(patch("/wallet/{id}", WALLET_A)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"environment\": \"PRODUCTION\"}"))
+                            .content("{\"pix_key\": \"updated@pix.com\"}"))
                     .andExpect(status().isOk());
         }
     }

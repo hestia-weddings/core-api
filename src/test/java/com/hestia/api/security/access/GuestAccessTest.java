@@ -324,15 +324,23 @@ class GuestAccessTest {
         }
 
         @Test
-        void cannotListPaymentConfigs() throws Exception {
-            mockMvc.perform(get("/payment-config")).andExpect(status().isUnauthorized());
+        void cannotListWallets() throws Exception {
+            mockMvc.perform(get("/wallet")).andExpect(status().isUnauthorized());
         }
 
         @Test
-        void cannotCreatePaymentConfig() throws Exception {
-            mockMvc.perform(post("/payment-config")
+        void cannotCreateWallet() throws Exception {
+            mockMvc.perform(post("/wallet")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"api_key\": \"$aact_hmlg_x\", \"environment\": \"SANDBOX\"}"))
+                            .content("{\"pix_key\": \"x@pix.com\"}"))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void cannotCreateTransfer() throws Exception {
+            mockMvc.perform(post("/transfers")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"amount\": 1000}"))
                     .andExpect(status().isUnauthorized());
         }
 

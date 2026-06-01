@@ -39,8 +39,8 @@ class CoupleAccessTest {
     private static final String OTHER_MESSAGE = "ffff0000-0000-0000-0000-000000000002";
     private static final String OWN_USER = "bbbb0000-0000-0000-0000-000000000001";
     private static final String ADMIN_USER = "aaaa0000-0000-0000-0000-000000000001";
-    private static final String OWN_PAYMENT_CONFIG = "aaaa1111-0000-0000-0000-000000000001";
-    private static final String OTHER_PAYMENT_CONFIG = "aaaa1111-0000-0000-0000-000000000002";
+    private static final String OWN_WALLET = "11111111-1111-1111-1111-111111111111";
+    private static final String OTHER_WALLET = "99999999-9999-9999-9999-999999999999";
     private static final String OWN_ORDER = "bbbb1111-0000-0000-0000-000000000001";
 
     // ==========================================
@@ -403,49 +403,41 @@ class CoupleAccessTest {
     }
 
     // ==========================================
-    // PAYMENT CONFIG ENDPOINTS (own wedding)
+    // WALLET ENDPOINTS (own wedding)
     // ==========================================
 
     @Nested
-    @DisplayName("Payment Configs (own wedding)")
-    class PaymentConfigOwn {
+    @DisplayName("Wallets (own wedding)")
+    class WalletOwn {
 
         @Test
-        void canListPaymentConfigs() throws Exception {
-            mockMvc.perform(get("/payment-config")).andExpect(status().isOk());
+        void canListWallets() throws Exception {
+            mockMvc.perform(get("/wallet")).andExpect(status().isOk());
         }
 
         @Test
-        void canGetPaymentConfigById() throws Exception {
-            mockMvc.perform(get("/payment-config/{id}", OWN_PAYMENT_CONFIG)).andExpect(status().isOk());
+        void canGetWalletById() throws Exception {
+            mockMvc.perform(get("/wallet/{id}", OWN_WALLET)).andExpect(status().isOk());
         }
 
         @Test
-        void cannotGetOtherWeddingPaymentConfig() throws Exception {
-            mockMvc.perform(get("/payment-config/{id}", OTHER_PAYMENT_CONFIG)).andExpect(status().isNotFound());
+        void cannotGetOtherWeddingWallet() throws Exception {
+            mockMvc.perform(get("/wallet/{id}", OTHER_WALLET)).andExpect(status().isNotFound());
         }
 
         @Test
-        void cannotCreateDuplicatePaymentConfig() throws Exception {
-            mockMvc.perform(post("/payment-config")
+        void canPatchWallet() throws Exception {
+            mockMvc.perform(patch("/wallet/{id}", OWN_WALLET)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"api_key\": \"$aact_hmlg_newkey\", \"environment\": \"SANDBOX\"}"))
-                    .andExpect(status().isConflict());
-        }
-
-        @Test
-        void canPatchPaymentConfig() throws Exception {
-            mockMvc.perform(patch("/payment-config/{id}", OWN_PAYMENT_CONFIG)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"environment\": \"PRODUCTION\"}"))
+                            .content("{\"pix_key\": \"updated@pix.com\"}"))
                     .andExpect(status().isOk());
         }
 
         @Test
-        void cannotPatchOtherWeddingPaymentConfig() throws Exception {
-            mockMvc.perform(patch("/payment-config/{id}", OTHER_PAYMENT_CONFIG)
+        void cannotPatchOtherWeddingWallet() throws Exception {
+            mockMvc.perform(patch("/wallet/{id}", OTHER_WALLET)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"environment\": \"PRODUCTION\"}"))
+                            .content("{\"pix_key\": \"x@pix.com\"}"))
                     .andExpect(status().isNotFound());
         }
     }
