@@ -57,3 +57,10 @@ VALUES ('aaaa1111-0000-0000-0000-000000000001', '$aact_hmlg_000TestKey123', 'SAN
 -- Order for webhook tests (PENDING, linked to gift A, wedding A)
 INSERT INTO orders (id, guest_name, guest_email, amount, status, payment_id, wedding_id, gift_id, created_at, updated_at, is_active)
 VALUES ('bbbb1111-0000-0000-0000-000000000001', 'Test Guest', 'guest@test.com', 25000, 'PENDING', 'cccc1111-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'eeee0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
+-- Wallet for wedding A (balance crediting in webhook tests)
+INSERT INTO wallets (id, pix_key, balance, fee, is_active, created_at, updated_at, wedding_id)
+VALUES ('11111111-1111-1111-1111-111111111111', 'test@pix.com', 0, 500, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '11111111-1111-1111-1111-111111111111');
+
+-- Set wallet balance to 50000 (500 BRL) so transfer tests have funds
+UPDATE wallets SET balance = 50000 WHERE id = '11111111-1111-1111-1111-111111111111';

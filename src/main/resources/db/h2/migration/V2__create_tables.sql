@@ -95,15 +95,30 @@ CREATE TABLE orders (
     CONSTRAINT chk_order_status CHECK (status IN ('PENDING', 'PAID', 'FAILED', 'EXPIRED'))
 );
 
-CREATE TABLE payment_configs (
-    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
-    api_key VARCHAR NOT NULL,
-    environment payment_env_enum NOT NULL DEFAULT 'SANDBOX',
-    webhook_token VARCHAR(64) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    is_active BOOLEAN NOT NULL DEFAULT TRUE,
-    wedding_id UUID NOT NULL UNIQUE,
-    CONSTRAINT fk_payment_config_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
-    CONSTRAINT chk_payment_env CHECK (environment IN ('PRODUCTION', 'SANDBOX'))
+CREATE TABLE wallets (
+     id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+     pix_key VARCHAR(255),
+     balance INTEGER NOT NULL DEFAULT 0,
+     fee INTEGER NOT NULL DEFAULT 500,
+     is_active BOOLEAN NOT NULL DEFAULT TRUE,
+     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     wedding_id UUID NOT NULL UNIQUE,
+     CONSTRAINT fk_wallet_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE
+);
+
+CREATE TABLE transactions (
+      id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+      amount INTEGER NOT NULL,
+      fee INTEGER NOT NULL,
+      status transaction_status_enum NOT NULL DEFAULT 'PENDING',
+      asaas_transfer_id VARCHAR(255),
+      is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      wallet_id UUID NOT NULL,
+      wedding_id UUID NOT NULL,
+      CONSTRAINT fk_transaction_wallet FOREIGN KEY (wallet_id) REFERENCES wallets(id) ON DELETE CASCADE,
+      CONSTRAINT fk_transaction_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
+      CONSTRAINT chk_transaction_status CHECK (status IN ('PENDING', 'PAID', 'FAILED', 'EXPIRED'))
 );
