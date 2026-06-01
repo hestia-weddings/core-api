@@ -9,9 +9,8 @@ CREATE TYPE order_status_enum AS ENUM (
 -- Enum for transaction status
 CREATE TYPE transaction_status_enum AS ENUM (
     'PENDING',
-    'PAID',
-    'FAILED',
-    'EXPIRED'
+    'COMPLETED',
+    'FAILED'
 );
 
 -- Orders table creation

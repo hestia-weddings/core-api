@@ -120,5 +120,5 @@ CREATE TABLE transactions (
       wedding_id UUID NOT NULL,
       CONSTRAINT fk_transaction_wallet FOREIGN KEY (wallet_id) REFERENCES wallets(id) ON DELETE CASCADE,
       CONSTRAINT fk_transaction_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
-      CONSTRAINT chk_transaction_status CHECK (status IN ('PENDING', 'PAID', 'FAILED', 'EXPIRED'))
+      CONSTRAINT chk_transaction_status CHECK (status IN ('PENDING', 'COMPLETED', 'FAILED'))
 );
