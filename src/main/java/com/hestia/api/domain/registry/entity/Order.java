@@ -32,7 +32,7 @@ public class Order extends BaseTenantModel {
     private Integer amount;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(nullable = false)
     private OrderStatus status;
 

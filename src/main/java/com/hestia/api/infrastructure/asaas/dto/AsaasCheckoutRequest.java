@@ -68,7 +68,7 @@ public class AsaasCheckoutRequest {
         @com.fasterxml.jackson.annotation.JsonProperty("cpfCnpj")
         private String cpfCnpj;
 
-        @com.fasterxml.jackson.annotation.JsonProperty("phoneNumber")
+        @com.fasterxml.jackson.annotation.JsonProperty("phone")
         private String phoneNumber;
 
         private String address;
