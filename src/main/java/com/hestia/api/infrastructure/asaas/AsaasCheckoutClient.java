@@ -1,10 +1,11 @@
 package com.hestia.api.infrastructure.asaas;
 
-import com.hestia.api.domain.payment.enums.PaymentEnvironment;
 import com.hestia.api.infrastructure.asaas.dto.AsaasCheckoutRequest;
 import com.hestia.api.infrastructure.asaas.dto.AsaasCheckoutResponse;
+import com.hestia.api.infrastructure.asaas.enums.AsaasEnvironment;
 import com.hestia.api.infrastructure.asaas.exception.AsaasCheckoutException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -13,14 +14,20 @@ import org.springframework.web.client.RestClient;
 public class AsaasCheckoutClient {
 
     private final RestClient restClient;
+    private final String apiKey;
+    private final AsaasEnvironment environment;
 
-    public AsaasCheckoutClient(RestClient.Builder restClientBuilder) {
+    public AsaasCheckoutClient(
+            RestClient.Builder restClientBuilder,
+            @Value("${asaas.api-key}") String apiKey,
+            @Value("${asaas.environment}") AsaasEnvironment environment) {
         this.restClient = restClientBuilder.build();
+        this.apiKey = apiKey;
+        this.environment = environment;
     }
 
-    public AsaasCheckoutResponse createCheckout(
-            String apiKey, PaymentEnvironment environment, AsaasCheckoutRequest request) {
-        String baseUrl = environment == PaymentEnvironment.PRODUCTION
+    public AsaasCheckoutResponse createCheckout(AsaasCheckoutRequest request) {
+        String baseUrl = environment == AsaasEnvironment.PRODUCTION
                 ? "https://api.asaas.com/v3"
                 : "https://api-sandbox.asaas.com/v3";
 

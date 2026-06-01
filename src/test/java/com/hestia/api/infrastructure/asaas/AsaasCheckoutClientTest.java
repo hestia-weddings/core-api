@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
-import com.hestia.api.domain.payment.enums.PaymentEnvironment;
 import com.hestia.api.infrastructure.asaas.dto.AsaasCheckoutRequest;
 import com.hestia.api.infrastructure.asaas.dto.AsaasCheckoutResponse;
+import com.hestia.api.infrastructure.asaas.enums.AsaasEnvironment;
 import com.hestia.api.infrastructure.asaas.exception.AsaasCheckoutException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ class AsaasCheckoutClientTest {
     void setUp() {
         RestClient.Builder builder = RestClient.builder();
         mockServer = MockRestServiceServer.bindTo(builder).build();
-        client = new AsaasCheckoutClient(builder);
+        client = new AsaasCheckoutClient(builder, "test-key", AsaasEnvironment.SANDBOX);
     }
 
     private AsaasCheckoutRequest buildRequest() {
@@ -71,7 +71,7 @@ class AsaasCheckoutClientTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andRespond(withSuccess(responseJson, MediaType.APPLICATION_JSON));
 
-        AsaasCheckoutResponse response = client.createCheckout("test-key", PaymentEnvironment.SANDBOX, buildRequest());
+        AsaasCheckoutResponse response = client.createCheckout(buildRequest());
 
         assertNotNull(response);
         assertEquals("abc-123", response.getId());
@@ -82,22 +82,25 @@ class AsaasCheckoutClientTest {
 
     @Test
     void usesProductionUrlWhenEnvironmentIsProduction() {
+        RestClient.Builder builder = RestClient.builder();
+        MockRestServiceServer prodMockServer = MockRestServiceServer.bindTo(builder).build();
+        AsaasCheckoutClient prodClient = new AsaasCheckoutClient(builder, "prod-key", AsaasEnvironment.PRODUCTION);
+
         String responseJson =
                 """
                 {"id": "prod-456", "link": "https://asaas.com/checkoutSession/show/prod-456", "status": "ACTIVE"}
                 """;
 
-        mockServer
+        prodMockServer
                 .expect(requestTo("https://api.asaas.com/v3/checkouts"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("access_token", "prod-key"))
                 .andRespond(withSuccess(responseJson, MediaType.APPLICATION_JSON));
 
-        AsaasCheckoutResponse response =
-                client.createCheckout("prod-key", PaymentEnvironment.PRODUCTION, buildRequest());
+        AsaasCheckoutResponse response = prodClient.createCheckout(buildRequest());
 
         assertEquals("prod-456", response.getId());
-        mockServer.verify();
+        prodMockServer.verify();
     }
 
     @Test
@@ -106,9 +109,7 @@ class AsaasCheckoutClientTest {
                 .expect(requestTo("https://api-sandbox.asaas.com/v3/checkouts"))
                 .andRespond(withUnauthorizedRequest());
 
-        assertThrows(
-                AsaasCheckoutException.class,
-                () -> client.createCheckout("invalid-key", PaymentEnvironment.SANDBOX, buildRequest()));
+        assertThrows(AsaasCheckoutException.class, () -> client.createCheckout(buildRequest()));
         mockServer.verify();
     }
 
@@ -118,9 +119,7 @@ class AsaasCheckoutClientTest {
                 .expect(requestTo("https://api-sandbox.asaas.com/v3/checkouts"))
                 .andRespond(withBadRequest());
 
-        assertThrows(
-                AsaasCheckoutException.class,
-                () -> client.createCheckout("test-key", PaymentEnvironment.SANDBOX, buildRequest()));
+        assertThrows(AsaasCheckoutException.class, () -> client.createCheckout(buildRequest()));
         mockServer.verify();
     }
 
@@ -130,9 +129,7 @@ class AsaasCheckoutClientTest {
                 .expect(requestTo("https://api-sandbox.asaas.com/v3/checkouts"))
                 .andRespond(withServerError());
 
-        assertThrows(
-                AsaasCheckoutException.class,
-                () -> client.createCheckout("test-key", PaymentEnvironment.SANDBOX, buildRequest()));
+        assertThrows(AsaasCheckoutException.class, () -> client.createCheckout(buildRequest()));
         mockServer.verify();
     }
 }

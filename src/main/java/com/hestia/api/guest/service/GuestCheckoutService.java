@@ -30,7 +30,6 @@ public class GuestCheckoutService {
     private final GiftAvailabilityRepository giftAvailabilityRepository;
     private final GiftRepository giftRepository;
     private final OrderRepository orderRepository;
-    private final PaymentConfigRepository paymentConfigRepository;
     private final WeddingRepository weddingRepository;
     private final AsaasCheckoutClient asaasCheckoutClient;
 
@@ -43,17 +42,12 @@ public class GuestCheckoutService {
 
         if (!gift.getAvailability()) throw new IllegalArgumentException("Gift is out of stock");
 
-        // 2. Load PaymentConfig
-        PaymentConfig paymentConfig = paymentConfigRepository
-                .findFirstByWeddingIdAndIsActiveTrue(weddingId)
-                .orElseThrow(() -> new ResourceNotFoundException("Payment config not found for this wedding"));
-
-        // 3. Load Wedding (for FK on Order)
+        // 2. Load Wedding (for FK on Order)
         Wedding wedding = weddingRepository
                 .findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
 
-        // 4. Create Order (PENDING) — paymentId is temporary, will be updated
+        // 3. Create Order (PENDING) — paymentId is temporary, will be updated
         Order baseOrder = Order.builder()
                 .guestName(request.getGuestName())
                 .guestEmail(request.getGuestEmail())
@@ -65,7 +59,7 @@ public class GuestCheckoutService {
                 .build();
         Order order = orderRepository.save(baseOrder);
 
-        // 5. Call Asaas Checkout
+        // 4. Call Asaas Checkout
         AsaasCheckoutRequest asaasRequest = AsaasCheckoutRequest.builder()
                 .billingTypes(List.of("PIX", "CREDIT_CARD"))
                 .chargeTypes(List.of("DETACHED"))
@@ -91,14 +85,13 @@ public class GuestCheckoutService {
                         .build())
                 .build();
 
-        AsaasCheckoutResponse asaasResponse = asaasCheckoutClient.createCheckout(
-                paymentConfig.getApiKey(), paymentConfig.getEnvironment(), asaasRequest);
+        AsaasCheckoutResponse asaasResponse = asaasCheckoutClient.createCheckout(asaasRequest);
 
-        // 6. Save payment_id (Asaas checkout ID) on Order
+        // 5. Save payment_id (Asaas checkout ID) on Order
         order.setPaymentId(UUID.fromString(asaasResponse.getId()));
         orderRepository.save(order);
 
-        // 7. Return checkout URL
+        // 6. Return checkout URL
         return new CheckoutResponse(asaasResponse.getLink());
     }
 }

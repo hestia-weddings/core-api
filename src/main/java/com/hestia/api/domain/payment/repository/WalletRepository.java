@@ -18,4 +18,6 @@ public interface WalletRepository extends JpaRepository<Wallet, UUID> {
     Optional<Wallet> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
 
     boolean existsByWeddingIdAndIsActiveTrue(UUID weddingId);
+
+    Optional<Wallet> findFirstByWeddingIdAndIsActiveTrue(UUID weddingId);
 }

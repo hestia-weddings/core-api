@@ -44,7 +44,7 @@ class GuestCheckoutControllerTest {
         response.setId("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");
         response.setLink("https://sandbox.asaas.com/checkoutSession/show/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");
         response.setStatus("ACTIVE");
-        when(asaasCheckoutClient.createCheckout(any(), any(), any())).thenReturn(response);
+        when(asaasCheckoutClient.createCheckout(any())).thenReturn(response);
     }
 
     @Test
