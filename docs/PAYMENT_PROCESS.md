@@ -6,6 +6,7 @@ Step-by-step guide to test the complete payment flow locally (sandbox).
 
 - App running (`make run`)
 - Asaas sandbox account with API key (`$aact_hmlg_*`)
+- A couple JWT token (authenticate via Supabase, user must have COUPLE role)
 - `.env.dev` configured:
   ```properties
   ASAAS_API_KEY=$aact_hmlg_000YourKeyHere
@@ -42,7 +43,7 @@ POST /api/v2/wallet
 Authorization: Bearer {couple-token}
 
 {
-  "pixKey": "couple@email.com"
+  "pix_key": "couple@email.com"
 }
 ```
 
@@ -50,9 +51,9 @@ Response:
 ```json
 {
   "id": "uuid",
-  "pixKey": "couple@email.com",
-  "availableBalance": 0,
-  "createdAt": "..."
+  "pix_key": "couple@email.com",
+  "available_balance": 0,
+  "created_at": "..."
 }
 ```
 
@@ -99,7 +100,8 @@ POST /webhook/asaas/{your-webhook-token}
 }
 ```
 
-> The `checkout.id` must match the Asaas payment ID returned during checkout creation.
+> The `checkout.id` must match the Asaas payment ID stored in the Order's `payment_id` field.
+> You can find it by querying `GET /api/v2/order` after creating the checkout.
 
 **What happens:**
 - Order status → `PAID`
@@ -118,13 +120,13 @@ Response:
 ```json
 {
   "id": "uuid",
-  "pixKey": "couple@email.com",
-  "availableBalance": 9523,
-  "createdAt": "..."
+  "pix_key": "couple@email.com",
+  "available_balance": 9523,
+  "created_at": "..."
 }
 ```
 
-> `availableBalance` is the max the couple can withdraw (gross balance minus fee reservation).
+> `available_balance` is the max the couple can withdraw (gross balance minus fee reservation).
 > The couple never sees the fee — only the available amount.
 
 ---
@@ -140,7 +142,7 @@ Authorization: Bearer {couple-token}
 }
 ```
 
-`amount` = what the couple wants to **receive** (in cents).
+`amount` = what the couple wants to **receive** (in cents). Must be ≤ `available_balance`, otherwise returns `422`.
 
 Response:
 ```json
@@ -148,7 +150,7 @@ Response:
   "id": "uuid",
   "amount": 9523,
   "status": "PENDING",
-  "createdAt": "..."
+  "created_at": "..."
 }
 ```
 
@@ -242,8 +244,10 @@ In the Asaas dashboard: **Integrations → Webhooks → New Webhook**
 | `POST /w/{slug}/gift/{id}/checkout` | None | Guest starts payment |
 | `POST /webhook/asaas/{token}` | None (token in path) | Asaas webhook |
 | `GET /api/v2/wallet` | Couple/Admin | List wallets |
-| `GET /api/v2/wallet/{id}` | Couple/Admin | Get wallet (shows availableBalance) |
+| `GET /api/v2/wallet/{id}` | Couple/Admin | Get wallet (shows available_balance) |
 | `POST /api/v2/wallet` | Couple/Admin | Create wallet |
 | `PATCH /api/v2/wallet/{id}` | Couple/Admin | Update PIX key |
 | `POST /api/v2/transfers` | Couple | Request withdrawal |
 | `GET /api/v2/order` | Couple/Admin | List orders |
+
+> Admin endpoints require `?wedding={uuid}` query param. Couple endpoints resolve the wedding automatically from the JWT.

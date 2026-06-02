@@ -115,25 +115,33 @@ This project follows an **8-step incremental development approach**. Each step r
 **Status**: Completed
 
 ### Deliverables
-- ✅ Payment gateway integration (Asaas Checkout)
-- ✅ Payment configuration per wedding (`payment_configs` table)
-- ✅ Order/Transaction entity with status tracking (PENDING → PAID/EXPIRED/FAILED)
+- ✅ Payment gateway integration (Asaas Checkout + Transfer API)
+- ✅ Centralized Héstia Asaas account (single API key from env config)
+- ✅ Wallet entity per wedding (PIX key, balance in cents, fee in basis points)
+- ✅ Order entity with status tracking (PENDING → PAID/EXPIRED/FAILED)
+- ✅ Transaction entity for withdrawals (PENDING → COMPLETED/FAILED)
 - ✅ Guest checkout endpoint (`POST /w/{slug}/gift/{giftId}/checkout`)
-- ✅ Webhook handling for payment events (`CHECKOUT_PAID`, `CHECKOUT_EXPIRED`, `CHECKOUT_CANCELED`)
-- ✅ Order query endpoints (Couple + Admin, read-only)
-- ✅ Duplicate payment config prevention (one per wedding)
-- ✅ Auto-generated webhook token for security
-- ✅ Integration tests (149 total, 89% instruction coverage)
+- ✅ Webhook handling for payment + transfer events
+- ✅ Wallet balance crediting on `CHECKOUT_PAID`
+- ✅ Transfer endpoint for couple PIX withdrawal
+- ✅ Fee deduction at withdrawal time (configurable %, default 5%)
+- ✅ Available balance prevents over-withdrawal
+- ✅ Idempotent webhook processing
+- ✅ Integration tests (158 total, 88% instruction coverage)
 
 ### Technical Approach
-- **Provider**: Asaas Checkout (PCI-DSS hosted page, PIX + Credit Card)
-- **Credential model**: Each couple configures their own Asaas API key (tax/legal isolation)
-- **Checkout flow**: Backend creates Asaas Checkout session → guest redirected → webhook confirms payment
+- **Provider**: Asaas Checkout + Transfer API (PCI-DSS hosted page, PIX + Credit Card)
+- **Credential model**: Single centralized Héstia Asaas API key (from `application.properties` / env var)
+- **Wallet**: One per wedding — stores PIX key, accumulated balance (cents), fee (basis points)
+- **Checkout flow**: Backend creates Asaas Checkout → guest pays → webhook credits wallet balance
+- **Transfer flow**: Couple requests withdrawal → backend calls Asaas Transfer API → webhook confirms
+- **Fee model**: Fee invisible to couple; deducted at withdrawal time from gross balance
+- **Available balance**: `wallet.balance - SUM(pending transactions)` — prevents over-withdrawal
 - **Stock management**: Automatic via `gift_availability` DB view (counts PAID orders)
-- **Webhook validation**: Secret token in URL path (auto-generated per wedding)
-- **Idempotency**: Duplicate webhook events ignored (only PENDING orders are processed)
-- **HTTP client**: Spring `RestClient` with error wrapping (`AsaasCheckoutException` → 502)
-- **Testing**: `@MockitoBean` on `AsaasCheckoutClient` for integration tests, `MockRestServiceServer` for client unit tests
+- **Webhook validation**: Global webhook token from config (single token for all weddings)
+- **Idempotency**: Status transitions (PENDING→PAID, PENDING→COMPLETED) happen exactly once
+- **HTTP client**: Spring `RestClient` with error wrapping (`AsaasCheckoutException` / `AsaasTransferException` → 502)
+- **Testing**: `@MockitoBean` on Asaas clients for integration tests, `MockRestServiceServer` for client unit tests
 
 ---
 
