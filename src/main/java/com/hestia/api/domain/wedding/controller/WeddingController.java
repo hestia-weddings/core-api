@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/wedding")
-@Tag(name = "Weddings", description = "CRUD operations for weddings management")
+@Tag(name = "Weddings")
 @RequiredArgsConstructor
 public class WeddingController {
 

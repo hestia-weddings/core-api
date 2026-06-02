@@ -6,10 +6,12 @@ import com.hestia.api.infrastructure.asaas.service.AsaasWebhookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/webhook/asaas")
+@Tag(name = "Webhooks")
 @RequiredArgsConstructor
 public class AsaasWebhookController {
 

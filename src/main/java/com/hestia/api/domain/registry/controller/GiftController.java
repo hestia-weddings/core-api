@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/gift")
-@Tag(name = "Registry", description = "CRUD operations for registries management")
+@Tag(name = "Registry")
 @RequiredArgsConstructor
 public class GiftController {
 

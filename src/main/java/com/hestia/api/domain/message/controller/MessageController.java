@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/message")
-@Tag(name = "Messages", description = "CRUD operations for messages management")
+@Tag(name = "Messages")
 @RequiredArgsConstructor
 public class MessageController {
 

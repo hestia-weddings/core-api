@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/rsvp/guest")
-@Tag(name = "RSVP", description = "CRUD operations for rsvp module managements")
+@Tag(name = "RSVP")
 @RequiredArgsConstructor
 public class GuestController {
 

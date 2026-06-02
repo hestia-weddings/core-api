@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/order")
-@Tag(name = "Registry", description = "CRUD operations for registries management")
+@Tag(name = "Registry")
 @RequiredArgsConstructor
 public class OrderController {
 
