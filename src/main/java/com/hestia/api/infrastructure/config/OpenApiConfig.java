@@ -17,8 +17,8 @@ import io.swagger.v3.oas.models.tags.Tag;
 @Configuration
 public class OpenApiConfig {
 
-    private static final List<String> TAG_ORDER = List.of(
-            "Weddings", "Accounts", "RSVP", "Registry", "Messages", "Guest", "Wallets", "Transfers", "Webhooks");
+    private static final List<String> TAG_ORDER =
+            List.of("Weddings", "Accounts", "RSVP", "Registry", "Messages", "Payments", "Webhooks");
 
     @Bean
     public OpenAPI openAPI() {
@@ -29,17 +29,14 @@ public class OpenApiConfig {
                         .version("2.0.0"))
                 .tags(List.of(
                         // Auth modules
-                        new Tag().name("Weddings").description("Authorization module management"),
-                        new Tag().name("Accounts").description("Authorization module management"),
+                        new Tag().name("Weddings").description("Authorization modules management"),
+                        new Tag().name("Accounts").description("Authorization modules management"),
                         // Domain modules
                         new Tag().name("RSVP").description("Domain modules management"),
                         new Tag().name("Registry").description("Domain modules management"),
                         new Tag().name("Messages").description("Domain modules management"),
-                        // Guests
-                        new Tag().name("Guest").description("Public guest-facing endpoints"),
                         // Payment modules
-                        new Tag().name("Wallets").description("Payment modules management"),
-                        new Tag().name("Transfers").description("Payment modules management"),
+                        new Tag().name("Payments").description("Payment modules management"),
                         // Webhook handlers
                         new Tag().name("Webhooks").description("Webhook calls handler")))
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Token"))

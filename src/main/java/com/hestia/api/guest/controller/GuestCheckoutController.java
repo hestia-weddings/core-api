@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/w/{slug}/gift/{giftId}/checkout")
-@Tag(name = "Guest")
+@Tag(name = "Payments")
 @RequiredArgsConstructor
 public class GuestCheckoutController {
 

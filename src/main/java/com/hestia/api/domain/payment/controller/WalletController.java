@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("wallet")
-@Tag(name = "Wallets")
+@Tag(name = "Payments")
 @RequiredArgsConstructor
 public class WalletController {
 

@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/w/{slug}/gift")
-@Tag(name = "Guest", description = "Public guest-facing endpoints")
+@Tag(name = "Registry")
 @RequiredArgsConstructor
 public class GuestGiftController {
 

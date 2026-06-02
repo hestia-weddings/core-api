@@ -17,8 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/transfers")
-@Tag(name = "Transfers")
+@RequestMapping("transfer")
+@Tag(name = "Payments")
 @RequiredArgsConstructor
 public class TransferController {
 

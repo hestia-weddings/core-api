@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/w/{slug}/rsvp")
-@Tag(name = "Guest")
+@Tag(name = "RSVP")
 @RequiredArgsConstructor
 public class GuestRsvpController {
 
