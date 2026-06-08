@@ -5,8 +5,13 @@ import com.hestia.api.domain.registry.entity.Order;
 
 import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class OrderMapper {
+
+    private final GiftMapper giftMapper;
 
     public OrderResponse toResponse(Order order) {
         return OrderResponse.builder()
@@ -16,7 +21,7 @@ public class OrderMapper {
                 .amount(order.getAmount())
                 .status(order.getStatus())
                 .paymentId(order.getPaymentId())
-                .giftId(order.getGift().getId())
+                .gift(giftMapper.toResponse(order.getGift()))
                 .createdAt(order.getCreatedAt())
                 .build();
     }

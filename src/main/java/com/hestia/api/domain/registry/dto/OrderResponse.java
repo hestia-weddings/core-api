@@ -15,5 +15,5 @@ public record OrderResponse(
         Integer amount,
         OrderStatus status,
         UUID paymentId,
-        UUID giftId,
+        GiftResponse gift,
         LocalDateTime createdAt) {}
