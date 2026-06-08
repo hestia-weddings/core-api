@@ -949,6 +949,34 @@
             "url": "{{base-url}}/w/{{slug}}/rsvp/guest/status/{{guest-id}}"
           },
           "response": []
+        },
+        {
+          "name": "Get Invite Message",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base-url}}/w/{{slug}}/wedding/invite"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Gift Message",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base-url}}/w/{{slug}}/wedding/gift"
+          },
+          "response": []
         }
       ]
     },
