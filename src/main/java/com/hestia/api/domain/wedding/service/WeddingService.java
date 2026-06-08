@@ -9,6 +9,8 @@ import com.hestia.api.domain.wedding.dto.WeddingResponse;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.mapper.WeddingMapper;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
+import com.hestia.api.guest.dto.GiftMessageResponse;
+import com.hestia.api.guest.dto.InviteMessageResponse;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,5 +78,23 @@ public class WeddingService {
         Wedding wedding = getWedding(id);
         wedding.setIsActive(false);
         weddingRepository.save(wedding);
+    }
+
+    @Transactional(readOnly = true)
+    public InviteMessageResponse getInviteMessage(UUID weddingId) {
+        Wedding wedding = weddingRepository
+                .findByIdAndIsActiveTrue(weddingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
+
+        return new InviteMessageResponse(wedding.getInviteMessage());
+    }
+
+    @Transactional(readOnly = true)
+    public GiftMessageResponse getGiftMessage(UUID weddingId) {
+        Wedding wedding = weddingRepository
+                .findByIdAndIsActiveTrue(weddingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
+
+        return new GiftMessageResponse(wedding.getGiftMessage());
     }
 }
