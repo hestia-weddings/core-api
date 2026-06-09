@@ -7,12 +7,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface GuestRepository extends JpaRepository<Guest, UUID> {
 
     Page<Guest> findByWeddingIdAndIsActiveTrue(UUID weddingId, Pageable pageable);
+
+    List<Guest> findByWeddingIdAndIsActiveTrue(UUID weddingId);
+
+    List<Guest> findByIsActiveTrue();
 
     Page<Guest> findByWeddingIdAndStatusAndIsActiveTrue(UUID weddingId, GuestStatus status, Pageable pageable);
 

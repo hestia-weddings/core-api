@@ -1,0 +1,20 @@
+meta {
+  name: generate metrics
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base-url}}/rsvp/metrics
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token-admin}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
