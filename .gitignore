@@ -37,6 +37,6 @@ build/
 !.env.example
 /bruno/collection.bru
 
-### GSD ###
+### Kiro ###
+.kiro/
 .gsd/
-/.kiro/
