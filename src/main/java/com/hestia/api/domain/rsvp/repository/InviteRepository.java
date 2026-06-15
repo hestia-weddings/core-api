@@ -1,7 +1,6 @@
 package com.hestia.api.domain.rsvp.repository;
 
 import com.hestia.api.domain.rsvp.entity.Invite;
-import com.hestia.api.domain.rsvp.enums.GuestStatus;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +15,16 @@ public interface InviteRepository extends JpaRepository<Invite, UUID> {
 
     Page<Invite> findByWeddingIdAndIsActiveTrue(UUID weddingId, Pageable pageable);
 
-    @Query("SELECT DISTINCT i FROM Invite i JOIN i.guests g WHERE i.wedding.id = :weddingId"
-            + " AND i.isActive = true AND g.isActive = true AND g.status = :status")
+    @Query(
+            value = "SELECT DISTINCT i.* FROM invites i JOIN guests g ON i.id = g.invite_id"
+                    + " WHERE i.wedding_id = :weddingId AND i.is_active = true"
+                    + " AND g.is_active = true AND g.status = CAST(:status AS guest_status_enum)",
+            countQuery = "SELECT COUNT(DISTINCT i.id) FROM invites i JOIN guests g ON i.id = g.invite_id"
+                    + " WHERE i.wedding_id = :weddingId AND i.is_active = true"
+                    + " AND g.is_active = true AND g.status = CAST(:status AS guest_status_enum)",
+            nativeQuery = true)
     Page<Invite> findByWeddingIdAndGuestStatus(
-            @Param("weddingId") UUID weddingId, @Param("status") GuestStatus status, Pageable pageable);
+            @Param("weddingId") UUID weddingId, @Param("status") String status, Pageable pageable);
 
     Optional<Invite> findByIdAndIsActiveTrue(UUID id);
 

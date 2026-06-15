@@ -27,28 +27,35 @@ class InviteStatusFilterTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("GET /rsvp/invite?status=CONFIRMED returns only confirmed invites")
+    @DisplayName("GET /rsvp/invite?status=CONFIRMED returns only confirmed guests in response")
     void filterByConfirmed() throws Exception {
         mockMvc.perform(get("/rsvp/invite").param("status", "CONFIRMED"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.meta.total_elements").value(1))
-                .andExpect(jsonPath("$.data[0].name").value("Familia Silva"));
+                .andExpect(jsonPath("$.data[0].name").value("Familia Silva"))
+                .andExpect(jsonPath("$.data[0].guests.length()").value(1))
+                .andExpect(jsonPath("$.data[0].guests[0].name").value("João Silva"));
     }
 
     @Test
-    @DisplayName("GET /rsvp/invite?status=PENDING returns only pending invites")
+    @DisplayName("GET /rsvp/invite?status=PENDING returns only pending guests in response")
     void filterByPending() throws Exception {
         mockMvc.perform(get("/rsvp/invite").param("status", "PENDING"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.meta.total_elements").value(1))
-                .andExpect(jsonPath("$.data[0].name").value("Familia Oliveira"));
+                .andExpect(jsonPath("$.meta.total_elements").value(2))
+                .andExpect(jsonPath("$.data[?(@.name=='Familia Silva')].guests[0].name")
+                        .value("Ana Silva"))
+                .andExpect(jsonPath("$.data[?(@.name=='Familia Oliveira')].guests[0].name")
+                        .value("Carlos Oliveira"));
     }
 
     @Test
-    @DisplayName("GET /rsvp/invite without filter returns all invites")
+    @DisplayName("GET /rsvp/invite without filter returns all invites with all guests")
     void noFilter() throws Exception {
         mockMvc.perform(get("/rsvp/invite"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.meta.total_elements").value(2));
+                .andExpect(jsonPath("$.meta.total_elements").value(2))
+                .andExpect(jsonPath("$.data[?(@.name=='Familia Silva')].guests.length()")
+                        .value(2));
     }
 }

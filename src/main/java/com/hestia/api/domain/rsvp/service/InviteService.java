@@ -42,10 +42,13 @@ public class InviteService {
         Page<Invite> page;
 
         if (weddingId != null && status != null)
-            page = inviteRepository.findByWeddingIdAndGuestStatus(weddingId, status, pageable);
+            page = inviteRepository.findByWeddingIdAndGuestStatus(weddingId, status.name(), pageable);
         else if (weddingId != null) page = inviteRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
         else page = inviteRepository.findAll(pageable);
 
+        if (status != null) {
+            return PageMapper.toResponse(page.map(invite -> inviteMapper.toResponse(invite, status)));
+        }
         return PageMapper.toResponse(page.map(inviteMapper::toResponse));
     }
 

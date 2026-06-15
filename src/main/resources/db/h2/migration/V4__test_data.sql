@@ -34,6 +34,9 @@ INSERT INTO guests (id, name, age_group, status, wedding_id, invite_id, created_
 VALUES ('dddd0000-0000-0000-0000-000000000001', 'João Silva', 'ADULT', 'CONFIRMED', '11111111-1111-1111-1111-111111111111', 'cccc0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 INSERT INTO guests (id, name, age_group, status, wedding_id, invite_id, created_at, updated_at, is_active)
+VALUES ('dddd0000-0000-0000-0000-000000000004', 'Ana Silva', 'ADULT', 'PENDING', '11111111-1111-1111-1111-111111111111', 'cccc0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
+INSERT INTO guests (id, name, age_group, status, wedding_id, invite_id, created_at, updated_at, is_active)
 VALUES ('dddd0000-0000-0000-0000-000000000003', 'Carlos Oliveira', 'ADULT', 'PENDING', '11111111-1111-1111-1111-111111111111', 'cccc0000-0000-0000-0000-000000000003', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Guests for wedding B

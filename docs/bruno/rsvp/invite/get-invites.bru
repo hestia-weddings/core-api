@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: {{base-url}}/rsvp/invite?page=0&size=10
+  url: {{base-url}}/rsvp/invite?page=0&size=10&status=DECLINED
   body: none
   auth: bearer
 }
@@ -13,9 +13,10 @@ get {
 params:query {
   page: 0
   size: 10
+  status: DECLINED
   ~wedding: {{wedding-id}}
 }
 
 auth:bearer {
-  token: {{token-admin}}
+  token: {{token-couple}}
 }
