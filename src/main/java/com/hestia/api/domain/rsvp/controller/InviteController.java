@@ -4,6 +4,7 @@ import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.rsvp.dto.CreateInviteRequest;
 import com.hestia.api.domain.rsvp.dto.InviteResponse;
 import com.hestia.api.domain.rsvp.dto.UpdateInviteRequest;
+import com.hestia.api.domain.rsvp.enums.GuestStatus;
 import com.hestia.api.domain.rsvp.service.InviteService;
 import com.hestia.api.infrastructure.security.principal.AuthenticatedUser;
 
@@ -32,8 +33,9 @@ public class InviteController {
     public ResponseEntity<PageResponse<InviteResponse>> getInvite(
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam(required = false) UUID wedding,
+            @RequestParam(required = false) GuestStatus status,
             Pageable pageable) {
-        return ResponseEntity.ok(inviteService.getInvites(user.resolveWeddingId(wedding), pageable));
+        return ResponseEntity.ok(inviteService.getInvites(user.resolveWeddingId(wedding), status, pageable));
     }
 
     @GetMapping("/{id}")

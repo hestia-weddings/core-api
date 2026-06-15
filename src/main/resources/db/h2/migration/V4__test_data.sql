@@ -22,6 +22,9 @@ VALUES ('bbbb0000-0000-0000-0000-000000000001', 'bbbb0000-0000-0000-0000-bbbbbbb
 INSERT INTO invites (id, name, phone, wedding_id, created_at, updated_at, is_active)
 VALUES ('cccc0000-0000-0000-0000-000000000001', 'Familia Silva', '11999990001', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
+INSERT INTO invites (id, name, phone, wedding_id, created_at, updated_at, is_active)
+VALUES ('cccc0000-0000-0000-0000-000000000003', 'Familia Oliveira', '11999990003', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
 -- Invites for wedding B
 INSERT INTO invites (id, name, phone, wedding_id, created_at, updated_at, is_active)
 VALUES ('cccc0000-0000-0000-0000-000000000002', 'Familia Santos', '11999990002', '22222222-2222-2222-2222-222222222222', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
@@ -29,6 +32,9 @@ VALUES ('cccc0000-0000-0000-0000-000000000002', 'Familia Santos', '11999990002',
 -- Guests for wedding A
 INSERT INTO guests (id, name, age_group, status, wedding_id, invite_id, created_at, updated_at, is_active)
 VALUES ('dddd0000-0000-0000-0000-000000000001', 'João Silva', 'ADULT', 'CONFIRMED', '11111111-1111-1111-1111-111111111111', 'cccc0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
+INSERT INTO guests (id, name, age_group, status, wedding_id, invite_id, created_at, updated_at, is_active)
+VALUES ('dddd0000-0000-0000-0000-000000000003', 'Carlos Oliveira', 'ADULT', 'PENDING', '11111111-1111-1111-1111-111111111111', 'cccc0000-0000-0000-0000-000000000003', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Guests for wedding B
 INSERT INTO guests (id, name, age_group, status, wedding_id, invite_id, created_at, updated_at, is_active)

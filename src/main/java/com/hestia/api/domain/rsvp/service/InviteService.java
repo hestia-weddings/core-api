@@ -37,11 +37,14 @@ public class InviteService {
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<InviteResponse> getInvites(@Nullable UUID weddingId, Pageable pageable) {
+    public PageResponse<InviteResponse> getInvites(
+            @Nullable UUID weddingId, @Nullable GuestStatus status, Pageable pageable) {
         Page<Invite> page;
 
-        if (weddingId == null) page = inviteRepository.findAll(pageable);
-        else page = inviteRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
+        if (weddingId != null && status != null)
+            page = inviteRepository.findByWeddingIdAndGuestStatus(weddingId, status, pageable);
+        else if (weddingId != null) page = inviteRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
+        else page = inviteRepository.findAll(pageable);
 
         return PageMapper.toResponse(page.map(inviteMapper::toResponse));
     }
