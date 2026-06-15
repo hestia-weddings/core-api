@@ -1,7 +1,7 @@
 package com.hestia.api.domain.registry.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 public class UpdateGiftRequest {
 
-    @NotBlank
+    @Size(min = 1)
     private String description;
 
     private String picture;

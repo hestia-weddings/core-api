@@ -9,9 +9,12 @@ import com.hestia.api.domain.registry.dto.GiftResponse;
 import com.hestia.api.domain.registry.dto.UpdateGiftRequest;
 import com.hestia.api.domain.registry.entity.Gift;
 import com.hestia.api.domain.registry.entity.GiftAvailability;
+import com.hestia.api.domain.registry.enums.OrderStatus;
+import com.hestia.api.domain.registry.exception.InsufficientStockReductionException;
 import com.hestia.api.domain.registry.mapper.GiftMapper;
 import com.hestia.api.domain.registry.repository.GiftAvailabilityRepository;
 import com.hestia.api.domain.registry.repository.GiftRepository;
+import com.hestia.api.domain.registry.repository.OrderRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
 
@@ -35,6 +38,7 @@ public class GiftService {
     private final GiftAvailabilityRepository giftAvailabilityRepository;
     private final GiftMapper giftMapper;
     private final WeddingRepository weddingRepository;
+    private final OrderRepository orderRepository;
 
     @Transactional(readOnly = true)
     public PageResponse<GiftAvailabilityResponse> getGifts(@Nullable UUID weddingId, Pageable pageable) {
@@ -90,6 +94,14 @@ public class GiftService {
 
     public GiftResponse updateGift(@Nullable UUID weddingId, UUID id, UpdateGiftRequest request) {
         Gift gift = getGift(weddingId, id);
+
+        if (request.getStock() != null) {
+            long soldCount = orderRepository.countByGiftIdAndStatusAndIsActiveTrue(gift.getId(), OrderStatus.PAID);
+            if (request.getStock() < soldCount) {
+                throw new InsufficientStockReductionException(
+                        "Cannot reduce stock below " + soldCount + " already-sold units");
+            }
+        }
 
         if (request.getDescription() != null) gift.setDescription(request.getDescription());
         if (request.getPicture() != null) gift.setPicture(request.getPicture());

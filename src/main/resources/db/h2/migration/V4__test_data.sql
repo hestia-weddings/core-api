@@ -36,7 +36,7 @@ VALUES ('dddd0000-0000-0000-0000-000000000002', 'Maria Santos', 'ADULT', 'PENDIN
 
 -- Gifts for wedding A
 INSERT INTO gifts (id, description, price, stock, wedding_id, created_at, updated_at, is_active)
-VALUES ('eeee0000-0000-0000-0000-000000000001', 'Jogo de Panelas', 25000, 2, '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+VALUES ('eeee0000-0000-0000-0000-000000000001', 'Jogo de Panelas', 25000, 3, '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Gifts for wedding B
 INSERT INTO gifts (id, description, price, stock, wedding_id, created_at, updated_at, is_active)
@@ -53,6 +53,14 @@ VALUES ('ffff0000-0000-0000-0000-000000000002', 'Vovó Ana', 'Felicidades!', '22
 -- Order for webhook tests (PENDING, linked to gift A, wedding A)
 INSERT INTO orders (id, guest_name, guest_email, amount, status, payment_id, wedding_id, gift_id, created_at, updated_at, is_active)
 VALUES ('bbbb1111-0000-0000-0000-000000000001', 'Test Guest', 'guest@test.com', 25000, 'PENDING', 'cccc1111-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'eeee0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
+-- Order PAID (linked to gift A, wedding A) — for stock validation tests
+INSERT INTO orders (id, guest_name, guest_email, amount, status, payment_id, wedding_id, gift_id, created_at, updated_at, is_active)
+VALUES ('bbbb1111-0000-0000-0000-000000000002', 'Paid Guest', 'paid@test.com', 25000, 'PAID', 'cccc1111-0000-0000-0000-000000000002', '11111111-1111-1111-1111-111111111111', 'eeee0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
+-- Second PAID order (linked to gift A, wedding A) — soldCount=2
+INSERT INTO orders (id, guest_name, guest_email, amount, status, payment_id, wedding_id, gift_id, created_at, updated_at, is_active)
+VALUES ('bbbb1111-0000-0000-0000-000000000003', 'Paid Guest 2', 'paid2@test.com', 25000, 'PAID', 'cccc1111-0000-0000-0000-000000000003', '11111111-1111-1111-1111-111111111111', 'eeee0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Wallet for wedding A (balance crediting in webhook tests)
 INSERT INTO wallets (id, pix_key, balance, fee, is_active, created_at, updated_at, wedding_id)

@@ -3,6 +3,7 @@ package com.hestia.api.common.exception;
 import com.hestia.api.common.dto.ErrorResponse;
 import com.hestia.api.domain.payment.exception.DuplicateWalletException;
 import com.hestia.api.domain.payment.exception.InsufficientBalanceException;
+import com.hestia.api.domain.registry.exception.InsufficientStockReductionException;
 import com.hestia.api.infrastructure.asaas.exception.AsaasCheckoutException;
 import com.hestia.api.infrastructure.asaas.exception.AsaasTransferException;
 
@@ -64,8 +65,8 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_GATEWAY, ex.getMessage());
     }
 
-    @ExceptionHandler(InsufficientBalanceException.class)
-    public ResponseEntity<ErrorResponse> handleInsufficientBalance(InsufficientBalanceException ex) {
+    @ExceptionHandler({InsufficientBalanceException.class, InsufficientStockReductionException.class})
+    public ResponseEntity<ErrorResponse> handleUnprocessableEntity(RuntimeException ex) {
         return buildResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
     }
 

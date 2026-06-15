@@ -1,6 +1,7 @@
 package com.hestia.api.domain.registry.repository;
 
 import com.hestia.api.domain.registry.entity.Order;
+import com.hestia.api.domain.registry.enums.OrderStatus;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,6 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Optional<Order> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
 
     Optional<Order> findByPaymentIdAndIsActiveTrue(UUID paymentId);
+
+    long countByGiftIdAndStatusAndIsActiveTrue(UUID giftId, OrderStatus status);
 }
