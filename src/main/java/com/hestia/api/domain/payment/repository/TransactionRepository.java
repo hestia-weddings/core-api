@@ -13,10 +13,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     Optional<Transaction> findByAsaasTransferId(String asaasTransferId);
 
-    @Query("SELECT COALESCE(SUM(t.amount + t.fee), 0) FROM Transaction t"
-            + " WHERE t.wallet.id = :walletId"
-            + " AND t.status = :status")
-    Integer sumPendingAmountsByWalletId(
-            @Param("walletId") UUID walletId,
-            @Param("status") com.hestia.api.domain.payment.enums.TransactionStatus status);
+    @Query(
+            value = "SELECT COALESCE(SUM(t.amount + t.fee), 0) FROM transactions t"
+                    + " WHERE t.wallet_id = :walletId"
+                    + " AND t.status = CAST(:status AS transaction_status_enum)",
+            nativeQuery = true)
+    Integer sumPendingAmountsByWalletId(@Param("walletId") UUID walletId, @Param("status") String status);
 }

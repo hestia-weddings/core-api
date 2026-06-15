@@ -1,6 +1,5 @@
 package com.hestia.api.domain.wedding.controller;
 
-import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.wedding.dto.CreateWeddingRequest;
 import com.hestia.api.domain.wedding.dto.UpdateWeddingRequest;
 import com.hestia.api.domain.wedding.dto.WeddingResponse;
@@ -30,7 +29,21 @@ public class WeddingController {
     private final WeddingService weddingService;
 
     @GetMapping
-    public ResponseEntity<PageResponse<WeddingResponse>> getWeddings(Pageable pageable) {
+    public ResponseEntity<?> getWeddings(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam(name = "wedding_id", required = false) UUID weddingId,
+            Pageable pageable) {
+        boolean isCouple =
+                user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COUPLE"));
+
+        if (isCouple) {
+            return ResponseEntity.ok(weddingService.getWeddingById(user.getWeddingId()));
+        }
+
+        if (weddingId != null) {
+            return ResponseEntity.ok(weddingService.getWeddingById(weddingId));
+        }
+
         return ResponseEntity.ok(weddingService.getWeddings(pageable));
     }
 
@@ -40,9 +53,7 @@ public class WeddingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WeddingResponse> getWeddingById(
-            @AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
-        validateWeddingAccess(user, id);
+    public ResponseEntity<WeddingResponse> getWeddingById(@PathVariable UUID id) {
         return ResponseEntity.ok(weddingService.getWeddingById(id));
     }
 

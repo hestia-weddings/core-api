@@ -10,6 +10,12 @@ get {
   auth: bearer
 }
 
+params:query {
+  page: 0
+  size: 10
+  ~wedding_id: 45d627f0-36f8-465a-b90d-e1966fb8f6c8
+}
+
 auth:bearer {
-  token: {{token-admin}}
+  token: {{token-couple}}
 }

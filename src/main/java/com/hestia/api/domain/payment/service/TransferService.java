@@ -45,7 +45,7 @@ public class TransferService {
 
         int fee = amount * wallet.getFee() / 10000;
         int availableBalance = wallet.getBalance()
-                - transactionRepository.sumPendingAmountsByWalletId(wallet.getId(), TransactionStatus.PENDING);
+                - transactionRepository.sumPendingAmountsByWalletId(wallet.getId(), TransactionStatus.PENDING.name());
 
         if (amount + fee > availableBalance) {
             throw new InsufficientBalanceException("Insufficient balance for transfer");

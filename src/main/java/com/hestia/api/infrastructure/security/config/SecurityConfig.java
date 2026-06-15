@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,7 +27,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http.cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
@@ -60,6 +62,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/account/{id}")
                         .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/wedding")
+                        .hasAnyRole("ADMIN", "COUPLE")
+                        .requestMatchers(HttpMethod.GET, "/wedding/{id}")
                         .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/wedding")
                         .hasRole("ADMIN")

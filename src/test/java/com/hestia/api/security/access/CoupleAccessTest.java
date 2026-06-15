@@ -306,7 +306,12 @@ class CoupleAccessTest {
 
         @Test
         void canGetOwnWedding() throws Exception {
-            mockMvc.perform(get("/wedding/{id}", OWN_WEDDING)).andExpect(status().isOk());
+            mockMvc.perform(get("/wedding")).andExpect(status().isOk());
+        }
+
+        @Test
+        void cannotGetWeddingById() throws Exception {
+            mockMvc.perform(get("/wedding/{id}", OWN_WEDDING)).andExpect(status().isForbidden());
         }
 
         @Test
@@ -318,7 +323,7 @@ class CoupleAccessTest {
         }
 
         @Test
-        void cannotGetOtherWedding() throws Exception {
+        void cannotGetOtherWeddingById() throws Exception {
             mockMvc.perform(get("/wedding/{id}", OTHER_WEDDING)).andExpect(status().isForbidden());
         }
 
@@ -363,11 +368,6 @@ class CoupleAccessTest {
     @Nested
     @DisplayName("Admin-only endpoints (should return 403)")
     class AdminOnly {
-
-        @Test
-        void cannotListWeddings() throws Exception {
-            mockMvc.perform(get("/wedding")).andExpect(status().isForbidden());
-        }
 
         @Test
         void cannotCreateWedding() throws Exception {

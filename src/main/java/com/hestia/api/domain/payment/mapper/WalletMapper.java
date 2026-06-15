@@ -16,7 +16,7 @@ public class WalletMapper {
 
     public WalletResponse toResponse(Wallet wallet) {
         int pendingAmount = transactionRepository.sumPendingAmountsByWalletId(
-                wallet.getId(), com.hestia.api.domain.payment.enums.TransactionStatus.PENDING);
+                wallet.getId(), com.hestia.api.domain.payment.enums.TransactionStatus.PENDING.name());
         int netBalance = (wallet.getBalance() - pendingAmount) * 10000 / (10000 + wallet.getFee());
 
         return WalletResponse.builder()
