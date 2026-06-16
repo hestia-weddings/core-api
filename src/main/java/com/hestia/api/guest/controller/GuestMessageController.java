@@ -2,6 +2,7 @@ package com.hestia.api.guest.controller;
 
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
+import com.hestia.api.domain.message.enums.MessageType;
 import com.hestia.api.domain.message.service.MessageService;
 
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ public class GuestMessageController {
     @PostMapping
     public ResponseEntity<MessageResponse> createMessage(
             @RequestAttribute UUID weddingId, @Valid @RequestBody CreateMessageRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(weddingId, request));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(messageService.createMessage(weddingId, request, MessageType.GENERAL));
     }
 }

@@ -1,8 +1,12 @@
 package com.hestia.api.domain.message.entity;
 
 import com.hestia.api.common.model.BaseTenantModel;
+import com.hestia.api.domain.message.enums.MessageType;
 
 import jakarta.persistence.*;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -27,4 +31,9 @@ public class Message extends BaseTenantModel {
 
     @Column(name = "is_new", nullable = false)
     private Boolean isNew;
+
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(nullable = false, columnDefinition = "message_type_enum")
+    private MessageType type;
 }

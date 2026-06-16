@@ -11,6 +11,7 @@ public class MessageMapper {
     public MessageResponse toResponse(Message message) {
         return MessageResponse.builder()
                 .id(message.getId())
+                .type(message.getType())
                 .sender(message.getSender())
                 .message(message.getMessage())
                 .isFavorite(message.getIsFavorite())
