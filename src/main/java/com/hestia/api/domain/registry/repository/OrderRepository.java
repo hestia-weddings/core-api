@@ -21,4 +21,6 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Optional<Order> findByPaymentIdAndIsActiveTrue(UUID paymentId);
 
     long countByGiftIdAndStatusAndIsActiveTrue(UUID giftId, OrderStatus status);
+
+    boolean existsByMessageIdAndIsActiveTrue(UUID messageId);
 }

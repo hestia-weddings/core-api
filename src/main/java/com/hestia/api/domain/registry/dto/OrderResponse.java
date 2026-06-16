@@ -1,5 +1,6 @@
 package com.hestia.api.domain.registry.dto;
 
+import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.registry.enums.OrderStatus;
 
 import java.time.LocalDateTime;
@@ -16,4 +17,5 @@ public record OrderResponse(
         OrderStatus status,
         UUID paymentId,
         GiftResponse gift,
+        MessageResponse message,
         LocalDateTime createdAt) {}

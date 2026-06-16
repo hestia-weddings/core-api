@@ -1,6 +1,7 @@
 package com.hestia.api.domain.registry.entity;
 
 import com.hestia.api.common.model.BaseTenantModel;
+import com.hestia.api.domain.message.entity.Message;
 import com.hestia.api.domain.registry.enums.OrderStatus;
 
 import jakarta.persistence.*;
@@ -42,4 +43,8 @@ public class Order extends BaseTenantModel {
     @ManyToOne
     @JoinColumn(name = "gift_id")
     private Gift gift;
+
+    @ManyToOne
+    @JoinColumn(name = "message_id")
+    private Message message;
 }
