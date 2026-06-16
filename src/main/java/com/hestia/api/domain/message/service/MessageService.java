@@ -1,14 +1,18 @@
 package com.hestia.api.domain.message.service;
 
 import com.hestia.api.common.dto.PageResponse;
+import com.hestia.api.common.exception.CannotDeleteLinkedMessageException;
 import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
 import com.hestia.api.domain.message.dto.CreateMessageRequest;
 import com.hestia.api.domain.message.dto.MessageResponse;
 import com.hestia.api.domain.message.dto.UpdateMessageRequest;
 import com.hestia.api.domain.message.entity.Message;
+import com.hestia.api.domain.message.enums.MessageType;
 import com.hestia.api.domain.message.mapper.MessageMapper;
 import com.hestia.api.domain.message.repository.MessageRepository;
+import com.hestia.api.domain.registry.repository.OrderRepository;
+import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
 
@@ -31,6 +35,8 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
     private final WeddingRepository weddingRepository;
+    private final OrderRepository orderRepository;
+    private final InviteRepository inviteRepository;
 
     @Transactional(readOnly = true)
     public PageResponse<MessageResponse> getMessages(
@@ -64,7 +70,7 @@ public class MessageService {
                 .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
     }
 
-    public MessageResponse createMessage(UUID weddingId, CreateMessageRequest request) {
+    public MessageResponse createMessage(UUID weddingId, CreateMessageRequest request, MessageType type) {
         Wedding wedding = weddingRepository
                 .findByIdAndIsActiveTrue(weddingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
@@ -74,6 +80,7 @@ public class MessageService {
                 .message(request.getMessage())
                 .isFavorite(false)
                 .isNew(true)
+                .type(type)
                 .wedding(wedding)
                 .build();
 
@@ -96,6 +103,12 @@ public class MessageService {
 
     public void deleteMessage(@Nullable UUID weddingId, UUID id) {
         Message message = getMessage(weddingId, id);
+
+        if (orderRepository.existsByMessageIdAndIsActiveTrue(id)
+                || inviteRepository.existsByMessageIdAndIsActiveTrue(id)) {
+            throw new CannotDeleteLinkedMessageException();
+        }
+
         message.setIsActive(false);
         messageRepository.save(message);
     }

@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
         CannotDeleteInviteWithConfirmedGuestsException.class,
         CannotDeleteConfirmedGuestException.class,
+        CannotDeleteLinkedMessageException.class,
         DuplicateWalletException.class
     })
     public ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex) {
