@@ -4,11 +4,11 @@
 
 -- Wedding A (couple user's wedding)
 INSERT INTO weddings (id, couple_name, slug, date, invite_message, gift_message, created_at, updated_at, is_active)
-VALUES ('11111111-1111-1111-1111-111111111111', 'Alice & Bob', 'alice-bob', '2026-12-20 18:00:00', 'You are invited!', 'Check our gifts', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+VALUES ('11111111-1111-1111-1111-111111111111', 'Alice & Bob', 'alice-bob', '2026-12-20', 'You are invited!', 'Check our gifts', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Wedding B (another wedding, for tenant isolation tests)
 INSERT INTO weddings (id, couple_name, slug, date, invite_message, gift_message, created_at, updated_at, is_active)
-VALUES ('22222222-2222-2222-2222-222222222222', 'Carol & Dave', 'carol-dave', '2026-11-15 17:00:00', 'Join us!', 'Gift list here', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+VALUES ('22222222-2222-2222-2222-222222222222', 'Carol & Dave', 'carol-dave', '2026-11-15', 'Join us!', 'Gift list here', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Admin user (no specific wedding scope, linked to wedding A for FK)
 INSERT INTO users (id, auth_user_id, email, name, role, wedding_id, created_at, updated_at, is_active)

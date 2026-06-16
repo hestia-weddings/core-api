@@ -1,6 +1,6 @@
 package com.hestia.api.domain.wedding.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ public class UpdateWeddingRequest {
 
     private String coupleName;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private String inviteMessage;
 

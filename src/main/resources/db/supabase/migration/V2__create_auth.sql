@@ -8,7 +8,7 @@ CREATE TYPE user_role_enum AS ENUM (
 CREATE TABLE weddings (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     couple_name text NOT NULL,
-    date timestamptz,
+    date date,
     picture text,
     invite_message text,
     gift_message text,

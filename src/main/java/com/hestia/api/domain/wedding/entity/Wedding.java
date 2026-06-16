@@ -6,7 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -24,7 +24,7 @@ public class Wedding extends BaseModel {
     private String coupleName;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(name = "invite_message")
     private String inviteMessage;

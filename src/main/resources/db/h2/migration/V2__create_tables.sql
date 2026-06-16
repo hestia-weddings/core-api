@@ -1,7 +1,7 @@
 CREATE TABLE weddings (
     id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
     couple_name VARCHAR NOT NULL,
-    date TIMESTAMP,
+    date DATE,
     picture VARCHAR,
     invite_message VARCHAR,
     gift_message VARCHAR,

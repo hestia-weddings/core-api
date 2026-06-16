@@ -2,7 +2,7 @@ package com.hestia.api.domain.wedding.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ public class CreateWeddingRequest {
     @NotBlank
     private String coupleName;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private String inviteMessage;
 
