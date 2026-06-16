@@ -1,6 +1,9 @@
 package com.hestia.api.guest.service;
 
 import com.hestia.api.common.exception.ResourceNotFoundException;
+import com.hestia.api.domain.message.entity.Message;
+import com.hestia.api.domain.message.enums.MessageType;
+import com.hestia.api.domain.message.repository.MessageRepository;
 import com.hestia.api.domain.registry.entity.GiftAvailability;
 import com.hestia.api.domain.registry.entity.Order;
 import com.hestia.api.domain.registry.enums.OrderStatus;
@@ -32,6 +35,7 @@ public class GuestCheckoutService {
     private final OrderRepository orderRepository;
     private final WeddingRepository weddingRepository;
     private final AsaasCheckoutClient asaasCheckoutClient;
+    private final MessageRepository messageRepository;
 
     @Transactional
     public CheckoutResponse createCheckout(UUID weddingId, UUID giftId, CheckoutRequest request) {
@@ -58,6 +62,22 @@ public class GuestCheckoutService {
                 .wedding(wedding)
                 .build();
         Order order = orderRepository.save(baseOrder);
+
+        // 3b. Create GIFT message if provided
+        if (request.getMessage() != null && !request.getMessage().isBlank()) {
+            String sender = request.getSender() != null ? request.getSender() : request.getGuestName();
+            Message message = Message.builder()
+                    .sender(sender)
+                    .message(request.getMessage())
+                    .isFavorite(false)
+                    .isNew(true)
+                    .type(MessageType.GIFT)
+                    .wedding(wedding)
+                    .build();
+            message = messageRepository.save(message);
+            order.setMessage(message);
+            orderRepository.save(order);
+        }
 
         // 4. Call Asaas Checkout
         AsaasCheckoutRequest asaasRequest = AsaasCheckoutRequest.builder()

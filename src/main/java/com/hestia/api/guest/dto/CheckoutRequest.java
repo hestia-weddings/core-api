@@ -14,4 +14,8 @@ public class CheckoutRequest {
 
     @NotBlank
     private String guestEmail;
+
+    private String sender;
+
+    private String message;
 }
