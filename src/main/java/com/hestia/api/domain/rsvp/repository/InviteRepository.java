@@ -31,4 +31,6 @@ public interface InviteRepository extends JpaRepository<Invite, UUID> {
     Optional<Invite> findByIdAndWeddingIdAndIsActiveTrue(UUID id, UUID weddingId);
 
     Optional<Invite> findByNameIgnoreCaseAndWeddingIdAndIsActiveTrue(String name, UUID weddingId);
+
+    boolean existsByMessageIdAndIsActiveTrue(UUID messageId);
 }

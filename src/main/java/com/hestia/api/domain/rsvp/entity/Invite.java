@@ -1,6 +1,7 @@
 package com.hestia.api.domain.rsvp.entity;
 
 import com.hestia.api.common.model.BaseTenantModel;
+import com.hestia.api.domain.message.entity.Message;
 
 import jakarta.persistence.*;
 
@@ -28,4 +29,8 @@ public class Invite extends BaseTenantModel {
     @OneToMany(mappedBy = "invite")
     @Builder.Default
     private List<Guest> guests = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "message_id")
+    private Message message;
 }
