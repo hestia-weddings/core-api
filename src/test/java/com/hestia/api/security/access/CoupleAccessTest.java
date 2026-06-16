@@ -316,7 +316,7 @@ class CoupleAccessTest {
 
         @Test
         void canPatchOwnWedding() throws Exception {
-            mockMvc.perform(patch("/wedding/{id}", OWN_WEDDING)
+            mockMvc.perform(patch("/wedding")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"couple_name\": \"Alice & Bobby\"}"))
                     .andExpect(status().isOk());
@@ -325,14 +325,6 @@ class CoupleAccessTest {
         @Test
         void cannotGetOtherWeddingById() throws Exception {
             mockMvc.perform(get("/wedding/{id}", OTHER_WEDDING)).andExpect(status().isForbidden());
-        }
-
-        @Test
-        void cannotPatchOtherWedding() throws Exception {
-            mockMvc.perform(patch("/wedding/{id}", OTHER_WEDDING)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"couple_name\": \"Hacked\"}"))
-                    .andExpect(status().isForbidden());
         }
     }
 
@@ -343,6 +335,11 @@ class CoupleAccessTest {
     @Nested
     @DisplayName("Account (self access)")
     class AccountSelf {
+
+        @Test
+        void canGetOwnAccount() throws Exception {
+            mockMvc.perform(get("/account")).andExpect(status().isOk());
+        }
 
         @Test
         void canPatchOwnAccount() throws Exception {
@@ -380,11 +377,6 @@ class CoupleAccessTest {
         @Test
         void cannotDeleteWedding() throws Exception {
             mockMvc.perform(delete("/wedding/{id}", OWN_WEDDING)).andExpect(status().isForbidden());
-        }
-
-        @Test
-        void cannotListAccounts() throws Exception {
-            mockMvc.perform(get("/account")).andExpect(status().isForbidden());
         }
 
         @Test

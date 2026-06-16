@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,18 +32,7 @@ public class WeddingController {
             @AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam(name = "wedding_id", required = false) UUID weddingId,
             Pageable pageable) {
-        boolean isCouple =
-                user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COUPLE"));
-
-        if (isCouple) {
-            return ResponseEntity.ok(weddingService.getWeddingById(user.getWeddingId()));
-        }
-
-        if (weddingId != null) {
-            return ResponseEntity.ok(weddingService.getWeddingById(weddingId));
-        }
-
-        return ResponseEntity.ok(weddingService.getWeddings(pageable));
+        return ResponseEntity.ok(weddingService.getWeddings(user.resolveWeddingId(weddingId), pageable));
     }
 
     @PostMapping
@@ -57,26 +45,17 @@ public class WeddingController {
         return ResponseEntity.ok(weddingService.getWeddingById(id));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping
     public ResponseEntity<WeddingResponse> patchWedding(
             @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id,
+            @RequestParam(name = "wedding_id", required = false) UUID weddingId,
             @Valid @RequestBody UpdateWeddingRequest request) {
-        validateWeddingAccess(user, id);
-        return ResponseEntity.ok(weddingService.updateWedding(id, request));
+        return ResponseEntity.ok(weddingService.updateWedding(user.resolveWeddingId(weddingId), request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWedding(@PathVariable UUID id) {
         weddingService.deleteWedding(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private void validateWeddingAccess(AuthenticatedUser user, UUID weddingId) {
-        boolean isCouple =
-                user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COUPLE"));
-        if (isCouple && !weddingId.equals(user.getWeddingId())) {
-            throw new AccessDeniedException("Access denied");
-        }
     }
 }

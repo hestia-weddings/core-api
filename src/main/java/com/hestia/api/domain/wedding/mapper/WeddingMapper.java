@@ -13,6 +13,7 @@ public class WeddingMapper {
                 .id(wedding.getId())
                 .coupleName(wedding.getCoupleName())
                 .date(wedding.getDate())
+                .picture(wedding.getPicture())
                 .inviteMessage(wedding.getInviteMessage())
                 .giftMessage(wedding.getGiftMessage())
                 .slug(wedding.getSlug())

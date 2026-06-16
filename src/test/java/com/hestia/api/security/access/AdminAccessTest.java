@@ -66,7 +66,8 @@ class AdminAccessTest {
 
         @Test
         void canPatchAnyWedding() throws Exception {
-            mockMvc.perform(patch("/wedding/{id}", WEDDING_B)
+            mockMvc.perform(patch("/wedding")
+                            .param("wedding_id", WEDDING_B.toString())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"couple_name\": \"Carol & Danny\"}"))
                     .andExpect(status().isOk());

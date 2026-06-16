@@ -282,7 +282,7 @@ class GuestAccessTest {
 
         @Test
         void cannotPatchWedding() throws Exception {
-            mockMvc.perform(patch("/wedding/{id}", "11111111-1111-1111-1111-111111111111")
+            mockMvc.perform(patch("/wedding")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"couple_name\": \"X\"}"))
                     .andExpect(status().isUnauthorized());

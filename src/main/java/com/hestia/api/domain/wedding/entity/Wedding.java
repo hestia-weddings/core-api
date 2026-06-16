@@ -34,4 +34,7 @@ public class Wedding extends BaseModel {
 
     @Column(nullable = false, unique = true)
     private String slug;
+
+    @Column
+    private String picture;
 }

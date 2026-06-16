@@ -10,6 +10,7 @@ public record WeddingResponse(
         UUID id,
         String coupleName,
         LocalDateTime date,
+        String picture,
         String inviteMessage,
         String giftMessage,
         String slug,
