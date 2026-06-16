@@ -4,6 +4,9 @@ import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.common.exception.CannotDeleteInviteWithConfirmedGuestsException;
 import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
+import com.hestia.api.domain.message.entity.Message;
+import com.hestia.api.domain.message.enums.MessageType;
+import com.hestia.api.domain.message.repository.MessageRepository;
 import com.hestia.api.domain.rsvp.dto.*;
 import com.hestia.api.domain.rsvp.entity.Guest;
 import com.hestia.api.domain.rsvp.entity.Invite;
@@ -13,6 +16,7 @@ import com.hestia.api.domain.rsvp.repository.GuestRepository;
 import com.hestia.api.domain.rsvp.repository.InviteRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
+import com.hestia.api.guest.dto.RsvpMessageRequest;
 
 import jakarta.annotation.Nullable;
 
@@ -35,6 +39,7 @@ public class InviteService {
     private final GuestRepository guestRepository;
     private final InviteMapper inviteMapper;
     private final WeddingRepository weddingRepository;
+    private final MessageRepository messageRepository;
 
     @Transactional(readOnly = true)
     public PageResponse<InviteResponse> getInvites(
@@ -132,5 +137,45 @@ public class InviteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
 
         return inviteMapper.toResponse(invite);
+    }
+
+    @Transactional(readOnly = true)
+    public InviteResponse searchInviteForGuest(UUID weddingId, SearchInviteRequest request) {
+        Invite invite = inviteRepository
+                .findByNameIgnoreCaseAndWeddingIdAndIsActiveTrue(request.getName(), weddingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
+
+        return inviteMapper.toGuestResponse(invite);
+    }
+
+    public void createOrUpdateRsvpMessage(UUID weddingId, RsvpMessageRequest request) {
+        Invite invite = inviteRepository
+                .findByIdAndWeddingIdAndIsActiveTrue(request.getInviteId(), weddingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
+
+        String sender = request.getSender() != null ? request.getSender() : invite.getName();
+
+        if (invite.getMessage() != null) {
+            Message existing = invite.getMessage();
+            existing.setSender(sender);
+            existing.setMessage(request.getMessage());
+            messageRepository.save(existing);
+        } else {
+            Wedding wedding = weddingRepository
+                    .findByIdAndIsActiveTrue(weddingId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Wedding not found"));
+
+            Message message = Message.builder()
+                    .sender(sender)
+                    .message(request.getMessage())
+                    .isFavorite(false)
+                    .isNew(true)
+                    .type(MessageType.RSVP)
+                    .wedding(wedding)
+                    .build();
+            message = messageRepository.save(message);
+            invite.setMessage(message);
+            inviteRepository.save(invite);
+        }
     }
 }

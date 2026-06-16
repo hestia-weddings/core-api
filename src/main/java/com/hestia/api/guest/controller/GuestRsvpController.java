@@ -7,6 +7,7 @@ import com.hestia.api.domain.rsvp.dto.SearchInviteRequest;
 import com.hestia.api.domain.rsvp.dto.UpdateGuestStatusRequest;
 import com.hestia.api.domain.rsvp.service.GuestService;
 import com.hestia.api.domain.rsvp.service.InviteService;
+import com.hestia.api.guest.dto.RsvpMessageRequest;
 
 import jakarta.validation.Valid;
 
@@ -31,7 +32,7 @@ public class GuestRsvpController {
     @PostMapping("/invite/search")
     public ResponseEntity<InviteResponse> searchInvite(
             @RequestAttribute UUID weddingId, @Valid @RequestBody SearchInviteRequest request) {
-        return ResponseEntity.ok(inviteService.searchInvite(weddingId, request));
+        return ResponseEntity.ok(inviteService.searchInviteForGuest(weddingId, request));
     }
 
     @GetMapping("/guest")
@@ -46,5 +47,12 @@ public class GuestRsvpController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateGuestStatusRequest request) {
         return ResponseEntity.ok(guestService.updateGuestStatus(weddingId, id, request));
+    }
+
+    @PostMapping("/message")
+    public ResponseEntity<Void> createRsvpMessage(
+            @RequestAttribute UUID weddingId, @Valid @RequestBody RsvpMessageRequest request) {
+        inviteService.createOrUpdateRsvpMessage(weddingId, request);
+        return ResponseEntity.ok().build();
     }
 }
