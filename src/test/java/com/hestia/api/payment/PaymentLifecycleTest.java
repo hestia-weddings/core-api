@@ -126,7 +126,7 @@ class PaymentLifecycleTest {
         int grossBalance = walletAfterPayment.getBalance();
         int expectedAvailable = grossBalance * 10000 / (10000 + walletAfterPayment.getFee());
 
-        mockMvc.perform(get("/wallet/{id}", WALLET_ID))
+        mockMvc.perform(get("/wallet"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.available_balance").value(expectedAvailable));
 

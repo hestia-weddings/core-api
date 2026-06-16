@@ -30,14 +30,6 @@ public class WeddingService {
     private final WeddingMapper weddingMapper;
 
     @Transactional(readOnly = true)
-    public Object getWeddings(UUID weddingId, Pageable pageable) {
-        if (weddingId != null) {
-            return getWeddingById(weddingId);
-        }
-        return getWeddings(pageable);
-    }
-
-    @Transactional(readOnly = true)
     public PageResponse<WeddingResponse> getWeddings(Pageable pageable) {
         Page<WeddingResponse> page =
                 weddingRepository.findByIsActiveTrue(pageable).map(weddingMapper::toResponse);

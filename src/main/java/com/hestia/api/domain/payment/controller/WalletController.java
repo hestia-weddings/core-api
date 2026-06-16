@@ -1,6 +1,5 @@
 package com.hestia.api.domain.payment.controller;
 
-import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.payment.dto.CreateWalletRequest;
 import com.hestia.api.domain.payment.dto.UpdateWalletRequest;
 import com.hestia.api.domain.payment.dto.WalletResponse;
@@ -29,17 +28,17 @@ public class WalletController {
     private final WalletService walletService;
 
     @GetMapping
-    public ResponseEntity<PageResponse<WalletResponse>> getWallets(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam(required = false) UUID wedding,
-            Pageable pageable) {
-        return ResponseEntity.ok(walletService.getWallets(user.resolveWeddingId(wedding), pageable));
+    public ResponseEntity<?> getWallets(@AuthenticationPrincipal AuthenticatedUser user, Pageable pageable) {
+        UUID weddingId = user.resolveWeddingId();
+        if (weddingId != null) {
+            return ResponseEntity.ok(walletService.getWallet(weddingId));
+        }
+        return ResponseEntity.ok(walletService.getWallets(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WalletResponse> getWalletById(
-            @AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
-        return ResponseEntity.ok(walletService.getWalletById(user.resolveWeddingId(), id));
+    public ResponseEntity<WalletResponse> getWalletById(@PathVariable UUID id) {
+        return ResponseEntity.ok(walletService.getWalletById(id));
     }
 
     @PostMapping
@@ -51,11 +50,15 @@ public class WalletController {
                 .body(walletService.createWallet(user.resolveWeddingId(wedding), request));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping
     public ResponseEntity<WalletResponse> updateWallet(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @Valid @RequestBody UpdateWalletRequest request,
-            @PathVariable UUID id) {
-        return ResponseEntity.ok(walletService.updateWallet(user.resolveWeddingId(), id, request));
+            @AuthenticationPrincipal AuthenticatedUser user, @Valid @RequestBody UpdateWalletRequest request) {
+        return ResponseEntity.ok(walletService.updateWalletByWedding(user.resolveWeddingId(), request));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<WalletResponse> updateWalletById(
+            @PathVariable UUID id, @Valid @RequestBody UpdateWalletRequest request) {
+        return ResponseEntity.ok(walletService.updateWalletById(id, request));
     }
 }

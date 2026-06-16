@@ -28,11 +28,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getUsers(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam(name = "user_id", required = false) UUID userId,
-            Pageable pageable) {
-        UUID resolvedId = user.resolveUserId(userId);
+    public ResponseEntity<?> getUsers(@AuthenticationPrincipal AuthenticatedUser user, Pageable pageable) {
+        UUID resolvedId = user.resolveUserId(null);
         if (resolvedId != null) {
             return ResponseEntity.ok(userService.getCoupleAccount(resolvedId));
         }
@@ -51,10 +48,14 @@ public class UserController {
 
     @PatchMapping
     public ResponseEntity<?> patchAccount(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam(name = "user_id", required = false) UUID userId,
-            @Valid @RequestBody UpdateUserRequest request) {
-        return ResponseEntity.ok(userService.updateUser(user.resolveUserId(userId), request));
+            @AuthenticationPrincipal AuthenticatedUser user, @Valid @RequestBody UpdateUserRequest request) {
+        return ResponseEntity.ok(userService.updateUser(user.resolveUserId(null), request));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponse> patchAccountById(
+            @PathVariable UUID id, @Valid @RequestBody UpdateUserRequest request) {
+        return ResponseEntity.ok(userService.updateUser(id, request));
     }
 
     @DeleteMapping("/{id}")

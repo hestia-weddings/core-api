@@ -66,8 +66,7 @@ class AdminAccessTest {
 
         @Test
         void canPatchAnyWedding() throws Exception {
-            mockMvc.perform(patch("/wedding")
-                            .param("wedding_id", WEDDING_B.toString())
+            mockMvc.perform(patch("/wedding/{id}", WEDDING_B)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"couple_name\": \"Carol & Danny\"}"))
                     .andExpect(status().isOk());
@@ -103,8 +102,7 @@ class AdminAccessTest {
 
         @Test
         void canPatchAnyAccount() throws Exception {
-            mockMvc.perform(patch("/account")
-                            .param("user_id", USER_COUPLE.toString())
+            mockMvc.perform(patch("/account/{id}", USER_COUPLE)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"name\": \"Updated\"}"))
                     .andExpect(status().isOk());
@@ -322,12 +320,12 @@ class AdminAccessTest {
     // ==========================================
 
     @Nested
-    @DisplayName("Wallets (cross-tenant with wedding param)")
+    @DisplayName("Wallets (cross-tenant with id path)")
     class WalletAdmin {
 
         @Test
         void canListWallets() throws Exception {
-            mockMvc.perform(get("/wallet").param("wedding", WEDDING_A)).andExpect(status().isOk());
+            mockMvc.perform(get("/wallet")).andExpect(status().isOk());
         }
 
         @Test

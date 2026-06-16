@@ -348,15 +348,6 @@ class CoupleAccessTest {
                             .content("{\"name\": \"Updated Name\"}"))
                     .andExpect(status().isOk());
         }
-
-        @Test
-        void patchAlwaysUpdatesOwnAccountRegardlessOfParam() throws Exception {
-            mockMvc.perform(patch("/account")
-                            .param("user_id", ADMIN_USER.toString())
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"name\": \"Hacked\"}"))
-                    .andExpect(status().isOk());
-        }
     }
 
     // ==========================================
@@ -393,6 +384,35 @@ class CoupleAccessTest {
         void cannotDeleteAccount() throws Exception {
             mockMvc.perform(delete("/account/{id}", ADMIN_USER)).andExpect(status().isForbidden());
         }
+
+        @Test
+        void cannotPatchWeddingById() throws Exception {
+            mockMvc.perform(patch("/wedding/{id}", OWN_WEDDING)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"couple_name\": \"X\"}"))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        void cannotPatchAccountById() throws Exception {
+            mockMvc.perform(patch("/account/{id}", OWN_USER)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\": \"X\"}"))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        void cannotGetWalletById() throws Exception {
+            mockMvc.perform(get("/wallet/{id}", OWN_WALLET)).andExpect(status().isForbidden());
+        }
+
+        @Test
+        void cannotPatchWalletById() throws Exception {
+            mockMvc.perform(patch("/wallet/{id}", OWN_WALLET)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"pix_key\": \"x@pix.com\"}"))
+                    .andExpect(status().isForbidden());
+        }
     }
 
     // ==========================================
@@ -404,34 +424,16 @@ class CoupleAccessTest {
     class WalletOwn {
 
         @Test
-        void canListWallets() throws Exception {
+        void canGetOwnWallet() throws Exception {
             mockMvc.perform(get("/wallet")).andExpect(status().isOk());
         }
 
         @Test
-        void canGetWalletById() throws Exception {
-            mockMvc.perform(get("/wallet/{id}", OWN_WALLET)).andExpect(status().isOk());
-        }
-
-        @Test
-        void cannotGetOtherWeddingWallet() throws Exception {
-            mockMvc.perform(get("/wallet/{id}", OTHER_WALLET)).andExpect(status().isNotFound());
-        }
-
-        @Test
         void canPatchWallet() throws Exception {
-            mockMvc.perform(patch("/wallet/{id}", OWN_WALLET)
+            mockMvc.perform(patch("/wallet")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"pix_key\": \"updated@pix.com\"}"))
                     .andExpect(status().isOk());
-        }
-
-        @Test
-        void cannotPatchOtherWeddingWallet() throws Exception {
-            mockMvc.perform(patch("/wallet/{id}", OTHER_WALLET)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"pix_key\": \"x@pix.com\"}"))
-                    .andExpect(status().isNotFound());
         }
     }
 

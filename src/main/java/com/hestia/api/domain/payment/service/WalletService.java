@@ -13,8 +13,6 @@ import com.hestia.api.domain.payment.repository.WalletRepository;
 import com.hestia.api.domain.wedding.entity.Wedding;
 import com.hestia.api.domain.wedding.repository.WeddingRepository;
 
-import jakarta.annotation.Nullable;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,18 +32,25 @@ public class WalletService {
     private final WeddingRepository weddingRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<WalletResponse> getWallets(@Nullable UUID weddingId, Pageable pageable) {
-        Page<Wallet> page;
-
-        if (weddingId == null) page = walletRepository.findAll(pageable);
-        else page = walletRepository.findByWeddingIdAndIsActiveTrue(weddingId, pageable);
-
+    public PageResponse<WalletResponse> getWallets(Pageable pageable) {
+        Page<Wallet> page = walletRepository.findAll(pageable);
         return PageMapper.toResponse(page.map(walletMapper::toResponse));
     }
 
     @Transactional(readOnly = true)
-    public WalletResponse getWalletById(@Nullable UUID weddingId, UUID id) {
-        return walletMapper.toResponse(getWallet(weddingId, id));
+    public WalletResponse getWallet(UUID weddingId) {
+        Wallet wallet = walletRepository
+                .findFirstByWeddingIdAndIsActiveTrue(weddingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Wallet not found"));
+        return walletMapper.toResponse(wallet);
+    }
+
+    @Transactional(readOnly = true)
+    public WalletResponse getWalletById(UUID id) {
+        Wallet wallet = walletRepository
+                .findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Wallet not found"));
+        return walletMapper.toResponse(wallet);
     }
 
     public WalletResponse createWallet(UUID weddingId, CreateWalletRequest request) {
@@ -67,21 +72,19 @@ public class WalletService {
         return walletMapper.toResponse(walletRepository.save(wallet));
     }
 
-    public WalletResponse updateWallet(@Nullable UUID weddingId, UUID id, UpdateWalletRequest request) {
-        Wallet wallet = getWallet(weddingId, id);
-
+    public WalletResponse updateWalletByWedding(UUID weddingId, UpdateWalletRequest request) {
+        Wallet wallet = walletRepository
+                .findFirstByWeddingIdAndIsActiveTrue(weddingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Wallet not found"));
         wallet.setPixKey(request.getPixKey());
-
         return walletMapper.toResponse(walletRepository.save(wallet));
     }
 
-    private Wallet getWallet(@Nullable UUID weddingId, UUID id) {
-        if (weddingId == null)
-            return walletRepository
-                    .findByIdAndIsActiveTrue(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Wallet not found"));
-        return walletRepository
-                .findByIdAndWeddingIdAndIsActiveTrue(id, weddingId)
+    public WalletResponse updateWalletById(UUID id, UpdateWalletRequest request) {
+        Wallet wallet = walletRepository
+                .findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Wallet not found"));
+        wallet.setPixKey(request.getPixKey());
+        return walletMapper.toResponse(walletRepository.save(wallet));
     }
 }

@@ -28,16 +28,12 @@ public class WeddingController {
     private final WeddingService weddingService;
 
     @GetMapping
-    public ResponseEntity<?> getWeddings(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam(name = "wedding_id", required = false) UUID weddingId,
-            Pageable pageable) {
-        return ResponseEntity.ok(weddingService.getWeddings(user.resolveWeddingId(weddingId), pageable));
-    }
-
-    @PostMapping
-    public ResponseEntity<WeddingResponse> postWedding(@Valid @RequestBody CreateWeddingRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(weddingService.createWedding(request));
+    public ResponseEntity<?> getWeddings(@AuthenticationPrincipal AuthenticatedUser user, Pageable pageable) {
+        UUID weddingId = user.resolveWeddingId();
+        if (weddingId != null) {
+            return ResponseEntity.ok(weddingService.getWeddingById(weddingId));
+        }
+        return ResponseEntity.ok(weddingService.getWeddings(pageable));
     }
 
     @GetMapping("/{id}")
@@ -45,12 +41,21 @@ public class WeddingController {
         return ResponseEntity.ok(weddingService.getWeddingById(id));
     }
 
+    @PostMapping
+    public ResponseEntity<WeddingResponse> postWedding(@Valid @RequestBody CreateWeddingRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(weddingService.createWedding(request));
+    }
+
     @PatchMapping
     public ResponseEntity<WeddingResponse> patchWedding(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam(name = "wedding_id", required = false) UUID weddingId,
-            @Valid @RequestBody UpdateWeddingRequest request) {
-        return ResponseEntity.ok(weddingService.updateWedding(user.resolveWeddingId(weddingId), request));
+            @AuthenticationPrincipal AuthenticatedUser user, @Valid @RequestBody UpdateWeddingRequest request) {
+        return ResponseEntity.ok(weddingService.updateWedding(user.resolveWeddingId(), request));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<WeddingResponse> patchWeddingById(
+            @PathVariable UUID id, @Valid @RequestBody UpdateWeddingRequest request) {
+        return ResponseEntity.ok(weddingService.updateWedding(id, request));
     }
 
     @DeleteMapping("/{id}")
