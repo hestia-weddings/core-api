@@ -48,6 +48,11 @@ public class AuthenticatedUser implements UserDetails {
         return resolveWeddingId(null);
     }
 
+    public UUID resolveUserId(@Nullable UUID requestedUserId) {
+        if (hasRole(UserRole.ADMIN)) return requestedUserId;
+        return this.id;
+    }
+
     @Override
     public String getPassword() {
         return null;

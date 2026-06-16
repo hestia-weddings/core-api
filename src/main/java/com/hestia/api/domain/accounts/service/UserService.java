@@ -3,6 +3,7 @@ package com.hestia.api.domain.accounts.service;
 import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.common.exception.ResourceNotFoundException;
 import com.hestia.api.common.mapper.PageMapper;
+import com.hestia.api.domain.accounts.dto.CoupleAccountResponse;
 import com.hestia.api.domain.accounts.dto.CreateUserRequest;
 import com.hestia.api.domain.accounts.dto.UpdateUserRequest;
 import com.hestia.api.domain.accounts.dto.UserResponse;
@@ -36,6 +37,16 @@ public class UserService {
         Page<UserResponse> user = userRepository.findByIsActiveTrue(pageable).map(userMapper::toResponse);
 
         return PageMapper.toResponse(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse getUserById(UUID id) {
+        return userMapper.toResponse(getUser(id));
+    }
+
+    @Transactional(readOnly = true)
+    public CoupleAccountResponse getCoupleAccount(UUID userId) {
+        return userMapper.toCoupleResponse(getUser(userId));
     }
 
     private User getUser(UUID id) {

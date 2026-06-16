@@ -56,6 +56,8 @@ public class SecurityConfig {
 
                         // ADMIN-ONLY (structural management)
                         .requestMatchers(HttpMethod.GET, "/account")
+                        .hasAnyRole("ADMIN", "COUPLE")
+                        .requestMatchers(HttpMethod.GET, "/account/{id}")
                         .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/account")
                         .hasRole("ADMIN")

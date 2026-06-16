@@ -1,6 +1,5 @@
 package com.hestia.api.domain.accounts.controller;
 
-import com.hestia.api.common.dto.PageResponse;
 import com.hestia.api.domain.accounts.dto.CreateUserRequest;
 import com.hestia.api.domain.accounts.dto.UpdateUserRequest;
 import com.hestia.api.domain.accounts.dto.UserResponse;
@@ -12,7 +11,6 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +28,20 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<PageResponse<UserResponse>> getUsers(Pageable pageable) {
+    public ResponseEntity<?> getUsers(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam(name = "user_id", required = false) UUID userId,
+            Pageable pageable) {
+        UUID resolvedId = user.resolveUserId(userId);
+        if (resolvedId != null) {
+            return ResponseEntity.ok(userService.getCoupleAccount(resolvedId));
+        }
         return ResponseEntity.ok(userService.getUsers(pageable));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PostMapping
@@ -39,26 +49,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
     }
 
+    @PatchMapping
+    public ResponseEntity<?> patchAccount(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam(name = "user_id", required = false) UUID userId,
+            @Valid @RequestBody UpdateUserRequest request) {
+        return ResponseEntity.ok(userService.updateUser(user.resolveUserId(userId), request));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponse> patchUser(
             @AuthenticationPrincipal AuthenticatedUser user,
             @PathVariable UUID id,
             @Valid @RequestBody UpdateUserRequest request) {
-        validateAccountAccess(user, id);
-        return ResponseEntity.ok(userService.updateUser(id, request));
+        return ResponseEntity.ok(userService.updateUser(user.resolveUserId(id), request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private void validateAccountAccess(AuthenticatedUser user, UUID targetId) {
-        boolean isCouple =
-                user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COUPLE"));
-        if (isCouple && !targetId.equals(user.getId())) {
-            throw new AccessDeniedException("Access denied");
-        }
     }
 }
