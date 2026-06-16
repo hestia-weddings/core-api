@@ -311,7 +311,7 @@ class GuestAccessTest {
 
         @Test
         void cannotPatchAccount() throws Exception {
-            mockMvc.perform(patch("/account/{id}", "bbbb0000-0000-0000-0000-000000000001")
+            mockMvc.perform(patch("/account")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"name\": \"X\"}"))
                     .andExpect(status().isUnauthorized());

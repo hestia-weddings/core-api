@@ -343,18 +343,19 @@ class CoupleAccessTest {
 
         @Test
         void canPatchOwnAccount() throws Exception {
-            mockMvc.perform(patch("/account/{id}", OWN_USER)
+            mockMvc.perform(patch("/account")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"name\": \"Updated Name\"}"))
                     .andExpect(status().isOk());
         }
 
         @Test
-        void cannotPatchOtherAccount() throws Exception {
-            mockMvc.perform(patch("/account/{id}", ADMIN_USER)
+        void patchAlwaysUpdatesOwnAccountRegardlessOfParam() throws Exception {
+            mockMvc.perform(patch("/account")
+                            .param("user_id", ADMIN_USER.toString())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"name\": \"Hacked\"}"))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isOk());
         }
     }
 

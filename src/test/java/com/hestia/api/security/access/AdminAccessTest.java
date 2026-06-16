@@ -103,7 +103,8 @@ class AdminAccessTest {
 
         @Test
         void canPatchAnyAccount() throws Exception {
-            mockMvc.perform(patch("/account/{id}", USER_COUPLE)
+            mockMvc.perform(patch("/account")
+                            .param("user_id", USER_COUPLE.toString())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"name\": \"Updated\"}"))
                     .andExpect(status().isOk());

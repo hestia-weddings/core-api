@@ -57,14 +57,6 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(user.resolveUserId(userId), request));
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponse> patchUser(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @PathVariable UUID id,
-            @Valid @RequestBody UpdateUserRequest request) {
-        return ResponseEntity.ok(userService.updateUser(user.resolveUserId(id), request));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
