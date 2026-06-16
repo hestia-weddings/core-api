@@ -12,6 +12,13 @@ CREATE TYPE guest_status_enum AS ENUM (
     'PENDING'
 );
 
+-- Enum for message type
+CREATE TYPE message_type_enum AS ENUM (
+    'GIFT',
+    'RSVP',
+    'GENERAL'
+);
+
 -- Messages table creation
 CREATE TABLE messages (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -19,6 +26,7 @@ CREATE TABLE messages (
     message text NOT NULL,
     is_favorite boolean NOT NULL DEFAULT false,
     is_new boolean NOT NULL DEFAULT true,
+    type message_type_enum NOT NULL DEFAULT 'GENERAL',
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
     is_active boolean NOT NULL DEFAULT true,
@@ -66,11 +74,16 @@ CREATE TABLE invites (
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
     is_active boolean NOT NULL DEFAULT true,
+    message_id uuid UNIQUE,
     wedding_id uuid NOT NULL,
     CONSTRAINT fk_invites_wedding
         FOREIGN KEY (wedding_id)
             REFERENCES weddings (id)
-            ON DELETE CASCADE
+            ON DELETE CASCADE,
+    CONSTRAINT fk_invites_message
+        FOREIGN KEY (message_id)
+            REFERENCES messages (id)
+            ON DELETE RESTRICT
 );
 
 -- Trigger to auto-update updated_at

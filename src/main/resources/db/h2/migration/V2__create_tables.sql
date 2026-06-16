@@ -31,11 +31,13 @@ CREATE TABLE messages (
     message VARCHAR NOT NULL,
     is_favorite BOOLEAN NOT NULL DEFAULT FALSE,
     is_new BOOLEAN NOT NULL DEFAULT TRUE,
+    type message_type_enum NOT NULL DEFAULT 'GENERAL',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     wedding_id UUID NOT NULL,
-    CONSTRAINT fk_messages_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE
+    CONSTRAINT fk_messages_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
+    CONSTRAINT chk_message_type CHECK (type IN ('GIFT', 'RSVP', 'GENERAL'))
 );
 
 CREATE TABLE invites (
@@ -46,7 +48,10 @@ CREATE TABLE invites (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     wedding_id UUID NOT NULL,
-    CONSTRAINT fk_invites_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE
+    message_id UUID,
+    CONSTRAINT fk_invites_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
+    CONSTRAINT fk_invites_message FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE RESTRICT,
+    CONSTRAINT uq_invites_message UNIQUE (message_id)
 );
 
 CREATE TABLE guests (
@@ -90,8 +95,11 @@ CREATE TABLE orders (
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     wedding_id UUID NOT NULL,
     gift_id UUID NOT NULL,
+    message_id UUID,
     CONSTRAINT fk_orders_gift FOREIGN KEY (gift_id) REFERENCES gifts(id) ON DELETE CASCADE,
     CONSTRAINT fk_orders_wedding FOREIGN KEY (wedding_id) REFERENCES weddings(id) ON DELETE CASCADE,
+    CONSTRAINT fk_orders_message FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE RESTRICT,
+    CONSTRAINT uq_orders_message UNIQUE (message_id),
     CONSTRAINT chk_order_status CHECK (status IN ('PENDING', 'PAID', 'FAILED', 'EXPIRED'))
 );
 

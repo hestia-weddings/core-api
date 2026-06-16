@@ -24,6 +24,7 @@ CREATE TABLE orders (
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
     is_active boolean NOT NULL DEFAULT true,
+    message_id uuid UNIQUE,
     wedding_id uuid NOT NULL,
     gift_id uuid NOT NULL,
     CONSTRAINT fk_orders_gift
@@ -33,7 +34,11 @@ CREATE TABLE orders (
     CONSTRAINT fk_orders_wedding
         FOREIGN KEY (wedding_id)
             REFERENCES weddings (id)
-            ON DELETE CASCADE
+            ON DELETE CASCADE,
+    CONSTRAINT fk_orders_message
+        FOREIGN KEY (message_id)
+            REFERENCES messages (id)
+            ON DELETE RESTRICT
 );
 
 -- Trigger to auto-update updated_at

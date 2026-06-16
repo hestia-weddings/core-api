@@ -52,16 +52,27 @@ INSERT INTO gifts (id, description, price, stock, wedding_id, created_at, update
 VALUES ('eeee0000-0000-0000-0000-000000000002', 'Liquidificador', 15000, 1, '22222222-2222-2222-2222-222222222222', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Messages for wedding A
-INSERT INTO messages (id, sender, message, wedding_id, created_at, updated_at, is_active)
-VALUES ('ffff0000-0000-0000-0000-000000000001', 'Tia Maria', 'Parabéns pelo casamento!', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+INSERT INTO messages (id, sender, message, type, wedding_id, created_at, updated_at, is_active)
+VALUES ('ffff0000-0000-0000-0000-000000000001', 'Tia Maria', 'Parabéns pelo casamento!', 'GENERAL', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Messages for wedding B
-INSERT INTO messages (id, sender, message, wedding_id, created_at, updated_at, is_active)
-VALUES ('ffff0000-0000-0000-0000-000000000002', 'Vovó Ana', 'Felicidades!', '22222222-2222-2222-2222-222222222222', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+INSERT INTO messages (id, sender, message, type, wedding_id, created_at, updated_at, is_active)
+VALUES ('ffff0000-0000-0000-0000-000000000002', 'Vovó Ana', 'Felicidades!', 'GENERAL', '22222222-2222-2222-2222-222222222222', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
+-- GIFT message linked to order A
+INSERT INTO messages (id, sender, message, type, wedding_id, created_at, updated_at, is_active)
+VALUES ('ffff0000-0000-0000-0000-000000000003', 'Test Guest', 'Beautiful gift!', 'GIFT', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
+-- RSVP message linked to invite A
+INSERT INTO messages (id, sender, message, type, wedding_id, created_at, updated_at, is_active)
+VALUES ('ffff0000-0000-0000-0000-000000000004', 'Familia Silva', 'Estaremos lá!', 'RSVP', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+
+-- Link invite to RSVP message
+UPDATE invites SET message_id = 'ffff0000-0000-0000-0000-000000000004' WHERE id = 'cccc0000-0000-0000-0000-000000000001';
 
 -- Order for webhook tests (PENDING, linked to gift A, wedding A)
-INSERT INTO orders (id, guest_name, guest_email, amount, status, payment_id, wedding_id, gift_id, created_at, updated_at, is_active)
-VALUES ('bbbb1111-0000-0000-0000-000000000001', 'Test Guest', 'guest@test.com', 25000, 'PENDING', 'cccc1111-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'eeee0000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
+INSERT INTO orders (id, guest_name, guest_email, amount, status, payment_id, wedding_id, gift_id, message_id, created_at, updated_at, is_active)
+VALUES ('bbbb1111-0000-0000-0000-000000000001', 'Test Guest', 'guest@test.com', 25000, 'PENDING', 'cccc1111-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'eeee0000-0000-0000-0000-000000000001', 'ffff0000-0000-0000-0000-000000000003', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
 -- Order PAID (linked to gift A, wedding A) — for stock validation tests
 INSERT INTO orders (id, guest_name, guest_email, amount, status, payment_id, wedding_id, gift_id, created_at, updated_at, is_active)
