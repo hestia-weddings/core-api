@@ -44,7 +44,7 @@ public class Order extends BaseTenantModel {
     @JoinColumn(name = "gift_id")
     private Gift gift;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "message_id")
     private Message message;
 }

@@ -30,7 +30,7 @@ public class Invite extends BaseTenantModel {
     @Builder.Default
     private List<Guest> guests = new ArrayList<>();
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "message_id")
     private Message message;
 }
