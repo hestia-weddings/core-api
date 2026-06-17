@@ -1,0 +1,19 @@
+meta {
+  name: Send RSVP Message
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base-url}}/w/{{slug}}/rsvp/message
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "invite_id": "{{invite-id}}",
+    "sender": "Carlos Silva",
+    "message": "Mal posso esperar pelo grande dia!"
+  }
+}
