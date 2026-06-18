@@ -274,7 +274,7 @@ class CoupleAccessTest {
 
         @Test
         void canReadMessage() throws Exception {
-            mockMvc.perform(patch("/message/{id}/read", OWN_MESSAGE)).andExpect(status().isOk());
+            mockMvc.perform(patch("/message/{id}/read", OWN_MESSAGE)).andExpect(status().isNoContent());
         }
 
         @Test
