@@ -306,7 +306,7 @@ class AdminAccessTest {
 
         @Test
         void canReadMessage() throws Exception {
-            mockMvc.perform(patch("/message/{id}/read", MESSAGE_A)).andExpect(status().isNoContent());
+            mockMvc.perform(patch("/message/{id}/read", MESSAGE_A)).andExpect(status().isOk());
         }
 
         @Test

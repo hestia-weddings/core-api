@@ -52,9 +52,9 @@ public class MessageController {
     }
 
     @PatchMapping("/{id}/read")
-    public ResponseEntity<Void> readMessage(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
-        messageService.readMessage(user.resolveWeddingId(), id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<MessageResponse> readMessage(
+            @AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
+        return ResponseEntity.ok(messageService.readMessage(user.resolveWeddingId(), id));
     }
 
     @DeleteMapping("/{id}")
