@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
-@DisplayName("Guest Wedding Messages")
-class GuestWeddingControllerTest {
+@DisplayName("Guest Messages")
+class GuestMessageControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -27,36 +27,36 @@ class GuestWeddingControllerTest {
     private static final String INVALID_SLUG = "nonexistent";
 
     @Nested
-    @DisplayName("GET /w/{slug}/wedding/invite")
+    @DisplayName("GET /w/{slug}/message/invite")
     class GetInviteMessage {
 
         @Test
         void returnsInviteMessage() throws Exception {
-            mockMvc.perform(get("/w/{slug}/wedding/invite", VALID_SLUG))
+            mockMvc.perform(get("/w/{slug}/message/invite", VALID_SLUG))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.invite_message").value("You are invited!"));
         }
 
         @Test
         void returns404ForInvalidSlug() throws Exception {
-            mockMvc.perform(get("/w/{slug}/wedding/invite", INVALID_SLUG)).andExpect(status().isNotFound());
+            mockMvc.perform(get("/w/{slug}/message/invite", INVALID_SLUG)).andExpect(status().isNotFound());
         }
     }
 
     @Nested
-    @DisplayName("GET /w/{slug}/wedding/gift")
+    @DisplayName("GET /w/{slug}/message/gift")
     class GetGiftMessage {
 
         @Test
         void returnsGiftMessage() throws Exception {
-            mockMvc.perform(get("/w/{slug}/wedding/gift", VALID_SLUG))
+            mockMvc.perform(get("/w/{slug}/message/gift", VALID_SLUG))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.gift_message").value("Check our gifts"));
         }
 
         @Test
         void returns404ForInvalidSlug() throws Exception {
-            mockMvc.perform(get("/w/{slug}/wedding/gift", INVALID_SLUG)).andExpect(status().isNotFound());
+            mockMvc.perform(get("/w/{slug}/message/gift", INVALID_SLUG)).andExpect(status().isNotFound());
         }
     }
 }
